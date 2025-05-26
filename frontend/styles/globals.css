@@ -1,13 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f8fafc;
+  --containerBackground: #ffffff;
+  --secondaryBackground: #f1f5f9;
+  --secondaryText: #eaeaea;
   --foreground: #020817;
+  --secondaryForeground: #556072;
+  --blue:#3b82f6;
 }
 
 [data-theme="dark"] {
   --background: #020817;
-  --foreground: #f9fafb;
+  --secondaryBackground: #1e293b;
+  --containerBackground: #061027;
+  --foreground: #f8fafc;
 }
 
 body {

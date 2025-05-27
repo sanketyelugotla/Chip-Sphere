@@ -2,8 +2,24 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { MdDarkMode, MdOutlineLightMode } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
+
+// Custom NavLink Component
+const NavLink = ({ href, children }) => {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+
+  return (
+    <Link
+      href={href}
+      className={`hover:text-blue-500 transition-colors duration-200 ${isActive ? 'text-blue-500' : ''}`}
+    >
+      {children}
+    </Link>
+  );
+};
 
 export default function Navbar() {
 
@@ -17,16 +33,16 @@ export default function Navbar() {
     <nav className='w-full h-[4rem] flex gap-5 justify-between px-[5rem] items-center'>
       <div className='flex gap-5 items-center'>
         <h1>Logo</h1>
-        <Link href='/' className='text-xl font-bold'>Chip Sphere</Link>
+        <NavLink href='/'>Chip Sphere</NavLink>
       </div>
 
       <div className='flex gap-7'>
-        <Link href='/'>Home</Link>
-        <Link href='/quizzes'>Quizzes</Link>
-        <Link href='/resources'>Resources</Link>
-        <Link href='/blogs'>Blogs</Link>
-        <Link href='/projects'>Projects</Link>
-        <Link href='/about'>About</Link>
+        <NavLink href='/'>Home</NavLink>
+        <NavLink href='/quizzes'>Quizzes</NavLink>
+        <NavLink href='/resources'>Resources</NavLink>
+        <NavLink href='/blogs'>Blogs</NavLink>
+        <NavLink href='/projects'>Projects</NavLink>
+        <NavLink href='/about'>About</NavLink>
       </div>
 
       <div className='flex items-center gap-8'>

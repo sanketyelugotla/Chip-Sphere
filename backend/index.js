@@ -1,6 +1,10 @@
 const express = require('express');
 const connectDB = require('./config/db')
 const cors = require("cors");
+
+const { auth } = require('./routes')
+const { authenticate } = require('./middleware/authenticate')
+
 require("dotenv").config();
 
 const app = express();
@@ -24,7 +28,9 @@ app.get('/', (req, res) => {
     res.status(200).json({ message: 'Chip sphere is running' })
 })
 
+app.use("/auth", auth);
+app.use(authenticate);
 
 // Port configuration and start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

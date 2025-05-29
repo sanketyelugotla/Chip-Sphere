@@ -7,7 +7,10 @@
   --secondaryText: #eaeaea;
   --foreground: #020817;
   --secondaryForeground: #556072;
-  --blue:#3b82f6;
+  --blue: #3b82f6;
+
+  --primary: 221.2 83.2% 53.3%;
+  --muted-foreground: 215.4 16.3% 46.9%;
 }
 
 [data-theme="dark"] {
@@ -15,6 +18,9 @@
   --secondaryBackground: #1e293b;
   --containerBackground: #061027;
   --foreground: #f8fafc;
+
+  --primary: 217.2 91.2% 59.8%;
+  --muted-foreground: 215 20.2% 65.1%;
 }
 
 body {

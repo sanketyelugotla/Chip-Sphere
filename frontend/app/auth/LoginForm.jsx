@@ -34,7 +34,7 @@ export default function LoginForm({ toggleAuthMode }) {
     return (
         <Card className="shadow-lg rounded-2xl bg-white border border-gray-300 hover:border-[#4AC9D6] transition-all duration-300">
             <Link href="/" passHref>
-                <div className="mx-auto w-32 cursor-pointer transition-all duration-500 transform hover:scale-105 hover:animate-pulse">
+                <div className="mx-auto w-36 cursor-pointer transition-all duration-500 transform hover:scale-105 hover:animate-pulse">
                     <Image
                         src="/ChipSphere.png"
                         alt="logo"

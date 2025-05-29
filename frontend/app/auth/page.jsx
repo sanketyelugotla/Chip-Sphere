@@ -14,10 +14,10 @@ export default function AuthPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50">
-            <div className="w-full max-w-6xl mx-auto flex justify-between items-center">
+        <div className="min-h-[90vh] flex items-center justify-center px-4 py-12">
+            <div className="flex justify-between items-center">
                 {/* Logo - Animated */}
-                <motion.div
+                {/* <motion.div
                     initial={{ x: 0 }}
                     animate={{ x: isLogin ? 0 : 'calc(100% - 12rem)' }}
                     transition={{ type: 'spring', stiffness: 100, damping: 15 }}
@@ -32,10 +32,10 @@ export default function AuthPage() {
                             whileTap={{ scale: 0.95 }}
                         />
                     </Link>
-                </motion.div>
+                </motion.div> */}
 
                 {/* Forms Container */}
-                <div className="w-full max-w-md relative">
+                <div className="w-full max-w-md relative flex justify-between items-center ml-10">
                     <AnimatePresence mode="wait">
                         {isLogin ? (
                             <motion.div

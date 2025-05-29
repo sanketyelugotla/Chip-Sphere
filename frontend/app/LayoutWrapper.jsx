@@ -10,10 +10,11 @@ export default function LayoutWrapper({ children }) {
 
     return (
         <>
-            {!hideNavbar && <Navbar />}
-            {/* <Navbar /> */}
+            {/* {!hideNavbar && <Navbar />} */}
+            <Navbar />
             {children}
-            {!hideNavbar && <Footer />}
+            <Footer />
+            {/* {!hideNavbar && <Footer />} */}
         </>
     );
 }

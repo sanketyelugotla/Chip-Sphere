@@ -31,6 +31,24 @@
   --secondaryBackground: #1e293b;
   --containerBackground: #061027;
   --foreground: #f8fafc;
+
+  --card: #0f172a;
+  --card-foreground: #f8fafc;
+  --popover: #0f172a;
+  --popover-foreground: #f8fafc;
+  --primary: #2563eb;
+  --primary-foreground: #0f172a;
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
+  --muted: #1e293b;
+  --muted-foreground: #8ba1c1;
+  --accent: #1e293b;
+  --accent-foreground: #f8fafc;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #f8fafc;
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #1d4ed8;
 }
 
 @theme {
@@ -59,4 +77,32 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Inter, Helvetica, sans-serif;
+}
+
+@keyframes continuousAnimation {
+  0% {
+    transform: rotate(0deg) scale(1) translateY(0);
+  }
+
+  25% {
+    transform: rotate(90deg) scale(1.1) translateY(-10px);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.2) translateY(0);
+  }
+
+  75% {
+    transform: rotate(270deg) scale(1.1) translateY(10px);
+  }
+
+  100% {
+    transform: rotate(360deg) scale(1) translateY(0);
+  }
+}
+
+.animate-continuous-animation {
+  animation: continuousAnimation 50s linear infinite;
+  transform-origin: center center;
+  /* Ensures rotation happens around the center */
 }

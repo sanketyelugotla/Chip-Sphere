@@ -12,7 +12,7 @@ export default function Navbar() {
   },[dark])
 
   return (
-    <nav className='w-full h-[4rem] flex gap-5 justify-between px-[5rem] items-center'>
+    <nav className='w-full h-[4rem]  flex gap-5 justify-between px-[5rem] items-center'>
       <div className='flex gap-5'>
         <h1>Logo</h1>
         <h1>Chip Sphere</h1>

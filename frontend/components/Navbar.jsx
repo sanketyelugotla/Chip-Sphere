@@ -1,9 +1,18 @@
-import React from 'react'
+"use client"
+
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 export default function Navbar() {
+
+  const [dark, setDark] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  },[dark])
+
   return (
-    <nav className='w-full h-[4rem] flex gap-5 justify-between px-[5rem] items-center'>
+    <nav className='w-full h-[4rem]  flex gap-5 justify-between px-[5rem] items-center'>
       <div className='flex gap-5'>
         <h1>Logo</h1>
         <h1>Chip Sphere</h1>
@@ -19,7 +28,7 @@ export default function Navbar() {
       </div>
 
       <div className='flex gap-5'>
-        <h1>Mode</h1>
+        <h1 onClick={()=>setDark(!dark)}>Mode</h1>
         <h1>Profile</h1>
       </div>
     </nav>

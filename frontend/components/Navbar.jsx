@@ -76,7 +76,7 @@ export default function Navbar() {
       className={`sticky top-0 z-50 w-full transition-all duration-200 ${isScrolled ? "bg-background/80 backdrop-blur-md shadow-sm" : "bg-transparent"
         }`}
     >
-      <div className="container mx-auto flex h-16 items-center justify-between px-12 ">
+      <div className="container mx-auto flex h-16 items-center justify-between px-[4rem] ">
         <div className="flex items-center">
           <Link href="/profile/user" className="flex items-center space-x-2">
             <div className="h-12 w-12 rounded-full flex items-center justify-center">

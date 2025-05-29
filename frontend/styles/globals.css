@@ -2,14 +2,14 @@
 
 :root {
   --background: #f8fafc;
-  --containerBackground: #ffffff;
-  --secondaryBackground: #f1f5f9;
+  --containe-fackground: #ffffff;
+  --secondary-background: #f1f5f9;
   --secondaryText: #eaeaea;
   --foreground: #020817;
   --secondaryForeground: #556072;
 
   --primary: #3b82f6;
-  --mutedForeground: #637388;
+  --muted-foreground: #637388;
   --primary: #3b82f6;
   --primary-foreground: #f8fafc;
   --secondary: #f1f5f9;
@@ -28,8 +28,8 @@
 
 [data-theme="dark"] {
   --background: #020817;
-  --secondaryBackground: #1e293b;
-  --containerBackground: #061027;
+  --secondary-background: #1e293b;
+  --container-background: #061027;
   --foreground: #f8fafc;
 
   --card: #0f172a;
@@ -67,10 +67,10 @@
   --color-radius: var(--radius);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-secondaryBackground: var(--secondaryBackground);
-  --color-containerBackground: var(--containerBackground);
-  --color-secondaryText: var(--secondaryText);
-  --color-secondaryForeground: var(--secondary-foreground);
+  --color-secondar-background: var(--secondary-background);
+  --color-container-background: var(--container-background);
+  --color-secondary-text: var(--secondary-text);
+  --color-secondary-foreground: var(--secondary-foreground);
 }
 
 body {

@@ -9,7 +9,7 @@ import {
 
 const Footer = () => {
     return (
-        <footer className="bg-[var(--secondaryBackground)] text-center text-[var(--secondaryForeground)] py-10 px-4">
+        <footer className="bg-secondaryBackground text-center text-[var(--secondaryForeground)] py-10 px-4">
             <div className="max-w-screen-xl mx-auto space-y-4">
                 {/* Logo and Title */}
                 <div className="flex items-center justify-center space-x-2">

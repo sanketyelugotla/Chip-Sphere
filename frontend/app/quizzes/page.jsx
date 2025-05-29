@@ -70,10 +70,10 @@ const quizzes = [
 export default function Quizzes() {
   return (
     <>
-      <div className="bg-[var(--secondaryBackground)] px-4 sm:px-10 md:px-16 lg:px-20 py-10">
+      <div className="bg-container-background px-4 sm:px-10 md:px-16 lg:px-20 py-10">
         <div className="max-w-screen-xl mx-auto">
           <h1 className="text-2xl sm:text-3xl font-bold">Quizzes</h1>
-          <p className="text-sm sm:text-base text-[var(--secondaryForeground)] mt-2">
+          <p className="text-sm sm:text-base text-secondary-foreground mt-2">
             Test your knowledge with our collection of engineering quizzes. Each quiz is designed to challenge
             your understanding and help you prepare for exams and interviews.
           </p>
@@ -86,14 +86,14 @@ export default function Quizzes() {
           <input
             type="text"
             placeholder="Search quizzes..."
-            className="w-1/2 p-2 border rounded-md border-[var(--secondaryBackground)] shadow-sm"
+            className="w-1/2 p-2 border rounded-md border-secondary-background shadow-sm"
           />
           {/* Filters can be added here */}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {quizzes.map((quiz, index) => (
-            <div key={index} className="border rounded-lg p-4 shadow-sm border-[var(--secondaryBackground)]">
+            <div key={index} className="border rounded-lg p-4 shadow-sm border-secondary-background">
               <div className="flex justify-between items-center text-sm mb-2">
                 <span
                   className={`px-2 py-1 rounded-full text-white ${quiz.color === 'red' ? 'bg-red-500' : 'bg-blue-500'

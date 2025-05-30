@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 })
 
 app.use("/auth", auth);
-app.use(authenticate);
+// app.use(authenticate);
 
 // Port configuration and start server
 const PORT = process.env.PORT || 3000;

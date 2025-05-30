@@ -6,6 +6,8 @@ import {
     FaLinkedinIn,
     FaGithub,
 } from 'react-icons/fa';
+import Image from 'next/image';
+
 
 const Footer = () => {
     return (
@@ -13,11 +15,14 @@ const Footer = () => {
             <div className="max-w-screen-xl mx-auto space-y-4">
                 {/* Logo and Title */}
                 <div className="flex items-center justify-center space-x-2">
-                    <img
-                        src="/logo.svg"
+                    <Image
+                        src="/ChipSphere.png"
                         alt="Chip Sphere Logo"
-                        className="w-6 h-6"
+                        width={50}
+                        height={50}
                     />
+
+
                     <span className="font-semibold text-lg">
                         Chip Sphere
                     </span>

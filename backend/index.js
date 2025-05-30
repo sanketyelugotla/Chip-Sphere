@@ -2,7 +2,7 @@ const express = require('express');
 const connectDB = require('./config/db')
 const cors = require("cors");
 
-const { auth } = require('./routes')
+const { auth, quiz } = require('./routes')
 const { authenticate } = require('./middleware/authenticate')
 
 require("dotenv").config();
@@ -29,6 +29,7 @@ app.get('/', (req, res) => {
 })
 
 app.use("/auth", auth);
+app.use('/quiz', quiz);
 // app.use(authenticate);
 
 // Port configuration and start server

@@ -6,19 +6,24 @@ import {
     FaLinkedinIn,
     FaGithub,
 } from 'react-icons/fa';
+import Image from 'next/image';
+
 
 const Footer = () => {
     return (
-        <footer className="bg-secondaryBackground text-center text-[var(--secondaryForeground)] py-10 px-4">
+        <footer className="bg-secondaryBackground text-center text-muted-foreground py-10 px-4">
             <div className="max-w-screen-xl mx-auto space-y-4">
                 {/* Logo and Title */}
                 <div className="flex items-center justify-center space-x-2">
-                    <img
-                        src="/logo.svg"
+                    <Image
+                        src="/ChipSphere.png"
                         alt="Chip Sphere Logo"
-                        className="w-6 h-6"
+                        width={50}
+                        height={50}
                     />
-                    <span className="font-semibold text-lg text-[var(--primaryForeground)]">
+
+
+                    <span className="font-semibold text-lg">
                         Chip Sphere
                     </span>
                 </div>
@@ -28,19 +33,19 @@ const Footer = () => {
 
                 {/* Social Icons */}
                 <div className="flex justify-center space-x-6 text-xl">
-                    <a href="#" className="hover:text-[var(--primaryForeground)]">
+                    <a href="#" >
                         <FaFacebookF />
                     </a>
-                    <a href="#" className="hover:text-[var(--primaryForeground)]">
+                    <a href="#" >
                         <FaTwitter />
                     </a>
-                    <a href="#" className="hover:text-[var(--primaryForeground)]">
+                    <a href="#" >
                         <FaInstagram />
                     </a>
-                    <a href="#" className="hover:text-[var(--primaryForeground)]">
+                    <a href="#" >
                         <FaLinkedinIn />
                     </a>
-                    <a href="#" className="hover:text-[var(--primaryForeground)]">
+                    <a href="#" >
                         <FaGithub />
                     </a>
                 </div>
@@ -49,13 +54,13 @@ const Footer = () => {
                 <p className="underline cursor-pointer">Contact Us</p>
 
                 {/* Divider */}
-                <hr className="my-4 border-gray-300 w-11/12 mx-auto" />
+                <hr className="my-4 border-muted-foreground w-11/12 mx-auto" />
 
                 {/* Footer Bottom */}
-                <div className="flex flex-col sm:flex-row justify-between items-center text-sm px-4 text-gray-500">
+                <div className="flex flex-col sm:flex-row justify-between items-center text-sm pt-5 ">
                     <p>© 2025 ChipSphere. All rights reserved.</p>
                     <p className="mt-2 sm:mt-0">
-                        Fabricated with <span className="text-pink-500">❤️</span> for the next-gen chip designers!
+                        Fabricated with <span>❤️</span> for the next-gen chip designers!
                     </p>
                 </div>
             </div>

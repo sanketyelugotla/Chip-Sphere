@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AlertCircle, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
+import { signin } from '@/utils/auth'
 
 export default function LoginForm({ toggleAuthMode }) {
     const [email, setEmail] = useState("")
@@ -14,17 +15,23 @@ export default function LoginForm({ toggleAuthMode }) {
     const [error, setError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [passwordVisible, setPasswordVisible] = useState(false)
-    const [captchaText, setCaptchaText] = useState(generateCaptcha())
+    const [captchaText, setCaptchaText] = useState()
     const [captchaInput, setCaptchaInput] = useState("")
     const [rememberMe, setRememberMe] = useState(false)
+
+    useEffect(() => {
+        setCaptchaText(generateCaptcha())
+    }, [])
 
     function generateCaptcha() {
         return Math.random().toString(36).substring(2, 6).toUpperCase()
     }
 
-    function handleSubmit(e) {
-        e.preventDefault()
-        // Handle login logic
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        const response = await signin(email, password);
+        console.log(response);
     }
 
     function refreshCaptcha() {
@@ -40,6 +47,7 @@ export default function LoginForm({ toggleAuthMode }) {
                         alt="logo"
                         width={128}
                         height={128}
+                        priority={true}
                         className="w-full h-auto"
                     />
                 </div>

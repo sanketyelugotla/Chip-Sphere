@@ -4,13 +4,13 @@ const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 // 📌 Register User
-const registerUser = async ({ name, email, password, role }) => {
+const registerUser = async ({ name, email, education, institution, password, role }) => {
     const emailLower = email.toLowerCase();
 
     let user = await User.findOne({ email: emailLower });
     if (user) throw new Error("User already exists");
 
-    user = new User({ name, email: emailLower, password, role });
+    user = new User({ name, email: emailLower, education, institution, password, role });
     user = await user.save();
 
     return { message: "User registered successfully", user };

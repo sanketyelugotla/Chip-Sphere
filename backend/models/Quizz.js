@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const QuizSchema = new mongoose.Schema({
-    name: {
+    title: {
         type: String,
-        required: [true, 'Name is required']
+        required: [true, 'title is required']
     },
     description: {
         type: String,
@@ -16,14 +16,23 @@ const QuizSchema = new mongoose.Schema({
     level: {
         type: String,
         enum: {
-            values: ['intermediate', 'beginner', 'advanced'],
+            values: ['Intermediate', 'Beginner', 'Advanced'],
             message: '{VALUE} is not a valid level. Allowed levels are beginner, intermediate and advanced'
         }
     },
-    subject: {
+    category: {
         type: String,
-        required: [true, 'Subject is required']
+        required: [true, 'category is required']
     },
+    color: {
+        type: String,
+        required: [true, 'color is required']
+    },
+    questions: {
+        type: Number,
+        required: [true, 'Questions is required']
+    },
+
 });
 
 module.exports = mongoose.model("Quizz", QuizSchema);

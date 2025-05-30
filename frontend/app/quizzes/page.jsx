@@ -1,73 +1,15 @@
-import React from 'react';
-
-const quizzes = [
-  {
-    level: 'Beginner',
-    title: 'VLSI Design Fundamentals',
-    duration: '30 min',
-    category: 'VLSI',
-    questions: 20,
-    color: 'blue',
-  },
-  {
-    level: 'Intermediate',
-    title: 'Digital Circuit Analysis',
-    duration: '25 min',
-    category: 'Digital Electronics',
-    questions: 15,
-    color: 'blue',
-  },
-  {
-    level: 'Advanced',
-    title: 'Semiconductor Physics',
-    duration: '40 min',
-    category: 'Electronics',
-    questions: 25,
-    color: 'red',
-  },
-  {
-    level: 'Intermediate',
-    title: 'PCB Design Principles',
-    duration: '30 min',
-    category: 'Hardware Design',
-    questions: 18,
-    color: 'blue',
-  },
-  {
-    level: 'Advanced',
-    title: 'Analog Circuit Design',
-    duration: '35 min',
-    category: 'Analog Electronics',
-    questions: 22,
-    color: 'red',
-  },
-  {
-    level: 'Beginner',
-    title: 'CMOS Technology Basics',
-    duration: '25 min',
-    category: 'VLSI',
-    questions: 18,
-    color: 'blue',
-  },
-  {
-    level: 'Intermediate',
-    title: 'Verilog HDL Programming',
-    duration: '30 min',
-    category: 'HDL',
-    questions: 20,
-    color: 'blue',
-  },
-  {
-    level: 'Advanced',
-    title: 'FPGA Architecture and Design',
-    duration: '40 min',
-    category: 'FPGA',
-    questions: 25,
-    color: 'red',
-  },
-];
-
+'use client'
+import { getQuizzes } from '@/utils/quizz';
+import React, { useEffect, useState } from 'react';
 export default function Quizzes() {
+  const [quizzes, setQuizzes] = useState([]);
+  const getdata = async () => {
+    setQuizzes(await getQuizzes())
+  }
+  useEffect(() => {
+    getdata()
+  }, [])
+  console.log(quizzes)
   return (
     <>
       <div className="bg-muted px-4 sm:px-10 md:px-16 lg:px-20 py-10">
@@ -104,6 +46,7 @@ export default function Quizzes() {
                 <span className="text-gray-500">{quiz.duration}</span>
               </div>
               <h2 className="font-semibold text-lg mb-1">{quiz.title}</h2>
+              <p className="text-sm text-gray-500 mb-4">{quiz.description }</p>
               <p className="text-sm text-gray-500 mb-4">{quiz.category} · {quiz.questions} questions</p>
               <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
                 Start Quiz

@@ -1,3 +1,4 @@
 module.exports = {
-    auth: require('./auth.route')
+    auth: require('./auth.route'),
+    quiz: require('./quiz.route'),
 }

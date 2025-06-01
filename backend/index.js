@@ -2,7 +2,7 @@ const express = require('express');
 const connectDB = require('./config/db')
 const cors = require("cors");
 
-const { auth } = require('./routes')
+const { auth, quiz } = require('./routes')
 const { authenticate } = require('./middleware/authenticate')
 
 require("dotenv").config();
@@ -11,7 +11,7 @@ const app = express();
 
 // CORS
 const corsOptions = {
-    origin: ['http://localhost:3000/'],
+    origin: ['http://localhost:3000'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
@@ -29,7 +29,8 @@ app.get('/', (req, res) => {
 })
 
 app.use("/auth", auth);
-app.use(authenticate);
+app.use('/quiz', quiz);
+// app.use(authenticate);
 
 // Port configuration and start server
 const PORT = process.env.PORT || 3000;

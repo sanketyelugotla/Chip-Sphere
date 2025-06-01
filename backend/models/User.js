@@ -12,6 +12,12 @@ const UserSchema = new mongoose.Schema({
         unique: [true, 'Email is already taken'],
         lowercase: true
     },
+    education: {
+        type: String,
+    },
+    institution: {
+        type: String,
+    },
     password: {
         type: String,
         required: [true, 'Password is required']

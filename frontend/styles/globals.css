@@ -7,6 +7,7 @@
   --secondaryText: #eaeaea;
   --foreground: #020817;
   --secondaryForeground: #556072;
+  --intermediate: #677791;
 
   --primary: #3b82f6;
   --muted-foreground: #637388;
@@ -29,6 +30,7 @@
 [data-theme="dark"] {
   --background: #020817;
   --secondary-background: #1e293b;
+  --intermediate: #1e293b;
   --container-background: #061027;
   --foreground: #f8fafc;
 
@@ -72,6 +74,7 @@
   --color-container-background: var(--container-background);
   --color-secondary-text: var(--secondary-text);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-intermediate: var(--intermediate);
 }
 
 body {

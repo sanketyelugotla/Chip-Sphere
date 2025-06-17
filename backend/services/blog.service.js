@@ -10,10 +10,16 @@ const getBlogs = async () => {
     }
 };
 
-const addBlog = async ({ title, image, description, date, type, durationRead, user }) => {
+const addBlog = async ({ title, image, description, type, durationRead, user }) => {
     try {
         const blog = new Blog({
-            title, image, description, date, type, durationRead, author: user._id
+            title,
+            image,
+            description,
+            date: new Date(),
+            type,
+            durationRead,
+            author: user._id
         });
 
         const saved = await blog.save();
@@ -22,7 +28,7 @@ const addBlog = async ({ title, image, description, date, type, durationRead, us
         console.log(error);
         throw new Error(error);
     }
-}
+};
 
 module.exports = {
     getBlogs,

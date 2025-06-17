@@ -3,7 +3,7 @@ const { Quiz } = require("../models");
 
 const getQuizzes = async () => {
     try {
-        const quizzes = await Quiz.find();
+        const quizzes = await Quiz.find().populate("author", "name");;
         return quizzes;
     } catch (error) {
         console.log(error);

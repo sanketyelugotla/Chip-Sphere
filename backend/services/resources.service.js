@@ -3,7 +3,7 @@ const { Resource } = require("../models");
 // 📌 Get all resources
 const getResources = async () => {
     try {
-        const resources = await Resource.find();
+        const resources = await Resource.find().populate("author", "name");;
         return resources;
     } catch (error) {
         console.error(error);
@@ -12,7 +12,7 @@ const getResources = async () => {
 };  
 
 // 📌 Add a new resources
-const addResource = async ({ name, description, typeOfFile, file, sizeOfFile }) => {
+const addResource = async ({ name, description, typeOfFile, file, sizeOfFile, user }) => {
     try {
         const resource = new Resource({
             name,
@@ -20,6 +20,7 @@ const addResource = async ({ name, description, typeOfFile, file, sizeOfFile }) 
             typeOfFile,
             file,
             sizeOfFile,
+            author: user._id,
         });
 
         const savedResource = await resource.save();

@@ -1,10 +1,9 @@
-const Blog = require("../models");
+const { Project } = require("../models");
 
 const getProjects = async () => {
     try {
         const projects = await Project.find()
             .populate("author", "name")
-            .populate("contributors", "name");
 
         return projects;
     } catch (error) {
@@ -25,14 +24,13 @@ const addProject = async ({ title, image, description, category, hashtags = [], 
             date: new Date(),
             author: user._id
         });
-
         const saved = await project.save();
         return saved;
     } catch (error) {
         console.error(error);
         throw new Error("Failed to add project");
     }
-  };
+};
 
 module.exports = {
     getProjects,

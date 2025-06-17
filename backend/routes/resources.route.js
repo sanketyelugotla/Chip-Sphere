@@ -1,3 +1,4 @@
+const authenticateAdmin = require("../middleware/authenticateAdmin");
 const { resourcesService } = require("../services");
 const express = require("express");
 const router = express.Router();
@@ -13,8 +14,9 @@ router.get("/", async (req, res) => {
     }
 });
 // 📌 Add a new resource
-router.post("/", async (req, res) => {
+router.post("/", authenticateAdmin, async (req, res) => {
     try {
+        req.body.user = req.user;
         const resource = await resourcesService.addResource(req.body);
         res.status(201).json({ success: true, message: "Resource added successfully", resource });
     } catch (error) {

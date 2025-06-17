@@ -16,6 +16,7 @@ router.get("/", async (req, res) => {
 
 router.put('/', authenticateAdmin, async (req, res) => {
     try {
+        req.body.user = req.user;
         const quiz = await quizService.addQuiz(req.body);
         res.status(200).json({ success: true, message: "Quiz added successfully", quiz });
     } catch (error) {

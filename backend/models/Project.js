@@ -21,12 +21,10 @@ const ProjectSchema = new mongoose.Schema({
         type: [String],
         default: [],
     },
-    contributors: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
-        }
-    ],
+    contributors: {
+        type: [String],
+        default: [],
+    },
     date: {
         type: Date,
         required: [true, 'Date is required'],

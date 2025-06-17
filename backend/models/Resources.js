@@ -4,7 +4,7 @@ const ResourceSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Name is required']
-    },  
+    },
     description: {
         type: String,
         required: [true, 'Description is required'],
@@ -29,7 +29,7 @@ const ResourceSchema = new mongoose.Schema({
         type: String,
         required: [true, 'File is required'],
         validate: {
-            validator: function(v) {
+            validator: function (v) {
                 return /\.(pdf|mp4|docx)$/.test(v);
             },
             message: props => `${props.value} is not a valid file format!`
@@ -44,6 +44,11 @@ const ResourceSchema = new mongoose.Schema({
         type: Number,
         default: 0,
         min: [0, 'Number of downloads cannot be negative']
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: [true, 'Author is required'],
     },
 })
 

@@ -3,7 +3,7 @@ const { Quiz } = require("../models");
 
 const getQuizzes = async () => {
     try {
-        const quizzes = await Quiz.find();
+        const quizzes = await Quiz.find().populate("author", "name");
         return quizzes;
     } catch (error) {
         console.log(error);
@@ -11,10 +11,10 @@ const getQuizzes = async () => {
     }
 };
 
-const addQuiz = async ({ name, description, duration, level, category, user }) => {
+const addQuiz = async ({ title, description, duration, level, category, user }) => {
     try {
         const quiz = new Quiz({
-            name,
+            title,
             description,
             duration,
             level,

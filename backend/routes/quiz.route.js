@@ -1,7 +1,6 @@
 const express = require("express");
 const { quizService } = require("../services");
 const authenticateAdmin = require("../middleware/authenticateAdmin");
-
 const router = express.Router();
 
 // Get all quizzes
@@ -24,5 +23,6 @@ router.put('/', authenticateAdmin, async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 })
+
 
 module.exports = router;

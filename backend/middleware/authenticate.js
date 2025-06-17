@@ -16,7 +16,7 @@ function authenticate(req, res, next) {
             req.user = { _id: decoded.id };
             next();
         } else {
-            return res.status(401).json({ status: false, error: "Unauthorised" })
+            return res.status(401).json({ status: false, error: "Unauthorised" });
         }
     } catch (error) {
         return res.status(401).json({ status: false, error: "Invalid token" });

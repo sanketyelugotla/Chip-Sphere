@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 })
 
 app.use("/auth", auth);
-app.use(authenticate);
+// app.use(authenticate);
 app.use('/quiz', quiz);
 app.use('/blog', quiz);
 

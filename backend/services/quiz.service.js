@@ -11,14 +11,15 @@ const getQuizzes = async () => {
     }
 };
 
-const addQuiz = async ({ name, description, duration, level, subject }) => {
+const addQuiz = async ({ name, description, duration, level, category, user }) => {
     try {
         const quiz = new Quiz({
             name,
             description,
             duration,
             level,
-            subject,
+            category,
+            author: user._id,
         });
 
         const saved = await quiz.save();

@@ -1,5 +1,6 @@
 const express = require("express");
 const { quizService } = require("../services");
+const authenticateAdmin = require("../middleware/authenticateAdmin");
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router.get("/", async (req, res) => {
     }
 })
 
-router.put('/', async (req, res) => {
+router.put('/', authenticateAdmin, async (req, res) => {
     try {
         const quiz = await quizService.addQuiz(req.body);
         res.status(200).json({ success: true, message: "Quiz added successfully", quiz });

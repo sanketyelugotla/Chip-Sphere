@@ -1,7 +1,24 @@
+'use client'
+import { getResources } from '@/utils/resources'
+import React, { useState, useEffect } from 'react'
 import ResourceCard from '@/components/ResourceCard'
-import React from 'react'
 
 export default function Resources() {
+
+  const [resources, setResources] = useState([])
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        const data = await getResources();
+        console.log("Fetched Resources:", data);
+        setResources(data);
+      } catch (error) {
+        console.error("Error fetching resources:", error);
+      }
+    };
+    fetchResources();
+  }, []);
+
   return (
     <div>
       <div className='w-full py-10 px-15 md:py-15 md:px-20 bg-[var(--secondaryBackground)]'>
@@ -26,15 +43,17 @@ export default function Resources() {
           </select>
         </div>
         <div className='grid grid-cols-1 gap-6 md:grid-cols-4 px-15 md:px-20'>
-          <ResourceCard typeOfFile={"PDF"} typeOfMaterial="Lecture Notes" NameOfFile="Data Structures and Algorithms" descOfFile="Comprehensive notesddsvsdvsdv sdvsdv sd v dsvsd vsdv dsvsd s on Data Structures and Algorithms." SizeOfFIle="2.5 MB" NoOfDownloads={150} />
-          <ResourceCard typeOfFile={"PDF"} typeOfMaterial="Lecture Notes" NameOfFile="Data Structures and Algorithms" descOfFile="Comprehensive notesddsvsdvsdv sdvsdv sd v dsvsd vsdv dsvsd s on Data Structures and Algorithms." SizeOfFIle="2.5 MB" NoOfDownloads={150} />
-          <ResourceCard typeOfFile={"PDF"} typeOfMaterial="Lecture Notes" NameOfFile="Data Structures and Algorithms" descOfFile="Comprehensive notesddsvsdvsdv sdvsdv sd v dsvsd vsdv dsvsd s on Data Structures and Algorithms." SizeOfFIle="2.5 MB" NoOfDownloads={150} />
-          <ResourceCard typeOfFile={"PDF"} typeOfMaterial="Lecture Notes" NameOfFile="Data Structures and Algorithms" descOfFile="Comprehensive notesddsvsdvsdv sdvsdv sd v dsvsd vsdv dsvsd s on Data Structures and Algorithms." SizeOfFIle="2.5 MB" NoOfDownloads={150} />
-          <ResourceCard typeOfFile={"PDF"} typeOfMaterial="Lecture Notes" NameOfFile="Data Structures and Algorithms" descOfFile="Comprehensive notesddsvsdvsdv sdvsdv sd v dsvsd vsdv dsvsd s on Data Structures and Algorithms." SizeOfFIle="2.5 MB" NoOfDownloads={150} />
-          <ResourceCard typeOfFile={"PDF"} typeOfMaterial="Lecture Notes" NameOfFile="Data Structures and Algorithms" descOfFile="Comprehensive notesddsvsdvsdv sdvsdv sd v dsvsd vsdv dsvsd s on Data Structures and Algorithms." SizeOfFIle="2.5 MB" NoOfDownloads={150} />
-          <ResourceCard typeOfFile={"PDF"} typeOfMaterial="Lecture Notes" NameOfFile="Data Structures and Algorithms" descOfFile="Comprehensive notesddsvsdvsdv sdvsdv sd v dsvsd vsdv dsvsd s on Data Structures and Algorithms." SizeOfFIle="2.5 MB" NoOfDownloads={150} />
-          <ResourceCard typeOfFile={"PDF"} typeOfMaterial="Lecture Notes" NameOfFile="Data Structures and Algorithms" descOfFile="Comprehensive notesddsvsdvsdv sdvsdv sd v dsvsd vsdv dsvsd s on Data Structures and Algorithms." SizeOfFIle="2.5 MB" NoOfDownloads={150} />
-          <ResourceCard typeOfFile={"DOCX"} typeOfMaterial="Question Paper" NameOfFile="Computer Networks - Midterm" descOfFile="Midterm ques;sdmvsdv alkv asl vasvaslv asl  weewf wefwefewf t" SizeOfFIle="1.2 MB" NoOfDownloads={200} />
+          {resources.map((resource, index) => (
+          <ResourceCard
+            key={index}
+            typeOfFile={resource.typeOfFile}
+            typeOfMaterial={resource.typeOfMaterial}
+            NameOfFile={resource.name}
+            descOfFile={resource.description}
+            SizeOfFIle={resource.SizeOfFIlezeOfFile}
+            NoOfDownloads={resource.noOfDownloads}
+          />
+          ))}
         </div>
       </div>
     </div>

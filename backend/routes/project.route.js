@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 })
 
 // Add a project
-router.put('/', authenticate, async (req, res) => {
+router.put('/', authenticateAdmin, async (req, res) => {
     try {
         req.body.user = req.user;
         const project = await projectService.addProject(req.body);

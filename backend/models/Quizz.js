@@ -24,15 +24,19 @@ const QuizSchema = new mongoose.Schema({
         type: String,
         required: [true, 'category is required']
     },
-    color: {
-        type: String,
-        required: [true, 'color is required']
-    },
     questions: {
         type: Number,
-        required: [true, 'Questions is required']
+        default: 0,
     },
-
+    usersAttempted: {
+        type: Number,
+        default: 0,
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: [true, 'Author is required'],
+    },
 });
 
 module.exports = mongoose.model("Quizz", QuizSchema);

@@ -1,26 +1,27 @@
 const express = require("express");
-const { quizService } = require("../services");
+const { blogService } = require("../services");
 const authenticateAdmin = require("../middleware/authenticateAdmin");
 
 const router = express.Router();
 
-// Get all quizzes
+// Get all blogs
 router.get("/", async (req, res) => {
     try {
-        const quizzes = await quizService.getQuizzes();
-        res.status(200).json({ success: true, message: "Quizzes fetched successfully", quizzes });
+        const blogs = await blogService.getBlogs();
+        res.status(200).json({ success: true, message: "Blogs fetched successfully", blogs });
     } catch (error) {
-        console.error("Error Getting quizzes:", error);
+        console.error("Error Getting blogs:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 })
 
+// Add a blog
 router.put('/', authenticateAdmin, async (req, res) => {
     try {
-        const quiz = await quizService.addQuiz(req.body);
-        res.status(200).json({ success: true, message: "Quiz added successfully", quiz });
+        const blog = await blogService.addBlog(req.body);
+        res.status(200).json({ success: true, message: "Blog added successfully", blog });
     } catch (error) {
-        console.error("Error adding quizz:", error);
+        console.error("Error adding blog:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 })

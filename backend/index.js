@@ -32,6 +32,7 @@ app.use("/auth", auth);
 app.use('/quiz', quiz);
 app.use('/resource', resource);
 // app.use(authenticate);
+app.use('/blog', blog);
 app.use('/quiz', quiz);
 app.use('/blog', blog);
 app.use('/project', project);

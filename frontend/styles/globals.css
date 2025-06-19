@@ -72,7 +72,7 @@
   --color-foreground: var(--foreground);
   --color-secondar-background: var(--secondary-background);
   --color-container-background: var(--container-background);
-  --color-secondary-text: var(--secondary-text);
+  --color-secondary-text: var(--secondaryText);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-intermediate: var(--intermediate);
 }

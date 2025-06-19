@@ -26,7 +26,7 @@ export default function Blogs() {
   });
 
   return (
-    <div className="bg-background text-foreground min-h-screen">
+    <div className="bg-background  min-h-screen">
       {/* Header */}
       <div className="relative bg-gradient-to-r from-primary/10 to-primary/5 px-4 sm:px-10 md:px-16 lg:px-20 py-10">
         <div className="max-w-screen-xl mx-auto">
@@ -69,7 +69,7 @@ export default function Blogs() {
             className="w-full lg:w-1/2 object-cover"
           />
           <div className="p-6 flex flex-col justify-between">
-            <p className="px-3 py-1 w-fit rounded-full bg-blue-500 text-secondary-text text-sm font-medium mb-2">
+            <p className="px-3 py-1 w-fit rounded-full bg-blue-500 text-white text-sm font-medium mb-2">
               Industry Trends
             </p>
             <h3 className="text-2xl font-bold mb-2">
@@ -79,7 +79,7 @@ export default function Blogs() {
               Exploring upcoming trends and technologies in VLSI design that will shape the industry in the coming years.
             </p>
             <p className="text-sm text-muted-foreground mb-2">Dr. Sarah Chen · May 15, 2023 · 8 min read</p>
-            <button className="mt-auto bg-blue-600 text-secondary-text py-2 px-4 rounded-md hover:bg-blue-700 transition w-fit">
+            <button className="mt-auto bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition w-fit">
               Read Full Article
             </button>
           </div>

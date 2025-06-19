@@ -10,11 +10,11 @@ function ResourceCard({typeOfFile,typeOfMaterial,NameOfFile,descOfFile,SizeOfFIl
         <div className='flex flex-col h-[150] items-center gap-2'>
             <p className='h-12 w-12 rounded-full bg-secondar-background'></p>
             <h1 className='text-2xl font-bold text-wrap overflow-hidden text-center'>{NameOfFile}</h1>
-            <p className='text-sm font-semibold text-center text-wrap h-[40] overflow-hidden  text-secondary-foreground'>{descOfFile}</p>
+            <p className='text-sm font-semibold text-center text-wrap h-[40] overflow-hidden  text-muted-foreground'>{descOfFile}</p>
         </div>
         <div className='flex justify-between'>
-            <p className=' text-sm text-secondary-foreground'>Size: {SizeOfFIle}</p>
-            <p className=' text-sm text-secondary-foreground'>{NoOfDownloads} downloads</p>
+            <p className=' text-sm text-muted-foreground'>Size: {SizeOfFIle}</p>
+            <p className=' text-sm text-muted-foreground'>{NoOfDownloads} downloads</p>
         </div>
         <div className='flex justify-between gap-2'>
             <button className='rounded-md w-[50%] py-2 text-sm text-foreground bg-background border-1 border-secondar-background'> Save</button>

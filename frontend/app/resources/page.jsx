@@ -21,21 +21,21 @@ export default function Resources() {
 
   return (
     <div>
-      <div className='w-full py-10 px-15 md:py-15 md:px-20 bg-[var(--secondaryBackground)]'>
+      <div className='w-full py-10 px-15 md:py-15 md:px-20 bg-secondar-background'>
         <h1 className='text-2xl md:text-5xl font-bold my-2'>Resources</h1>
-        <p className=' text-sm md:text-md font-semibold text-[var(--secondaryForeground)] text-wrap'>Access a wide range of study materials, lecture notes, question papers and more to enhance your learning experience.</p>
+        <p className=' text-sm md:text-md font-semibold text-muted-foreground text-wrap'>Access a wide range of study materials, lecture notes, question papers and more to enhance your learning experience.</p>
       </div>
       <div>
         <div className='flex gap-2 sm:px-15 md:px-20 py-2 md:py-5' >
-          <input type="text" placeholder='Search for resources...' className='flex-3 border-1 px-4 py-2 border-[var(--secondaryBackground)] rounded-md' />
-          <select className='flex-1 border-1 px-4 py-2 border-[var(--secondaryBackground)] rounded-md'>
+          <input type="text" placeholder='Search for resources...' className='flex-3 border-1 px-4 py-2 border-secondar-background rounded-md' />
+          <select className='flex-1 border-1 px-4 py-2 border-secondar-background rounded-md'>
             <option value="all">All Categories</option>
             <option value="lecture-notes">Lecture Notes</option>
             <option value="question-papers">Question Papers</option>
             <option value="assignments">Assignments</option>
           </select>
 
-          <select className='flex-1 border-1 px-4 py-2 border-[var(--secondaryBackground)] rounded-md'>
+          <select className='flex-1 border-1 px-4 py-2 border-secondar-background rounded-md'>
             <option value="all">All Types</option>
             <option value="pdf">PDF</option>
             <option value="docx">DOCX</option>

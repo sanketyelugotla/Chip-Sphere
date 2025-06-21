@@ -89,8 +89,8 @@ export default function Quizzes() {
         {/* Quizzes Grid */}
         {filteredQuizzes.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-            {filteredQuizzes.map((quiz, index) => (
-              <QuizCard key={index} quiz={quiz} />
+            {filteredQuizzes.map((quiz) => (
+              <QuizCard key={quiz._id} quiz={quiz} />
             ))}
           </div>
         ) : (

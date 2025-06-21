@@ -53,4 +53,5 @@ const checkAnswers = async (quizId, submittedAnswers) => {
 module.exports = {
     getQuestions,
     addQuestionsToQuiz,
+    checkAnswers,
 };

@@ -4,7 +4,6 @@ const getQuestions = async (quizId) => {
     if (!quizId) throw new Error("Quiz ID is required");
 
     const questions = await Question.find({ quizId }).select("-answer -explanation");
-
     return questions;
 };
 
@@ -48,7 +47,7 @@ const checkAnswers = async (quizId, submittedAnswers) => {
         correct: score,
         results
     };
-  };
+};
 
 module.exports = {
     getQuestions,

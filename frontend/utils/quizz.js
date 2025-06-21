@@ -12,3 +12,13 @@ export const getQuizzes = async (email, password) => {
     }
 }
 
+export const getQuestions = async (id) => {
+    console.log(id, "called")
+    try {
+        const response = await axios.get(`${dbUri}/question/${id}`);
+        // console.log(response.data.questions)
+        return response.data.questions;
+    } catch (error) {
+        return error;
+    }
+}

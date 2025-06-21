@@ -13,7 +13,6 @@ export default function QuizPage({ params }) {
   const [answers, setAnswers] = useState([]);
 
   useEffect(() => {
-    // Start timer
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
@@ -25,16 +24,14 @@ export default function QuizPage({ params }) {
       });
     }, 1000);
 
-    // Fetch data
     getData();
 
-    return () => clearInterval(timer); // Cleanup timer
+    return () => clearInterval(timer);
   }, []);
 
   const getData = async () => {
     const data = await getQuestions(id);
-    setQuestions(data);
-    console.log(data);
+    setQuestions(Array.isArray(data) ? data : []);
   };
 
   const handleOptionSelect = (option) => {
@@ -52,7 +49,6 @@ export default function QuizPage({ params }) {
       }
       return updated;
     });
-    console.log(answers)
   };
 
   const handleNext = () => {
@@ -83,7 +79,18 @@ export default function QuizPage({ params }) {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  if (!questions) return <p className="text-white text-center mt-10">Loading questions...</p>;
+  if (!questions) {
+    return <p className="text-white text-center mt-10">Loading questions...</p>;
+  }
+
+  if (questions.length === 0) {
+    return (
+      <div className="max-w-3xl mx-auto px-5 py-8 text-slate-200 text-center">
+        <h1 className="text-2xl font-semibold text-red-400">No Questions Available</h1>
+        <p className="text-slate-400 mt-2">It looks like there are no questions in this quiz. Please check back later or contact the administrator.</p>
+      </div>
+    );
+  }
 
   if (quizSubmitted) {
     return (
@@ -105,7 +112,7 @@ export default function QuizPage({ params }) {
   const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="max-w-3xl my-10 mx-auto px-5 py-8 text-secondary-text  relative bg-gradient-to-r from-primary/10 to-primary/5">
+    <div className="max-w-3xl my-10 mx-auto px-5 py-8 text-secondary-text relative bg-gradient-to-r from-primary/10 to-primary/5">
       <header className="mb-6">
         <h1 className="text-2xl font-semibold text-foreground mb-2">FPGA Architecture and Design</h1>
         <p className="text-muted-foreground text-sm mb-6">Test your knowledge of FPGA architecture, design flow, and implementation techniques.</p>
@@ -134,11 +141,11 @@ export default function QuizPage({ params }) {
       <main>
         <div className="bg-background rounded-lg p-6 mb-6">
           <div className="text-lg mb-6 leading-relaxed text-foreground">
-            {currentQuestion.title}
+            {currentQuestion?.title}
           </div>
 
           <ul className="space-y-3">
-            {currentQuestion.options.map((option, index) => (
+            {currentQuestion?.options.map((option, index) => (
               <li
                 key={index}
                 className={`bg-primary p-4 rounded-lg cursor-pointer transition-all 

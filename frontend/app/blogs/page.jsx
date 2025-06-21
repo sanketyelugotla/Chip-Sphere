@@ -21,7 +21,7 @@ export default function Blogs() {
     getData();
   }, []);
 
-  const filteredBlogs = blogs.filter((blog) => {
+  const filteredBlogs = blogs?.filter((blog) => {
     return selectedCategory === "All Categories" || blog.type === selectedCategory;
   });
 

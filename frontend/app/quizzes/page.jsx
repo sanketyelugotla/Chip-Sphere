@@ -12,7 +12,7 @@ export default function Quizzes() {
   const getdata = async () => {
     const data = await getQuizzes();
     setQuizzes(data);
-    const uniqueCategories = Array.from(new Set(data.map(q => q.category))).filter(Boolean);
+    const uniqueCategories = Array.isArray(quizzes) ? Array.from(new Set(data.map(q => q.category))).filter(Boolean) : [];
     setCategories(uniqueCategories);
   }
 
@@ -24,17 +24,19 @@ export default function Quizzes() {
   const [selectedDifficulty, setSelectedDifficulty] = useState("All Difficulties");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredQuizzes = quizzes.filter((quiz) => {
-    const categoryMatch =
-      selectedCategory === "All Categories" || quiz.category === selectedCategory;
-    const difficultyMatch =
-      selectedDifficulty === "All Difficulties" || quiz.level === selectedDifficulty;
-    const searchMatch =
-      quiz.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      quiz.description.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredQuizzes = Array.isArray(quizzes)
+    ? quizzes.filter((quiz) => {
+      const categoryMatch =
+        selectedCategory === "All Categories" || quiz.category === selectedCategory;
+      const difficultyMatch =
+        selectedDifficulty === "All Difficulties" || quiz.level === selectedDifficulty;
+      const searchMatch =
+        quiz.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        quiz.description.toLowerCase().includes(searchQuery.toLowerCase());
 
-    return categoryMatch && difficultyMatch && searchMatch;
-  });
+      return categoryMatch && difficultyMatch && searchMatch;
+    })
+    : [];
 
   return (
     <>

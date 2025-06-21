@@ -4,4 +4,5 @@ module.exports = {
     Blog: require('./Blog'),
     Resource: require('./Resources'),
     Project: require('./Project'),
+    Question: require('./Question'),
 }

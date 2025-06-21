@@ -13,11 +13,20 @@ export const getQuizzes = async (email, password) => {
 }
 
 export const getQuestions = async (id) => {
-    console.log(id, "called")
     try {
         const response = await axios.get(`${dbUri}/question/${id}`);
         // console.log(response.data.questions)
         return response.data.questions;
+    } catch (error) {
+        return error;
+    }
+}
+
+export const submitAnswers = async (id, answers) => {
+    console.log(answers)
+    try {
+        const response = await axios.post(`${dbUri}/question/${id}`, { answers });
+        return response.data;
     } catch (error) {
         return error;
     }

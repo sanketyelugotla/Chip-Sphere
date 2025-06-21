@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { getQuestions } from '@/utils/quizz';
+import { getQuestions, submitAnswers } from '@/utils/quizz';
 
 export default function QuizPage({ params }) {
   const { id } = React.use(params);
@@ -10,6 +10,7 @@ export default function QuizPage({ params }) {
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [questions, setQuestions] = useState(null);
+  const [answers, setAnswers] = useState([]);
 
   useEffect(() => {
     // Start timer
@@ -38,13 +39,23 @@ export default function QuizPage({ params }) {
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
+
+    const currentQuestionId = questions[currentQuestionIndex]._id;
+
+    setAnswers(prev => {
+      const updated = [...prev];
+      const existing = updated.find(a => a.questionId === currentQuestionId);
+      if (existing) {
+        existing.selected = option;
+      } else {
+        updated.push({ questionId: currentQuestionId, selected: option });
+      }
+      return updated;
+    });
+    console.log(answers)
   };
 
   const handleNext = () => {
-    if (selectedOption === questions[currentQuestionIndex].answer) {
-      setScore(prev => prev + 1);
-    }
-
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setSelectedOption(null);
@@ -60,7 +71,9 @@ export default function QuizPage({ params }) {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    const response = await submitAnswers(id, answers);
+    setScore(response.result.correct);
     setQuizSubmitted(true);
   };
 

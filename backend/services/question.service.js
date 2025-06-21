@@ -40,7 +40,7 @@ const checkAnswers = async (quizId, submittedAnswers) => {
             isCorrect
         };
     });
-
+    // console.log(results);
     return {
         totalQuestions: questions.length,
         attempted: submittedAnswers.length,

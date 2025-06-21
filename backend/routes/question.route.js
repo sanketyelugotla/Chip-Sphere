@@ -26,7 +26,9 @@ router.put('/:id', async (req, res) => {
 })
 
 // Check submitted answers for a quiz
-router.post('/check/:id', async (req, res) => {
+router.post('/:id', async (req, res) => {
+    console.log(req.params.id);
+    console.log(req.body);
     try {
         const result = await questionService.checkAnswers(req.params.id, req.body.answers);
         res.status(200).json({ success: true, message: "Answers evaluated", result });

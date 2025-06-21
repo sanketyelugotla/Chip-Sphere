@@ -1,0 +1,39 @@
+const express = require("express");
+const { questionService } = require("../services");
+
+const router = express.Router();
+
+// Get all Questions for a quiz
+router.get("/:id", async (req, res) => {
+    try {
+        const questions = await questionService.getQuestions(req.params.id);
+        res.status(200).json({ success: true, message: "Questions fetched successfully", questions });
+    } catch (error) {
+        console.error("Error Getting questions:", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+})
+
+// Add questions for a quiz
+router.put('/:id', async (req, res) => {
+    try {
+        const questions = await questionService.addQuestionsToQuiz(req.params.id, req.body.questions);
+        res.status(200).json({ success: true, message: "Questions added successfully", questions });
+    } catch (error) {
+        console.error("Error adding Questions:", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+})
+
+// Check submitted answers for a quiz
+router.post('/check/:id', async (req, res) => {
+    try {
+        const result = await questionService.checkAnswers(req.params.id, req.body.answers);
+        res.status(200).json({ success: true, message: "Answers evaluated", result });
+    } catch (error) {
+        console.error("Error checking answers:", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+module.exports = router;

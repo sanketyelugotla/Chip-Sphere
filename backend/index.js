@@ -2,7 +2,7 @@ const express = require('express');
 const connectDB = require('./config/db')
 const cors = require("cors");
 
-const { auth, quiz, blog, resource, project } = require('./routes')
+const { auth, quiz, blog, resource, project, question } = require('./routes')
 const { authenticate } = require('./middleware/authenticate')
 
 require("dotenv").config();
@@ -36,6 +36,7 @@ app.use('/blog', blog);
 app.use('/quiz', quiz);
 app.use('/blog', blog);
 app.use('/project', project);
+app.use('/question', question);
 
 // Port configuration and start server
 const PORT = process.env.PORT || 3000;

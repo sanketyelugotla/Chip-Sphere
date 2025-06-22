@@ -4,29 +4,58 @@ import { CiUser } from 'react-icons/ci';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import BlogCard from '@/components/blogCard';
+import Loading from '../loading';
 
 export default function Blogs() {
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState(null);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [error, setError] = useState(null); // 🔥 Error state
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getBlogs();
-      console.log(data)
-      setBlogs(data);
-      const uniqueCategories = Array.from(new Set(data.map(q => q.type))).filter(Boolean);
-      setCategories(uniqueCategories);
+      try {
+        const data = await getBlogs();
+        setBlogs(data);
+        const uniqueCategories = Array.from(new Set(data.map(q => q.type))).filter(Boolean);
+        setCategories(uniqueCategories);
+      } catch (err) {
+        console.error(err);
+        if (err.message === 'Network Error') {
+          setError("⚠️ Network Error: Please check your internet connection or try again later.");
+        } else {
+          setError(`⚠️ ${err.message}`);
+        }
+      }
     };
     getData();
   }, []);
 
-  const filteredBlogs = blogs?.filter((blog) => {
-    return selectedCategory === "All Categories" || blog.type === selectedCategory;
-  });
+  // Loading state
+  if (!blogs && !error) {
+    return (
+      <div className="p-6">
+        <Loading />
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="p-6 text-red-500 font-semibold bg-red-100 rounded-md max-w-screen-md mx-auto mt-6">
+        {error}
+      </div>
+    );
+  }
+
+  // Filter blogs by category
+  const filteredBlogs = blogs?.filter(blog =>
+    selectedCategory === "All Categories" || blog.type === selectedCategory
+  );
 
   return (
-    <div className="bg-background  min-h-screen">
+    <div className="bg-background min-h-screen">
       {/* Header */}
       <div className="relative bg-gradient-to-r from-primary/10 to-primary/5 px-4 sm:px-10 md:px-16 lg:px-20 py-10">
         <div className="max-w-screen-xl mx-auto">
@@ -79,7 +108,8 @@ export default function Blogs() {
               Exploring upcoming trends and technologies in VLSI design that will shape the industry in the coming years.
             </p>
             <p className="text-sm text-muted-foreground mb-2">Dr. Sarah Chen · May 15, 2023 · 8 min read</p>
-            <button className="mt-auto bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition w-fit">
+
+            <button className="mt-auto bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition w-fit cursor-pointer">
               Read Full Article
             </button>
           </div>

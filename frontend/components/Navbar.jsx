@@ -92,6 +92,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
+              prefetch={true}
               className={`text-[0.875rem] font-bold transition-colors hover:text-primary ${pathname === link.href ? "text-primary" : "text-muted-foreground"
                 }`}
             >
@@ -155,6 +156,7 @@ export default function Navbar() {
                     <Link
                       key={link.name}
                       href={link.href}
+                       prefetch={true}
                       className={`block text-lg font-medium transition-colors hover:text-primary ${pathname === link.href ? "text-primary" : "text-muted-foreground"
                         }`}
                     >

@@ -1,6 +1,7 @@
 const express = require("express");
 const { blogService } = require("../services");
 const authenticateAdmin = require("../middleware/authenticateAdmin");
+const { getBlog } = require("../services/blog.service");
 
 const router = express.Router();
 
@@ -11,6 +12,16 @@ router.get("/", async (req, res) => {
         res.status(200).json({ success: true, message: "Blogs fetched successfully", blogs });
     } catch (error) {
         console.error("Error Getting blogs:", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+})
+
+router.get("/:id", async (req, res) => {
+    try {
+        const blog = await blogService.getBlog(req.params.id);
+        res.status(200).json({ success: true, message: "Blog fetched successfully", blog });
+    } catch (error) {
+        console.error("Error Getting blog:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 })

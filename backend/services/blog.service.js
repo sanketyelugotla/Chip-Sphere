@@ -30,7 +30,21 @@ const addBlog = async ({ title, image, description, type, durationRead, user }) 
     }
 };
 
+const getBlog = async (id) => {
+    try {
+        const blog = await Blog.findById(id).populate("author", "name");
+        if (!blog) {
+            throw new Error("Blog not found");
+        }
+        return blog;
+    } catch (error) {
+        console.error("Error fetching blog:", error.message);
+        throw new Error("Failed to fetch blog");
+    }
+};
+
 module.exports = {
     getBlogs,
     addBlog,
+    getBlog,
 };

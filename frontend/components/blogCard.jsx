@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import { CiUser } from 'react-icons/ci';
 
@@ -43,9 +44,9 @@ export default function BlogCard({ blog }) {
 
             {/* Read More link - Added as shown in image */}
             <div className="mt-4 flex justify-between items-center">
-                <a href="#" className="text-primary hover:underline font-medium">
+                <Link href={`/blogs/${blog._id}`} className="text-primary/80 hover:text-primary font-medium">
                     Read More →
-                </a>
+                </Link>
             </div>
         </div>
     );

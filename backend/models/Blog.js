@@ -33,6 +33,10 @@ const BlogSchema = new mongoose.Schema({
         ref: "User",
         required: [true, 'Author is required'],
     },
+    content: {
+        type: String,
+        required: [true, 'content is required'],
+    },
 });
 
 module.exports = mongoose.model("Blog", BlogSchema);

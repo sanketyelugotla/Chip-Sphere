@@ -140,7 +140,7 @@ export default function QuizPage({ params }) {
 
         <div className="flex justify-between items-center mb-6 pb-2 border-b border-border">
           <span className="text-foreground font-medium">Question {currentQuestionIndex + 1} of {questions.length}</span>
-          <span className="bg-secondary px-3 py-1 rounded-full text-xs text-destructive font-bold border border-border">
+          <span className="bg-secondary-text px-3 py-1 rounded-full text-xs text-red-500 font-extrabold border border-border">
             ⏱ {formatTime(timeLeft)} remaining
           </span>
         </div>
@@ -168,7 +168,7 @@ export default function QuizPage({ params }) {
 
         <div className="flex justify-between mt-6">
           <button
-            className={`px-6 py-2 rounded-lg font-medium transition-all border border-border
+            className={`px-6 py-2 rounded-lg font-medium transition-all border border-border cursor-pointer
               ${currentQuestionIndex === 0 ? 'bg-secondary text-muted-foreground cursor-not-allowed' : 'bg-secondary hover:bg-secondary-background text-foreground'}`}
             onClick={handlePrev}
             disabled={currentQuestionIndex === 0}
@@ -176,7 +176,7 @@ export default function QuizPage({ params }) {
             Previous
           </button>
           <button
-            className={`px-6 py-2 rounded-lg font-medium transition-all border border-primary
+            className={`px-6 py-2 rounded-lg font-medium transition-all border border-primary cursor-pointer
               ${!selectedOption ? 'bg-primary/50 hover:bg-primary/90  text-primary-foreground' : 'bg-primary/90 hover:bg-primary/90 text-primary-foreground'}`}
             onClick={handleNext}
           >

@@ -1,17 +1,18 @@
 import React from 'react';
 import { FiDownload, FiSave } from 'react-icons/fi';
+import { TbFileStack, TbFileTypePpt, TbFileTypePdf, TbFileTypeDocx } from "react-icons/tb";
 
 function ResourceCard({ resource }) {
     const getFileIcon = (fileType) => {
         switch (fileType.toLowerCase()) {
             case 'pdf':
-                return <span className="text-red-500 text-4xl">PDF</span>;
+                return <TbFileTypePdf className='w-[70%] h-[70%] ' />;
             case 'docx':
-                return <span className="text-blue-500 text-4xl">DOCX</span>;
+                return <TbFileTypeDocx className='w-[70%] h-[70%] ' />;
             case 'ppt':
-                return <span className="text-orange-500 text-4xl">PPT</span>;
+                return <TbFileTypePpt className='w-[70%] h-[70%] '/>;
             default:
-                return <span className="text-gray-500 text-4xl">FILE</span>;
+                return <TbFileStack className='w-[70%] h-[70%] '/>;
         }
     };
 
@@ -20,10 +21,10 @@ function ResourceCard({ resource }) {
             <div className="p-5 flex flex-col h-full">
                 {/* Badges */}
                 <div className="flex justify-between mb-4">
-                    <span className="px-3 py-1 text-xs rounded-full bg-primary/10 text-primary font-medium">
+                    <span className="px-3 py-1 text-xs font-semibold capitalize rounded-full bg-primary/10 text-primary">
                         {resource.typeOfFile}
                     </span>
-                    <span className="px-3 py-1 text-xs rounded-full bg-secondary text-secondary-foreground font-medium">
+                    <span className="px-3 py-1 text-xs  font-semibold capitalize rounded-full bg-secondary text-secondary-foreground">
                         {resource.typeOfMaterial}
                     </span>
                 </div>

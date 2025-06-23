@@ -39,7 +39,7 @@ export default function LoginForm({ toggleAuthMode }) {
     }
 
     return (
-        <Card className="shadow-lg rounded-2xl bg-white border border-gray-300 hover:border-[#4AC9D6] transition-all duration-300">
+        <Card className="shadow-lg rounded-2xl bg-container-background border border-border hover:border-[#4AC9D6] transition-all duration-300">
             <Link href="/" passHref>
                 <div className="mx-auto w-36 cursor-pointer transition-all duration-500 transform hover:scale-105 hover:animate-pulse">
                     <Image
@@ -54,8 +54,8 @@ export default function LoginForm({ toggleAuthMode }) {
             </Link>
 
             <CardHeader className="text-center pt-6">
-                <CardTitle className="text-3xl font-extrabold text-gray-800">Time to Plug In!</CardTitle>
-                <CardDescription className="text-gray-500">Chipsphere: Powering Circuit Minds Everywhere.</CardDescription>
+                <CardTitle className="text-3xl font-extrabold">Time to Plug In!</CardTitle>
+                <CardDescription className="text-sm text-muted-foreground font-medium">Chipsphere: Powering Circuit Minds Everywhere.</CardDescription>
             </CardHeader>
 
             <CardContent>
@@ -69,7 +69,7 @@ export default function LoginForm({ toggleAuthMode }) {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Email Input */}
                     <div className="space-y-2">
-                        <Label htmlFor="email" className="text-sm text-gray-600">Your Email</Label>
+                        <Label htmlFor="email" className="text-sm text-muted-foreground font-medium">Your Email</Label>
                         <Input
                             id="email"
                             type="email"
@@ -77,14 +77,14 @@ export default function LoginForm({ toggleAuthMode }) {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="w-full rounded-md bg-gray-50 text-gray-700 border-2 border-gray-300 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
+                            className="w-full rounded-md bg-backgroud border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
                         />
                     </div>
 
                     {/* Password Input */}
                     <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                            <Label htmlFor="password" className="text-sm text-gray-600">Password</Label>
+                            <Label htmlFor="password" className="text-sm text-muted-foreground font-medium">Password</Label>
                             <Link href="/auth/Forgetpassword" className="text-sm text-[#4AC9D6] hover:underline">
                                 Forgot password?
                             </Link>
@@ -97,7 +97,7 @@ export default function LoginForm({ toggleAuthMode }) {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 placeholder="Shh… It's a secret!"
-                                className="w-full rounded-md bg-gray-50 text-gray-700 border-2 border-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
+                                className="w-full rounded-md bg-backgroud border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
                             />
                             <div
                                 className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
@@ -114,7 +114,7 @@ export default function LoginForm({ toggleAuthMode }) {
 
                     {/* Captcha Input */}
                     <div className="space-y-2">
-                        <Label htmlFor="captcha" className="text-sm text-gray-600">Captcha:</Label>
+                        <Label htmlFor="captcha" className="text-sm text-muted-foreground font-medium">Captcha:</Label>
                         <div className="flex items-center gap-4">
                             <div className="flex items-center justify-center">
                                 <Button type="button" variant="ghost" size="icon" onClick={refreshCaptcha}>
@@ -134,7 +134,7 @@ export default function LoginForm({ toggleAuthMode }) {
                                 onChange={(e) => setCaptchaInput(e.target.value)}
                                 placeholder="Enter captcha"
                                 required
-                                className="w-full max-w-[200px] ml-3 rounded-md bg-gray-50 text-gray-700 border-2 border-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
+                                className="w-full max-w-[200px] ml-3 rounded-md bg-backgroud border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
                             />
                         </div>
                     </div>
@@ -148,7 +148,7 @@ export default function LoginForm({ toggleAuthMode }) {
                             onChange={() => setRememberMe(!rememberMe)}
                             className="h-4 w-4 text-[#4AC9D6] border-gray-300 rounded focus:ring-2 focus:ring-[#4AC9D6]"
                         />
-                        <Label htmlFor="rememberMe" className="text-sm text-gray-600">Remember me</Label>
+                        <Label htmlFor="rememberMe" className="text-sm text-muted-foreground font-medium">Remember me</Label>
                     </div>
 
                     {/* Login Button */}
@@ -174,11 +174,11 @@ export default function LoginForm({ toggleAuthMode }) {
 
             {/* Footer */}
             <CardFooter className="flex flex-col space-y-4">
-                <div className="text-center text-sm text-gray-500">
+                <div className="text-center text-sm text-muted-foreground font-medium">
                     Don't have an account?{" "}
                     <button
                         onClick={toggleAuthMode}
-                        className="text-[#374d50] hover:underline font-medium"
+                        className="text-[#374d50] hover:underline font-semibold"
                     >
                         Sign up (We won't bite!)
                     </button>

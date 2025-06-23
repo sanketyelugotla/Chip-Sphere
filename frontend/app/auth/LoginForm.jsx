@@ -42,7 +42,7 @@ export default function LoginForm({ toggleAuthMode }) {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         ctx.font = "bold 20px monospace"
-        ctx.fillStyle = "#1f2937" // dark text
+        ctx.fillStyle = "#888888"
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
         ctx.fillText(captchaText, canvas.width / 2, canvas.height / 2)
@@ -128,7 +128,7 @@ export default function LoginForm({ toggleAuthMode }) {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="w-full rounded-md bg-backgroud border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
+                            className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
                         />
                     </div>
 
@@ -147,7 +147,7 @@ export default function LoginForm({ toggleAuthMode }) {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 placeholder="Shh… It's a secret!"
-                                className="w-full rounded-md bg-backgroud border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
+                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
                             />
                             <div
                                 className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
@@ -170,18 +170,18 @@ export default function LoginForm({ toggleAuthMode }) {
                             </Button>
                             <canvas
                                 id="captchaCanvas"
-                                className="h-10 w-24 rounded-md bg-muted"
+                                className="h-10 w-24 rounded-md bg-background border-2 border-border"
                                 width={96}
                                 height={40}
                             />
                             <Input
                                 id="captcha"
-                                type="text"
+                                type="text" 
                                 value={captchaInput}
                                 onChange={(e) => setCaptchaInput(e.target.value)}
                                 placeholder="Enter captcha"
                                 required
-                                className="w-full max-w-[200px] ml-3 rounded-md bg-backgroud border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
+                                className="w-full max-w-[200px] ml-3 rounded-md bg-background border-2 border-border focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
                             />
                         </div>
                     </div>

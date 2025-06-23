@@ -124,7 +124,7 @@ export default function SignupForm({ toggleAuthMode }) {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 required
-                                className="w-full rounded-md bg-backgroud border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
+                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
                             />
                         </div>
                         <div className="flex-1 space-y-2">
@@ -136,7 +136,7 @@ export default function SignupForm({ toggleAuthMode }) {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="w-full rounded-md bg-backgroud border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
+                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
                             />
                         </div>
                     </div>
@@ -151,7 +151,7 @@ export default function SignupForm({ toggleAuthMode }) {
                                 value={education}
                                 onChange={(e) => setEducation(e.target.value)}
                                 required
-                                className="w-full rounded-md bg-backgroud border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
+                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
                             />
                         </div>
                         <div className="flex-1 space-y-2">
@@ -162,7 +162,7 @@ export default function SignupForm({ toggleAuthMode }) {
                                 value={institution}
                                 onChange={(e) => setInstitution(e.target.value)}
                                 required
-                                className="w-full rounded-md bg-backgroud border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
+                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
                             />
                         </div>
                     </div>
@@ -182,7 +182,7 @@ export default function SignupForm({ toggleAuthMode }) {
                                 }}
                                 placeholder="Set your key here"
                                 required
-                                className="w-full rounded-md bg-backgroud border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
+                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
                             />
                             <div
                                 className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
@@ -221,7 +221,7 @@ export default function SignupForm({ toggleAuthMode }) {
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 placeholder="Confirm your password"
                                 required
-                                className="w-full rounded-md bg-backgroud border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
+                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
                             />
                             <div
                                 className="absolute inset-y-0 right-3 flex items-center cursor-pointer"

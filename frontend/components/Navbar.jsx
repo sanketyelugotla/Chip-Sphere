@@ -130,14 +130,14 @@ export default function Navbar() {
                   <User className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent className="bg-background border-2 border-border" align="end">
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
-                    <p className="font-medium">{user.name || "User"}</p>
+                    <p className="font-semibold text-foreground">{user.name || "User"}</p>
                     <p className="text-sm text-muted-foreground">{user.email}</p>
                   </div>
                 </div>
-                <DropdownMenuSeparator />
+              
 
                 {/* Removed Profile, Saved Items, and My Progress */}
 
@@ -198,3 +198,4 @@ export default function Navbar() {
     </header>
   )
 }
+

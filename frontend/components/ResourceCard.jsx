@@ -10,9 +10,9 @@ function ResourceCard({ resource }) {
             case 'docx':
                 return <TbFileTypeDocx className='w-[70%] h-[70%] ' />;
             case 'ppt':
-                return <TbFileTypePpt className='w-[70%] h-[70%] '/>;
+                return <TbFileTypePpt className='w-[70%] h-[70%] ' />;
             default:
-                return <TbFileStack className='w-[70%] h-[70%] '/>;
+                return <TbFileStack className='w-[70%] h-[70%] ' />;
         }
     };
 
@@ -54,7 +54,7 @@ function ResourceCard({ resource }) {
                         <FiSave className="text-lg" />
                         Save
                     </button>
-                    <button className="flex items-center justify-center gap-2 w-full py-2 px-4 rounded-md bg-primary text-background hover:bg-primary/90 transition">
+                    <button className="flex items-center justify-center gap-2 w-full py-2 px-4 rounded-md bg-primary text-white hover:bg-primary/90 transition ">
                         <FiDownload className="text-lg" />
                         Download
                     </button>

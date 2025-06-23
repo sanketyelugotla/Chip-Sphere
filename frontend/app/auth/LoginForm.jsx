@@ -14,6 +14,7 @@ import { useEffect, useState } from "react"
 
 import { signin } from '@/utils/auth'
 import { useUser } from "@/context/userContext"
+import { TfiReload } from "react-icons/tfi";
 
 export default function LoginForm({ toggleAuthMode }) {
     const [email, setEmail] = useState("")
@@ -166,7 +167,9 @@ export default function LoginForm({ toggleAuthMode }) {
                         <Label htmlFor="captcha" className="text-sm text-muted-foreground font-medium">Captcha:</Label>
                         <div className="flex items-center gap-4">
                             <Button type="button" variant="ghost" size="icon" onClick={refreshCaptcha}>
-                                <img src="/reloadicon.png" alt="Refresh Captcha" className="h-6 w-6" />
+                                {/* <img src="/reloadicon.png" alt="Refresh Captcha" className="h-6 w-6" /> */}
+                                <TfiReload />
+
                             </Button>
                             <canvas
                                 id="captchaCanvas"
@@ -176,7 +179,7 @@ export default function LoginForm({ toggleAuthMode }) {
                             />
                             <Input
                                 id="captcha"
-                                type="text" 
+                                type="text"
                                 value={captchaInput}
                                 onChange={(e) => setCaptchaInput(e.target.value)}
                                 placeholder="Enter captcha"

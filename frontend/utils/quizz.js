@@ -19,7 +19,7 @@ export const getQuestions = async (id, token) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        let questions = response.data.questions;
+            let questions = response.data.questions;
 
         const shuffleArray = (array) => {
             for (let i = array.length - 1; i > 0; i--) {

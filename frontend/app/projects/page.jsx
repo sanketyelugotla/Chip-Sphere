@@ -99,7 +99,7 @@ export default function Projects() {
               Showcase your engineering project to the community and get feedback from peers and experts.
             </p>
           </div>
-          <button className="bg-primary text-background px-6 py-3 rounded-md hover:bg-primary/90 transition whitespace-nowrap">
+          <button className="bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition whitespace-nowrap cursor-pointer">
             Submit your project
           </button>
         </div>

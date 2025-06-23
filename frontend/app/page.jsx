@@ -134,7 +134,7 @@ export default function Home() {
               progress.
             </p>
             <Button size="lg" asChild>
-              <Link href="/auth/signup">Sign Up Now</Link>
+              <Link href="/auth?mode=signup">Sign Up Now</Link>
             </Button>
           </div>
         </section>

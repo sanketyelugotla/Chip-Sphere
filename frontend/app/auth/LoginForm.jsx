@@ -30,6 +30,22 @@ export default function LoginForm({ toggleAuthMode }) {
         setCaptchaText(generateCaptcha())
     }, [])
 
+    useEffect(() => {
+        const canvas = /** @type {HTMLCanvasElement | null} */ (document.getElementById("captchaCanvas"))
+
+        if (!canvas) return
+      
+        const ctx = canvas.getContext("2d")
+        if (!ctx) return
+      
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.font = "bold 20px monospace"
+        ctx.fillStyle = "#1f2937" // dark text
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+        ctx.fillText(captchaText, canvas.width / 2, canvas.height / 2)
+      }, [captchaText])
+
     function generateCaptcha() {
         return Math.random().toString(36).substring(2, 6).toUpperCase()
     }
@@ -148,9 +164,12 @@ export default function LoginForm({ toggleAuthMode }) {
                             <Button type="button" variant="ghost" size="icon" onClick={refreshCaptcha}>
                                 <img src="/reloadicon.png" alt="Refresh Captcha" className="h-6 w-6" />
                             </Button>
-                            <div className="flex h-10 w-24 items-center justify-center rounded-md bg-muted font-mono text-lg font-bold tracking-widest">
-                                {captchaText}
-                            </div>
+                            <canvas
+                                id="captchaCanvas"
+                                className="h-10 w-24 rounded-md bg-muted"
+                                width={96}
+                                height={40}
+                            />
                             <Input
                                 id="captcha"
                                 type="text"

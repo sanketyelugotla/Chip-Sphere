@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { getQuestions, submitAnswers } from '@/utils/quizz';
+import Cookies from 'js-cookie';
 
 export default function QuizPage({ params }) {
   const { id } = React.use(params);
@@ -38,7 +39,8 @@ export default function QuizPage({ params }) {
   }, [currentQuestionIndex, questions]);
 
   const getData = async () => {
-    const data = await getQuestions(id);
+    const token = Cookies.get("token");
+    const data = await getQuestions(id, token);
     setQuestions(Array.isArray(data) ? data : []);
   };
 

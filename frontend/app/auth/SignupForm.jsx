@@ -68,6 +68,7 @@ export default function SignupForm({ toggleAuthMode }) {
         setIsLoading(true)
         try {
             const response = await signup(name, email, education, institution, password, 'user')
+            // console.log(response);
             if (response?.data?.token) {
                 Cookies.set("token", response.data.token, {
                     expires: 7,

@@ -8,12 +8,15 @@ const registerUser = async ({ name, email, education, institution, password, rol
     const emailLower = email.toLowerCase();
 
     let user = await User.findOne({ email: emailLower });
+    console.log(user);
     if (user) throw new Error("User already exists");
 
     user = new User({ name, email: emailLower, education, institution, password, role });
-    user = await user.save();
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "3h" });
+    let newUser = await user.save();
+    // console.log(user);
 
-    return { message: "User registered successfully", user };
+    return { message: "User registered successfully", user, token };
 };
 
 // 📌 Login User

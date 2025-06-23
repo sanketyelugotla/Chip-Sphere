@@ -12,9 +12,13 @@ export const getQuizzes = async (email, password) => {
     }
 }
 
-export const getQuestions = async (id) => {
+export const getQuestions = async (id, token) => {
     try {
-        const response = await axios.get(`${dbUri}/question/${id}`);
+        const response = await axios.get(`${dbUri}/question/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         let questions = response.data.questions;
 
         const shuffleArray = (array) => {

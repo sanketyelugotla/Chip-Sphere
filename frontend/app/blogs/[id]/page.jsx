@@ -3,19 +3,25 @@
 import { useRouter } from 'next/navigation';
 import Head from 'next/head';
 import { marked } from 'marked';
-import DOMPurify from 'dompurify';  // Make sure to `npm install dompurify`
+import DOMPurify from 'dompurify';
 import React, { useState, useEffect } from 'react';
 import { getBlog } from '@/utils/blog';
+import Cookies from 'js-cookie';
 
 export default function BlogDetailPage({ params }) {
-    const { id } = React.use(params);  // Properly get the blog ID
-    const router = useRouter();
+    const { id } = React.use(params);
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
+    const router = useRouter()
 
     const fetchBlog = async (id) => {
         try {
-            const data = await getBlog(id);  // Ensure you're passing as object if needed
+            const token = Cookies.get("token");
+            if (!token) {
+                // throw new Error("Please login to continue");
+                router.push('/auth?mode=login')
+            }
+            const data = await getBlog(id, token);
             setBlog(data);
         } catch (error) {
             console.error("Failed to fetch blog:", error);

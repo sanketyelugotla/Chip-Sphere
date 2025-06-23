@@ -1,4 +1,5 @@
 import axios from "axios"
+import { Cookie } from "next/font/google";
 
 const dbUri = process.env.NEXT_PUBLIC_DATABASE_URI;
 
@@ -12,10 +13,14 @@ export const getBlogs = async () => {
     }
 }
 
-export const getBlog = async (id) => {
+export const getBlog = async (id, token) => {
     try {
-        const response = await axios.get(`${dbUri}/blog/${id}`);
-        console.log(response.data);
+        const response = await axios.get(`${dbUri}/blog/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        // console.log(response.data);
         return response.data.blog;
     } catch (error) {
         return error;

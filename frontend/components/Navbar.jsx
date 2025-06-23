@@ -62,7 +62,15 @@ export default function Navbar() {
   }, [])
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+    const savedTheme = localStorage.getItem("theme")
+    if (savedTheme) {
+      setDark(savedTheme === "dark")
+    }
+  }, [])
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light")
+    localStorage.setItem("theme", dark ? "dark" : "light")
   }, [dark])
 
   const navLinks = [

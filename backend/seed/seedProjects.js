@@ -1,0 +1,109 @@
+const mongoose = require('mongoose');
+const { Project } = require("../models");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const MONGO_URI = process.env.MONGO_URI;
+
+// Common image for all except the first
+
+const projectData = [
+    {
+        "_id": { "$oid": "6851ab722044cb19ce176128" },
+        "title": "FPGA-Based Digital Signal Processing System",
+        "image": "/placeholder.svg?height=200&width=400",
+        "description": "Implementation of a digital signal processing system on an FPGA platform for real-time audio processing.",
+        "category": "FPGA",
+        "hashtags": ["#FPGA", "#DSP", "#Audio"],
+        "contributors": ["John Doe", "Sarah Chen"],
+        "date": { "$date": "2025-06-17T17:52:50.267Z" },
+        "author": { "$oid": "685199808f623fb5e7f50d6a" },
+        "__v": 0,
+        "content": "This project involves the design and implementation of a real-time audio processing system using an FPGA. The system uses Verilog to implement common DSP algorithms like FIR and IIR filters, FFT, and noise cancellation. It receives audio input via an ADC, processes it on the FPGA, and outputs it via a DAC. Key features include parallel processing, low-latency filtering, and real-time signal visualization using LEDs or UART output. The platform is based on Xilinx Spartan or Intel Cyclone boards."
+    },
+    {
+        "_id": { "$oid": "6851ab942044cb19ce17612a" },
+        "title": "Low-Power VLSI Design for IoT Applications",
+        "image": "/placeholder.svg?height=200&width=400",
+        "description": "Design and implementation of low-power VLSI circuits for Internet of Things (IoT) applications.",
+        "category": "VLSI",
+        "hashtags": ["#VLSI", "#IoT", "#LowPower"],
+        "contributors": ["Michael Rodriguez", "Emily Johnson"],
+        "date": { "$date": "2025-06-17T17:53:24.195Z" },
+        "author": { "$oid": "685199808f623fb5e7f50d6a" },
+        "__v": 0,
+        "content": "This project focuses on designing energy-efficient VLSI circuits tailored for low-power IoT devices. It includes the creation of combinational and sequential logic using CMOS technology, optimized for sub-threshold operation. Techniques like clock gating, power gating, and multi-Vt design are applied to reduce dynamic and leakage power. Applications include smart sensors, wearable tech, and environmental monitors. The design is simulated using Cadence Virtuoso and validated through layout versus schematic checks."
+    },
+    {
+        "_id": { "$oid": "6851ab9d2044cb19ce17612c" },
+        "title": "PCB Design for Wireless Power Transfer",
+        "image": "/placeholder.svg?height=200&width=400",
+        "description": "Design and fabrication of a PCB for efficient wireless power transfer using resonant inductive coupling.",
+        "category": "PCB Design",
+        "hashtags": ["#PCB", "#WirelessPower", "#InductiveCoupling"],
+        "contributors": ["Robert Chang", "Lisa Patel"],
+        "date": { "$date": "2025-06-17T17:53:33.198Z" },
+        "author": { "$oid": "685199808f623fb5e7f50d6a" },
+        "__v": 0,
+        "content": "This project showcases the design and fabrication of a PCB for efficient wireless power transfer using resonant inductive coupling. It involves coil design using Litz wire traces on the PCB, impedance matching, and frequency tuning for maximum efficiency. The board includes a transmitter driven by a high-frequency oscillator and a Class-E amplifier, and a receiver connected to a rectifier and voltage regulator. Applications include wireless phone charging and biomedical implants."
+    },
+    {
+        "_id": { "$oid": "6851aba52044cb19ce17612e" },
+        "title": "ASIC Implementation of AES Encryption Algorithm",
+        "image": "https://www.tessolve.com/wp-content/uploads/2023/12/memory-testing-post.jpg",
+        "description": "ASIC implementation of the Advanced Encryption Standard (AES) algorithm for secure data transmission.",
+        "category": "ASIC",
+        "hashtags": ["#ASIC", "#AES", "#Encryption"],
+        "contributors": ["James Wilson", "David Kim"],
+        "date": { "$date": "2025-06-17T17:53:41.159Z" },
+        "author": { "$oid": "685199808f623fb5e7f50d6a" },
+        "__v": 0,
+        "content": "The project implements the AES-128 encryption algorithm as an Application-Specific Integrated Circuit (ASIC). It focuses on optimizing area, power, and throughput by designing pipelined S-boxes and MixColumns operations. Synthesis and timing analysis are performed using Synopsys tools, and the design is verified using Verilog testbenches. The final GDSII layout is generated and evaluated for performance metrics like gate count and critical path delay."
+    },
+    {
+        "_id": { "$oid": "6851abad2044cb19ce176130" },
+        "title": "Mixed-Signal IC Design for Biomedical Applications",
+        "image": "/placeholder.svg?height=200&width=400",
+        "description": "Design of a mixed-signal integrated circuit for biomedical signal acquisition and processing.",
+        "category": "Mixed-Signal",
+        "hashtags": ["#MixedSignal", "#Biomedical", "#ICDesign"],
+        "contributors": ["Jennifer Lee", "Mark Thompson"],
+        "date": { "$date": "2025-06-17T17:53:49.520Z" },
+        "author": { "$oid": "685199808f623fb5e7f50d6a" },
+        "__v": 0,
+        "content": "This project involves designing a mixed-signal IC for acquiring and processing biomedical signals like ECG and EEG. It includes an analog front-end with a low-noise amplifier (LNA), bandpass filters, and an ADC. The digital section performs signal compression and wireless transmission. Cadence Virtuoso is used for analog design, and Verilog is used for the digital controller. Special attention is given to minimizing noise and power for wearable applications."
+    },
+    {
+        "_id": { "$oid": "6851abb52044cb19ce176132" },
+        "title": "Hardware Accelerator for Machine Learning",
+        "image": "/placeholder.svg?height=200&width=400",
+        "description": "Design and implementation of a hardware accelerator for machine learning inference on edge devices.",
+        "category": "Hardware Acceleration",
+        "hashtags": ["#ML", "#Hardware", "#EdgeComputing"],
+        "contributors": ["Alex Chen", "Sophia Martinez"],
+        "date": { "$date": "2025-06-17T17:53:57.670Z" },
+        "author": { "$oid": "685199808f623fb5e7f50d6a" },
+        "__v": 0,
+        "content": "This project involves developing a hardware accelerator using an FPGA or ASIC for performing ML inference (e.g., CNN or DNN models) on edge devices. The design includes a custom datapath for matrix multiplication, weight storage in BRAM, and a DMA interface for fast data movement. Models are quantized to INT8 for performance, and tested using TensorFlow Lite. Use cases include image classification and voice recognition in low-power IoT systems."
+    }
+];
+
+
+
+const seedProjects = async () => {
+    try {
+        await mongoose.connect(MONGO_URI);
+        console.log('MongoDB connected');
+
+        await Project.deleteMany(); // Optional: Clear old data
+        await Project.insertMany(projectData);
+
+        console.log('Dummy blogs inserted');
+        process.exit();
+    } catch (err) {
+        console.error(err);
+        process.exit(1);
+    }
+};
+
+seedProjects();

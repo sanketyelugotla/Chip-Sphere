@@ -89,7 +89,15 @@ export default function BlogDetailPage({ params }) {
                         <span>{blog.durationRead} min read</span>
                     </div>
                 </div>
-
+                <div className="relative w-full h-64 md:h-96 mb-8 rounded-lg overflow-hidden">
+                    <img
+                        src={blog.image || '/default-blog-image.jpg'} // Add a default image path
+                        alt={blog.title}
+                        className="object-cover"
+                        // Important for above-the-fold images
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+                    />
+                </div>
                 <article className="prose prose-invert max-w-none  [&_*]:text-foreground">
                     <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
                 </article>

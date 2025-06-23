@@ -1,27 +1,60 @@
-import React from 'react'
+import Image from 'next/image';
+import Link from 'next/link';
 
-function ProjectCard({domain, nameOfProject, descOfProject, technologyUsed, contributers, imageUrl}) {
-  return (
-    <div className='flex flex-col p-4 h-100 border-1 border-secondar-background rounded-md bg-background shadow-md'>
-        <div className='flex-2 flex'>
-            <img className='absolute w-90 h-40' src={imageUrl}/>
+export default function ProjectCard({ project }) {
+    return (
+        <div className="border border-border rounded-lg overflow-hidden shadow-sm bg-container-background hover:shadow-md transition-all duration-200 hover:-translate-y-1">
+            {/* Image Section */}
+            <div className="w-full h-48 relative">
+                <Image
+                    src={project.image || "/default-project.jpg"}
+                    alt={project.title}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                />
+            </div>
 
-            <p className=' relative top-2 left-2 h-4  text-[11px] font-semibold px-2 rounded-full bg-primary text-background'>{domain}</p>
-        </div>
-        <div className=' flex-3 mt-10'>
-            <h1 className='text-2xl font-semibold h-[32] sm:h-[64] text-wrap overflow-hidden'>{nameOfProject}</h1>
-            <p className='text-sm text-wrap h-[20] sm:h-[40] overflow-hidden text-muted-foreground'>{descOfProject}</p>
-            <div className='flex'>
-                <p className=' text-[9px] py-1 px-2 border-1 mt-2 border-secondar-background rounded-full'>{technologyUsed}</p>
+            {/* Content Section */}
+            <div className="p-5">
+                {/* Category Badge */}
+                <span className="inline-block px-3 py-1 mb-3 text-xs font-semibold rounded-full bg-primary/10 text-primary">
+                    {project.category || "Project"}
+                </span>
+
+                {/* Title */}
+                <h3 className="text-xl font-bold mb-2 line-clamp-2">{project.title}</h3>
+
+                {/* Description */}
+                <p className="text-muted-foreground mb-4 line-clamp-3">{project.description}</p>
+
+                {/* Technologies */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                    {project.technologyUsed?.slice(0, 3).map((tech, index) => (
+                        <span key={index} className="px-2 py-1 text-xs rounded-md bg-secondary text-secondary-foreground">
+                            {tech}
+                        </span>
+                    ))}
+                    {project.technologyUsed?.length > 3 && (
+                        <span className="px-2 py-1 text-xs rounded-md bg-secondary text-secondary-foreground">
+                            +{project.technologyUsed.length - 3} more
+                        </span>
+                    )}
+                </div>
+
+                {/* Footer */}
+                <div className="flex items-center justify-between pt-3 border-t border-border">
+                    <span className="text-sm text-muted-foreground">
+                        {project.contributors?.join(', ') || 'Anonymous'}
+                    </span>
+                    <Link
+                        href={`/projects/${project.id}`}
+                        className="text-sm font-medium text-primary hover:underline"
+                    >
+                        View Details →
+                    </Link>
+                </div>
             </div>
-            <div className='flex my-2'>
-                <img/>
-                <p className='text-xs text-wrap overflow-hidden  text-muted-foreground'>Contributors: {contributers}</p>
-            </div>
-            <button className='bg-none text-primary text-sm'>View Project →</button>
         </div>
-    </div>
-  )
+    );
 }
-
-export default ProjectCard

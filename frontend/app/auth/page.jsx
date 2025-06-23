@@ -2,15 +2,23 @@
 
 import { AnimatePresence, motion } from "framer-motion"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import LoginForm from "./LoginForm"
 import SignupForm from "./SignupForm"
 
 export default function AuthPage() {
-    const [isLogin, setIsLogin] = useState(true)
+    const searchParams = useSearchParams()
+    const mode = searchParams.get("mode") // 'login' or 'signup'
+
+    const [isLogin, setIsLogin] = useState(mode !== 'signup') // default to login unless mode=signup
+
+    useEffect(() => {
+        setIsLogin(mode !== 'signup')
+    }, [mode])
 
     const toggleAuthMode = () => {
-        setIsLogin(!isLogin)
+        setIsLogin(prev => !prev)
     }
 
     return (

@@ -134,10 +134,10 @@ export default function Navbar() {
           ) : (
             <div className="hidden sm:flex items-center space-x-2">
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/auth">Log in</Link>
+                <Link href="/auth?mode=login">Log in</Link>
               </Button>
               <Button size="sm" asChild>
-                <Link href="/auth">Sign up</Link>
+                  <Link href="/auth?mode=signup">Sign up</Link>
               </Button>
             </div>
           )}
@@ -156,7 +156,7 @@ export default function Navbar() {
                     <Link
                       key={link.name}
                       href={link.href}
-                       prefetch={true}
+                      prefetch={true}
                       className={`block text-lg font-medium transition-colors hover:text-primary ${pathname === link.href ? "text-primary" : "text-muted-foreground"
                         }`}
                     >
@@ -167,10 +167,10 @@ export default function Navbar() {
                 {!user && (
                   <div className="space-y-2">
                     <Button className="w-full" asChild>
-                      <Link href="/auth/signup">Sign up</Link>
+                      <Link href="/auth?mode=signup">Sign up</Link>
                     </Button>
                     <Button variant="outline" className="w-full" asChild>
-                      <Link href="/auth/login">Log in</Link>
+                      <Link href="/auth?mode=login">Log in</Link>
                     </Button>
                   </div>
                 )}

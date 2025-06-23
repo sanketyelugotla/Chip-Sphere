@@ -1,3 +1,5 @@
+'use client'
+
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -7,6 +9,9 @@ import { AlertCircle, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
+import Cookies from "js-cookie"
+
 import { signin } from '@/utils/auth'
 
 export default function LoginForm({ toggleAuthMode }) {
@@ -15,9 +20,11 @@ export default function LoginForm({ toggleAuthMode }) {
     const [error, setError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [passwordVisible, setPasswordVisible] = useState(false)
-    const [captchaText, setCaptchaText] = useState()
+    const [captchaText, setCaptchaText] = useState("")
     const [captchaInput, setCaptchaInput] = useState("")
     const [rememberMe, setRememberMe] = useState(false)
+
+    const router = useRouter()
 
     useEffect(() => {
         setCaptchaText(generateCaptcha())
@@ -27,15 +34,42 @@ export default function LoginForm({ toggleAuthMode }) {
         return Math.random().toString(36).substring(2, 6).toUpperCase()
     }
 
-    async function handleSubmit(e) {
-        e.preventDefault();
-
-        const response = await signin(email, password);
-        console.log(response);
-    }
-
     function refreshCaptcha() {
         setCaptchaText(generateCaptcha())
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault()
+        setError("")
+        setIsLoading(true)
+
+        if (captchaInput.trim().toUpperCase() !== captchaText.trim().toUpperCase()) {
+            setError("Captcha doesn't match. Try again.")
+            setIsLoading(false)
+            refreshCaptcha()
+            return
+        }
+
+        try {
+            const response = await signin(email, password)
+
+            if (response?.data?.token) {
+                // Store token in cookies
+                Cookies.set('token', response.data.token, {
+                    expires: rememberMe ? 7 : undefined, // 7 days if rememberMe is checked
+                    secure: true,
+                    sameSite: 'Lax',
+                })
+
+                router.push("/")
+            } else {
+                setError("Invalid response. Please try again.")
+            }
+        } catch (err) {
+            setError(err?.response?.data?.message || "Login failed. Please check your credentials.")
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -67,7 +101,6 @@ export default function LoginForm({ toggleAuthMode }) {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Email Input */}
                     <div className="space-y-2">
                         <Label htmlFor="email" className="text-sm text-gray-600">Your Email</Label>
                         <Input
@@ -77,11 +110,9 @@ export default function LoginForm({ toggleAuthMode }) {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="w-full rounded-md bg-gray-50 text-gray-700 border-2 border-gray-300 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
                         />
                     </div>
 
-                    {/* Password Input */}
                     <div className="space-y-2">
                         <div className="flex items-center justify-between">
                             <Label htmlFor="password" className="text-sm text-gray-600">Password</Label>
@@ -97,7 +128,6 @@ export default function LoginForm({ toggleAuthMode }) {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 placeholder="Shh… It's a secret!"
-                                className="w-full rounded-md bg-gray-50 text-gray-700 border-2 border-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
                             />
                             <div
                                 className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
@@ -112,21 +142,15 @@ export default function LoginForm({ toggleAuthMode }) {
                         </div>
                     </div>
 
-                    {/* Captcha Input */}
                     <div className="space-y-2">
                         <Label htmlFor="captcha" className="text-sm text-gray-600">Captcha:</Label>
                         <div className="flex items-center gap-4">
-                            <div className="flex items-center justify-center">
-                                <Button type="button" variant="ghost" size="icon" onClick={refreshCaptcha}>
-                                    <img src="/reloadicon.png" alt="Refresh Captcha" className="h-6 w-6" />
-                                    <span className="sr-only">Refresh Captcha</span>
-                                </Button>
-                            </div>
-
+                            <Button type="button" variant="ghost" size="icon" onClick={refreshCaptcha}>
+                                <img src="/reloadicon.png" alt="Refresh Captcha" className="h-6 w-6" />
+                            </Button>
                             <div className="flex h-10 w-24 items-center justify-center rounded-md bg-muted font-mono text-lg font-bold tracking-widest">
                                 {captchaText}
                             </div>
-
                             <Input
                                 id="captcha"
                                 type="text"
@@ -134,48 +158,35 @@ export default function LoginForm({ toggleAuthMode }) {
                                 onChange={(e) => setCaptchaInput(e.target.value)}
                                 placeholder="Enter captcha"
                                 required
-                                className="w-full max-w-[200px] ml-3 rounded-md bg-gray-50 text-gray-700 border-2 border-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
+                                className="w-full max-w-[200px] ml-3"
                             />
                         </div>
                     </div>
 
-                    {/* Remember Me Checkbox */}
                     <div className="flex items-center space-x-2">
                         <input
                             type="checkbox"
                             id="rememberMe"
                             checked={rememberMe}
                             onChange={() => setRememberMe(!rememberMe)}
-                            className="h-4 w-4 text-[#4AC9D6] border-gray-300 rounded focus:ring-2 focus:ring-[#4AC9D6]"
+                            className="h-4 w-4"
                         />
                         <Label htmlFor="rememberMe" className="text-sm text-gray-600">Remember me</Label>
                     </div>
 
-                    {/* Login Button */}
                     <Button
                         type="submit"
-                        className="w-full cursor-pointer rounded-md bg-[#307179] text-white hover:bg-[#374d50] transition-all  hover:shadow-lg"
+                        className="w-full rounded-md bg-[#307179] text-white hover:bg-[#374d50]"
                         disabled={isLoading}
                     >
                         {isLoading ? "Logging you in..." : "Login (Let's dive into Chipsphere!)"}
                     </Button>
                 </form>
-
-                {/* Divider */}
-                <div className="relative mt-6">
-                    <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-gray-300 opacity-30"></div>
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase text-gray-500">
-                        <span className="bg-white px-2 text-gray-400"></span>
-                    </div>
-                </div>
             </CardContent>
 
-            {/* Footer */}
             <CardFooter className="flex flex-col space-y-4">
                 <div className="text-center text-sm text-gray-500">
-                    Don't have an account?{" "}
+                    Don&apos;t have an account?{" "}
                     <button
                         onClick={toggleAuthMode}
                         className="text-[#374d50] hover:underline font-medium"

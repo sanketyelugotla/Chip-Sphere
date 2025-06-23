@@ -7,9 +7,12 @@ import { AlertCircle, Eye, EyeOff } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+import Cookies from "js-cookie"
+import { useRouter } from "next/navigation"
 import { signup } from "@/utils/auth"
 
 export default function SignupForm({ toggleAuthMode }) {
+    const router = useRouter()
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [education, setEducation] = useState("")
@@ -42,11 +45,44 @@ export default function SignupForm({ toggleAuthMode }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setError("")
 
-        const response = await signup(name, email, education, institution, password, 'user');
-        console.log(response);
+        if (!agreeToTerms) {
+            setError("You must agree to the terms and conditions.")
+            return
+        }
+
+        if (password !== confirmPassword) {
+            setError("Passwords do not match.")
+            return
+        }
+
+        const isPasswordStrong = Object.values(passwordValidations).every(Boolean)
+        if (!isPasswordStrong) {
+            setError("Password does not meet strength requirements.")
+            return
+        }
+
+        setIsLoading(true)
+        try {
+            const response = await signup(name, email, education, institution, password, 'user')
+            if (response?.data?.token) {
+                Cookies.set("token", response.data.token, {
+                    expires: 7,
+                    secure: true,
+                    sameSite: "Lax",
+                })
+                router.push("/")
+            } else {
+                setError("Signup failed. Please try again.")
+            }
+        } catch (err) {
+            setError(err?.response?.data?.message || "Signup failed. Please try again.")
+        } finally {
+            setIsLoading(false)
+        }
     }
-
+    
     return (
         <Card className="shadow-lg rounded-2xl bg-white border border-gray-300 hover:border-[#4AC9D6] transition-all duration-300">
             <Link href="/" passHref>

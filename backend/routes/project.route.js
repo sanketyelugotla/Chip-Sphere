@@ -1,6 +1,7 @@
 const express = require("express");
 const { projectService } = require("../services");
 const authenticateAdmin = require("../middleware/authenticateAdmin");
+const authenticate = require("../middleware/authenticate");
 
 const router = express.Router();
 
@@ -11,6 +12,17 @@ router.get("/", async (req, res) => {
         res.status(200).json({ success: true, message: "Projects fetched successfully", projects });
     } catch (error) {
         console.error("Error Getting projects:", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+})
+
+// Get a project
+router.get("/:id", authenticate, async (req, res) => {
+    try {
+        const project = await projectService.getProject(req.params.id);
+        res.status(200).json({ success: true, message: "Project details fetched successfully", project });
+    } catch (error) {
+        console.error("Error Getting project details:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 })

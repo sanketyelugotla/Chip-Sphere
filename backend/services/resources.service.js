@@ -9,7 +9,7 @@ const getResources = async () => {
         console.error(error);
         throw new Error("Error fetching resources");
     }
-};  
+};
 
 // 📌 Add a new resources
 const addResource = async ({ name, description, typeOfFile, file, sizeOfFile, user }) => {
@@ -31,8 +31,12 @@ const addResource = async ({ name, description, typeOfFile, file, sizeOfFile, us
     }
 };
 
+const getResource = async ({ id }) => {
+
+}
 
 module.exports = {
     getResources,
     addResource,
+    getResource,
 };

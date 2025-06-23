@@ -34,14 +34,15 @@ const loginUser = async ({ email, password }) => {
 const getUserDetails = async (req) => {
     try {
         const { _id } = req.user;
-        const user = await User.findById(_id);
+        const user = await User.findById(_id).select("-password");
         if (!user) throw new Error("Cannot find user");
         return user;
     } catch (error) {
         console.log(error);
-        throw new Error(error);
+        throw new Error(error.message);
     }
 }
+
 
 module.exports = {
     registerUser,

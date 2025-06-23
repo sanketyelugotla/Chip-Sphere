@@ -2,6 +2,7 @@ const express = require("express");
 const { blogService } = require("../services");
 const authenticateAdmin = require("../middleware/authenticateAdmin");
 const { getBlog } = require("../services/blog.service");
+const authenticate = require("../middleware/authenticate");
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.get("/", async (req, res) => {
     }
 })
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", authenticate, async (req, res) => {
     try {
         const blog = await blogService.getBlog(req.params.id);
         res.status(200).json({ success: true, message: "Blog fetched successfully", blog });

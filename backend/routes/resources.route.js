@@ -1,3 +1,4 @@
+const authenticate = require("../middleware/authenticate");
 const authenticateAdmin = require("../middleware/authenticateAdmin");
 const { resourcesService } = require("../services");
 const express = require("express");
@@ -24,6 +25,16 @@ router.post("/", authenticateAdmin, async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+
+router.get("/:id", authenticate, async (req, res) => {
+    try {
+        const project = await resourcesService.getResource(req.params.id);
+        res.status(200).json({ success: true, message: "Resource details fetched successfully", project });
+    } catch (error) {
+        console.error("Error Getting resource details:", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+})
 
 // Export the router
 module.exports = router;

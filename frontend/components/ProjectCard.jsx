@@ -50,8 +50,8 @@ export default function ProjectCard({ project }) {
                         {project.contributors?.join(', ') || 'Anonymous'}
                     </span>
                     <Link
-                        href={`/projects/${project.id}`}
-                        className="text-sm font-medium text-primary hover:underline"
+                        href={`/projects/${project._id}`}
+                        className="text-sm font-medium text-primary"
                     >
                         View Details →
                     </Link>

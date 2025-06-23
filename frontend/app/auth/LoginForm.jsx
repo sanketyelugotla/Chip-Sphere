@@ -5,14 +5,15 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { AlertCircle, Eye, EyeOff } from "lucide-react"
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
 import Cookies from "js-cookie"
+import { AlertCircle, Eye, EyeOff } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 import { signin } from '@/utils/auth'
+import { useUser } from "@/context/userContext"
 
 export default function LoginForm({ toggleAuthMode }) {
     const [email, setEmail] = useState("")
@@ -23,6 +24,7 @@ export default function LoginForm({ toggleAuthMode }) {
     const [captchaText, setCaptchaText] = useState("")
     const [captchaInput, setCaptchaInput] = useState("")
     const [rememberMe, setRememberMe] = useState(false)
+    const { refreshUser } = useUser();
 
     const router = useRouter()
 
@@ -34,17 +36,17 @@ export default function LoginForm({ toggleAuthMode }) {
         const canvas = /** @type {HTMLCanvasElement | null} */ (document.getElementById("captchaCanvas"))
 
         if (!canvas) return
-      
+
         const ctx = canvas.getContext("2d")
         if (!ctx) return
-      
+
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         ctx.font = "bold 20px monospace"
         ctx.fillStyle = "#1f2937" // dark text
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
         ctx.fillText(captchaText, canvas.width / 2, canvas.height / 2)
-      }, [captchaText])
+    }, [captchaText])
 
     function generateCaptcha() {
         return Math.random().toString(36).substring(2, 6).toUpperCase()
@@ -72,11 +74,11 @@ export default function LoginForm({ toggleAuthMode }) {
             if (response?.data?.token) {
                 // Store token in cookies
                 Cookies.set('token', response.data.token, {
-                    expires: rememberMe ? 7 : undefined, // 7 days if rememberMe is checked
+                    expires: rememberMe ? 7 : undefined,
                     secure: true,
                     sameSite: 'Lax',
                 })
-
+                refreshUser();
                 router.push("/")
             } else {
                 setError("Invalid response. Please try again.")

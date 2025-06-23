@@ -1,5 +1,6 @@
 "use client"
 
+import Cookies from "js-cookie"
 import { LogOut, Menu, User } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -15,12 +16,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { useUser } from "@/context/userContext"
 
-// 🔁 Replace this with your auth logic
-const useAuth = () => ({
-  user: null, // or mock: { email: "user@example.com", displayName: "John Doe" }
-  signOut: async () => console.log("Signed out"),
-})
+const useAuth = () => {
+  const { user, setUser } = useUser();
+
+  const signOut = () => {
+    Cookies.remove("token");
+    setUser(null);
+  };
+
+  return { user, signOut };
+};
+
 
 const NavLink = ({ href, children }) => {
   const pathname = usePathname();
@@ -39,7 +47,7 @@ const NavLink = ({ href, children }) => {
 export default function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
-  const user = false;
+  const { user, signOut } = useAuth();
 
   const [isScrolled, setIsScrolled] = useState(false)
   const [dark, setDark] = useState(false)
@@ -68,7 +76,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     await signOut()
-    router.push("/auth/login")
+    router.push("/")
   }
 
   return (
@@ -110,14 +118,14 @@ export default function Navbar() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full cursor-pointer">
                   <User className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
-                    <p className="font-medium">{user.displayName || "User"}</p>
+                    <p className="font-medium">{user.name || "User"}</p>
                     <p className="text-sm text-muted-foreground">{user.email}</p>
                   </div>
                 </div>
@@ -137,7 +145,7 @@ export default function Navbar() {
                 <Link href="/auth?mode=login">Log in</Link>
               </Button>
               <Button size="sm" asChild>
-                  <Link href="/auth?mode=signup">Sign up</Link>
+                <Link href="/auth?mode=signup">Sign up</Link>
               </Button>
             </div>
           )}

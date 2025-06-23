@@ -1,27 +1,66 @@
-import React from 'react'
+import React from 'react';
+import { FiDownload, FiSave } from 'react-icons/fi';
 
-function ResourceCard({typeOfFile,typeOfMaterial,NameOfFile,descOfFile,SizeOfFIle,NoOfDownloads}) {
-  return (
-    <div className=' flex flex-col gap-6 border-1 border-secondar-background rounded-md px-6 py-8 bg-background  shadow-md'>
-        <div className='flex justify-between'>
-            <p className=' text-xs py-1 font-bold px-2 border-1 border-secondar-background rounded-full'>{typeOfFile}</p>
-            <p className='text-xs py-1 font-bold px-2 rounded-full bg-primary text-background'>{typeOfMaterial}</p>
+function ResourceCard({ resource }) {
+    const getFileIcon = (fileType) => {
+        switch (fileType.toLowerCase()) {
+            case 'pdf':
+                return <span className="text-red-500 text-4xl">PDF</span>;
+            case 'docx':
+                return <span className="text-blue-500 text-4xl">DOCX</span>;
+            case 'ppt':
+                return <span className="text-orange-500 text-4xl">PPT</span>;
+            default:
+                return <span className="text-gray-500 text-4xl">FILE</span>;
+        }
+    };
+
+    return (
+        <div className="border border-border rounded-lg overflow-hidden shadow-sm bg-container-background hover:shadow-md transition-all duration-200">
+            <div className="p-5 flex flex-col h-full">
+                {/* Badges */}
+                <div className="flex justify-between mb-4">
+                    <span className="px-3 py-1 text-xs rounded-full bg-primary/10 text-primary font-medium">
+                        {resource.typeOfFile}
+                    </span>
+                    <span className="px-3 py-1 text-xs rounded-full bg-secondary text-secondary-foreground font-medium">
+                        {resource.typeOfMaterial}
+                    </span>
+                </div>
+
+                {/* File Icon and Name */}
+                <div className="flex flex-col items-center gap-3 mb-4 flex-grow">
+                    <div className="h-16 w-16 flex items-center justify-center">
+                        {getFileIcon(resource.typeOfFile)}
+                    </div>
+                    <h3 className="text-lg font-bold text-center line-clamp-2">
+                        {resource.name}
+                    </h3>
+                    <p className="text-sm text-muted-foreground text-center line-clamp-3">
+                        {resource.description}
+                    </p>
+                </div>
+
+                {/* Meta Info */}
+                <div className="flex justify-between text-sm text-muted-foreground mb-4">
+                    <span>Size: {resource.SizeOfFIle}</span>
+                    <span>{resource.noOfDownloads} downloads</span>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex gap-3 mt-auto">
+                    <button className="flex items-center justify-center gap-2 w-full py-2 px-4 rounded-md border border-border hover:bg-secondary/20 transition">
+                        <FiSave className="text-lg" />
+                        Save
+                    </button>
+                    <button className="flex items-center justify-center gap-2 w-full py-2 px-4 rounded-md bg-primary text-background hover:bg-primary/90 transition">
+                        <FiDownload className="text-lg" />
+                        Download
+                    </button>
+                </div>
+            </div>
         </div>
-        <div className='flex flex-col h-[150] items-center gap-2'>
-            <p className='h-12 w-12 rounded-full bg-secondar-background'></p>
-            <h1 className='text-2xl font-bold text-wrap overflow-hidden text-center'>{NameOfFile}</h1>
-            <p className='text-sm font-semibold text-center text-wrap h-[40] overflow-hidden  text-muted-foreground'>{descOfFile}</p>
-        </div>
-        <div className='flex justify-between'>
-            <p className=' text-sm text-muted-foreground'>Size: {SizeOfFIle}</p>
-            <p className=' text-sm text-muted-foreground'>{NoOfDownloads} downloads</p>
-        </div>
-        <div className='flex justify-between gap-2'>
-            <button className='rounded-md w-[50%] py-2 text-sm text-foreground bg-background border-1 border-secondar-background'> Save</button>
-            <button className='rounded-md w-[50%] py-2 text-sm text-background bg-primary border-1'> Download</button>
-        </div>
-    </div>
-  )
+    );
 }
 
-export default ResourceCard;    
+export default ResourceCard;

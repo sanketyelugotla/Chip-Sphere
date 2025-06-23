@@ -9,6 +9,7 @@ export default function BlogCard({ blog }) {
             <img
                 src={blog.image}
                 alt={blog.title}
+                
                 className="w-full h-48 object-cover rounded-md mb-4"
             />
 

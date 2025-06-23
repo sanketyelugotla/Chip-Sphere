@@ -11,7 +11,7 @@ export default function Blogs() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [error, setError] = useState(null); // 🔥 Error state
-
+  const [searchQuery, setSearchQuery] = useState("");
   useEffect(() => {
     const getData = async () => {
       try {
@@ -50,9 +50,12 @@ export default function Blogs() {
   }
 
   // Filter blogs by category
-  const filteredBlogs = blogs?.filter(blog =>
-    selectedCategory === "All Categories" || blog.type === selectedCategory
-  );
+  const filteredBlogs = blogs?.filter(blog => {
+    const matchesCategory = selectedCategory === "All Categories" || blog.type === selectedCategory;
+    const matchesSearch = blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      blog.content.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div className="bg-background min-h-screen">
@@ -74,6 +77,8 @@ export default function Blogs() {
             type="text"
             placeholder="Search blogs..."
             className="w-full sm:w-3/4 p-3 rounded-md border border-border bg-background text-foreground shadow-sm"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <select
             className="w-full sm:w-1/4 p-3 rounded-md border border-border bg-background text-foreground shadow-sm"

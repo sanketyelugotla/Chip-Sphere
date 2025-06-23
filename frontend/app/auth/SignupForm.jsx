@@ -10,6 +10,7 @@ import { useState } from "react"
 import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
 import { signup } from "@/utils/auth"
+import { useUser } from "@/context/userContext"
 
 export default function SignupForm({ toggleAuthMode }) {
     const router = useRouter()
@@ -30,6 +31,7 @@ export default function SignupForm({ toggleAuthMode }) {
     })
     const [passwordTouched, setPasswordTouched] = useState(false)
     const [agreeToTerms, setAgreeToTerms] = useState(false)
+    const { refreshUser } = useUser();
 
     const validatePassword = (password) => {
         const minLength = 8
@@ -72,6 +74,7 @@ export default function SignupForm({ toggleAuthMode }) {
                     secure: true,
                     sameSite: "Lax",
                 })
+                refreshUser();
                 router.push("/")
             } else {
                 setError("Signup failed. Please try again.")
@@ -82,7 +85,7 @@ export default function SignupForm({ toggleAuthMode }) {
             setIsLoading(false)
         }
     }
-    
+
     return (
         <Card className="shadow-lg rounded-2xl bg-container-background border border-border hover:border-[#4AC9D6] transition-all duration-300">
             <Link href="/" passHref>

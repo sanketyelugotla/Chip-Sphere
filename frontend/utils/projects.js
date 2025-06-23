@@ -10,3 +10,17 @@ export const getProjects = async () => {
         return error;
     }
 }
+
+export const getProject = async (id, token) => {
+    try {
+        const response = await axios.get(`${dbUri}/project/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+        console.log(response.data);
+        return response.data.project;
+    } catch (error) {
+        return error;
+    }
+}

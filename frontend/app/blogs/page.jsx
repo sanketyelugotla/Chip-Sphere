@@ -1,5 +1,5 @@
 'use client';
-import { getBlogs } from '@/utils/blog';
+import { getBlogs } from '@/services/blog';
 import { CiUser } from 'react-icons/ci';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';

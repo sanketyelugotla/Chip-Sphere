@@ -5,7 +5,7 @@ import Head from 'next/head';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';  // Make sure to `npm install dompurify`
 import React, { useState, useEffect } from 'react';
-import { getProject } from '@/utils/projects';
+import { getProject } from '@/services/projects';
 import Cookies from 'js-cookie';
 
 export default function BlogDetailPage({ params }) {

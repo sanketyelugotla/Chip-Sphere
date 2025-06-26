@@ -12,7 +12,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
-import { signin } from '@/utils/auth'
+import { signin } from '@/services/auth'
 import { useUser } from "@/context/userContext"
 import { TfiReload } from "react-icons/tfi";
 import { toast } from "react-toastify"

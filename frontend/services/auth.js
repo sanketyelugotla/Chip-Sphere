@@ -11,7 +11,7 @@ export const userDetails = async (token) => {
         });
         return res;
     } catch (error) {
-        return error;
+        throw new Error(error.response.data.message);
     }
 };
 
@@ -39,6 +39,6 @@ export const signup = async (name, email, education, institution, password, role
         });
         return response;
     } catch (error) {
-        return error;
+        throw new Error(error.response.data.message);
     }
 }

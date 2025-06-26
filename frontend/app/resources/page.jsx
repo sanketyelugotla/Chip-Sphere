@@ -1,5 +1,5 @@
 'use client';
-import { getResources } from '@/utils/resources';
+import { getResources } from '@/services/resources';
 import React, { useState, useEffect } from 'react';
 import ResourceCard from '@/components/ResourceCard';
 import Loading from '../loading';

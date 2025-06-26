@@ -5,7 +5,7 @@ import Head from 'next/head';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import React, { useState, useEffect } from 'react';
-import { getBlog } from '@/utils/blog';
+import { getBlog } from '@/services/blog';
 import Cookies from 'js-cookie';
 
 export default function BlogDetailPage({ params }) {

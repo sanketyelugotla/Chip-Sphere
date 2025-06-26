@@ -1,5 +1,5 @@
 'use client';
-import { getQuizzes } from '@/utils/quizz';
+import { getQuizzes } from '@/services/quizz';
 import React, { useEffect, useState } from 'react';
 import QuizCard from '@/components/QuizCard';
 import Loading from '../loading';

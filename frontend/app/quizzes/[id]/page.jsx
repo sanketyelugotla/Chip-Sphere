@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { getQuestions, submitAnswers } from '@/utils/quizz';
+import { getQuestions, submitAnswers } from '@/services/quizz';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 

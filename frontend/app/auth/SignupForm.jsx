@@ -9,8 +9,9 @@ import Link from "next/link"
 import { useState } from "react"
 import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
-import { signup } from "@/utils/auth"
+import { signup } from "@/services/auth"
 import { useUser } from "@/context/userContext"
+import { toast } from "react-toastify"
 
 export default function SignupForm({ toggleAuthMode }) {
     const router = useRouter()
@@ -68,22 +69,27 @@ export default function SignupForm({ toggleAuthMode }) {
         setIsLoading(true)
         try {
             const response = await signup(name, email, education, institution, password, 'user')
-            // console.log(response);
-            if (response?.data?.token) {
+            const { token, role, success } = response?.data || {};
+
+            if (success && token) {
                 Cookies.set("token", response.data.token, {
                     expires: 7,
                     secure: true,
                     sameSite: "Lax",
                 })
+                toast.success("Signup successful!");
                 refreshUser();
                 router.push("/")
             } else {
-                setError("Signup failed. Please try again.")
+                const errMsg = "ISignup failed. Please try again.";
+                toast.error(errMsg);
+                setError(errMsg);
             }
         } catch (err) {
-            setError(err?.response?.data?.message || "Signup failed. Please try again.")
+            toast.error(err.message);
+            setError(err.message);
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
 

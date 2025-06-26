@@ -1,6 +1,6 @@
 "use client"
 
-import { userDetails } from "@/utils/auth"
+import { userDetails } from "@/services/auth"
 import Cookies from "js-cookie"
 import { createContext, useContext, useEffect, useState } from "react"
 

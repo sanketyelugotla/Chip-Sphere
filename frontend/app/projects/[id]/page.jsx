@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Head from 'next/head';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';  // Make sure to `npm install dompurify`
@@ -13,14 +13,19 @@ export default function BlogDetailPage({ params }) {
   const router = useRouter();
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
+  const token = Cookies.get("token");
+
+  const pathname = usePathname();
+  useEffect(() => {
+    if (!token) {
+      router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
+      return;
+    }
+  }, [])
 
   const fetchProject = async (id) => {
     try {
-      const token = Cookies.get("token");
-      if (!token) {
-        router.push('/auth?mode=login')
-      }
-      const data = await getProject(id, token);  // Ensure you're passing as object if needed
+      const data = await getProject(id, token);
       setProject(data);
     } catch (error) {
       console.error("Failed to fetch blog:", error);

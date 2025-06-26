@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
 
         const res = await userDetails(token);
 
-        if (res.data.success = true) {
+        if (res.data.success === true) {
             setUser(res.data.user);
         }
     };

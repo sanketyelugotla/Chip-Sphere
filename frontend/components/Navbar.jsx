@@ -94,7 +94,7 @@ export default function Navbar() {
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-[4rem] ">
         <div className="flex items-center">
-          <Link href="/profile/user" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2">
             <div className="h-12 w-12 rounded-full flex items-center justify-center">
               <img src="/ChipSphere.png" alt="logo" className="h-12 w-12 rounded-full" />
             </div>
@@ -137,10 +137,10 @@ export default function Navbar() {
                     <p className="text-sm text-muted-foreground">{user.email}</p>
                   </div>
                 </div>
-              
-
-                {/* Removed Profile, Saved Items, and My Progress */}
-
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer" onClick={() => router.push(`/profile/${user.name}`)}>
+                  Dashboard
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="text-red-600 cursor-pointer" onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" /> Log out

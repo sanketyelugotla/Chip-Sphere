@@ -8,7 +8,7 @@ export const getQuizzes = async (email, password) => {
         // console.log(response.data.quizzes)
         return response.data.quizzes;
     } catch (error) {
-        return error;
+        throw new Error(error.response.data.message);
     }
 }
 
@@ -40,8 +40,7 @@ export const getQuestions = async (id, token) => {
 
         return questions;
     } catch (error) {
-        console.error("Error fetching questions:", error);
-        return error;
+        throw new Error(error.response.data.message);
     }
 };
 
@@ -60,6 +59,6 @@ export const submitAnswers = async (id, answers, token) => {
         );
         return response.data;
     } catch (error) {
-        return error;
+        throw new Error(error.response.data.message);
     }
 };

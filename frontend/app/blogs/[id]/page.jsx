@@ -1,11 +1,12 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import Head from 'next/head';
-import { marked } from 'marked';
-import DOMPurify from 'dompurify';
-import React, { useState, useEffect } from 'react';
 import { getBlog } from '@/services/blog';
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
+import Head from 'next/head';
+import { usePathname, useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+
 import Cookies from 'js-cookie';
 
 export default function BlogDetailPage({ params }) {
@@ -13,14 +14,10 @@ export default function BlogDetailPage({ params }) {
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter()
+    const token = Cookies.get("token");
 
     const fetchBlog = async (id) => {
         try {
-            const token = Cookies.get("token");
-            if (!token) {
-                // throw new Error("Please login to continue");
-                router.push('/auth?mode=login')
-            }
             const data = await getBlog(id, token);
             setBlog(data);
         } catch (error) {
@@ -30,11 +27,15 @@ export default function BlogDetailPage({ params }) {
         }
     };
 
+    const pathname = usePathname();
     useEffect(() => {
-        if (id) {
+        if (!token) {
+            router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
+            return;
+        } if (id) {
             fetchBlog(id);
         }
-    }, [id]);  // Ensure it runs when ID changes
+    }, [id]);
 
     if (loading) {
         return (

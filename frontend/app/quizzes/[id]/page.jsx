@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { getQuestions, submitAnswers } from '@/services/quizz';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function QuizPage({ params }) {
   const { id } = React.use(params);
@@ -14,11 +14,12 @@ export default function QuizPage({ params }) {
   const [questions, setQuestions] = useState(null);
   const [answers, setAnswers] = useState([]);
   const router = useRouter()
-
+  const token = Cookies.get("token");
+  
+  const pathname = usePathname();
   useEffect(() => {
-    const token = Cookies.get("token");
     if (!token) {
-      router.replace("/auth?mode=login");
+      router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
       return;
     }
     const timer = setInterval(() => {
@@ -46,8 +47,6 @@ export default function QuizPage({ params }) {
   }, [currentQuestionIndex, questions]);
 
   const getData = async () => {
-    const token = Cookies.get("token");
-    if (!token) router.push('/auth?mode=login');
     const data = await getQuestions(id, token);
 
     setQuestions(Array.isArray(data) ? data : []);

@@ -29,21 +29,6 @@ const useAuth = () => {
   return { user, signOut };
 };
 
-
-const NavLink = ({ href, children }) => {
-  const pathname = usePathname();
-  const isActive = pathname === href;
-
-  return (
-    <Link
-      href={href}
-      className={`hover:text-blue-500 transition-colors duration-200 ${isActive ? 'text-blue-500' : ''}`}
-    >
-      {children}
-    </Link>
-  );
-};
-
 export default function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
@@ -83,7 +68,7 @@ export default function Navbar() {
   ]
 
   const handleLogout = async () => {
-    await signOut()
+    signOut()
     router.push("/")
   }
 

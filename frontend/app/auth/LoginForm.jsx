@@ -12,10 +12,14 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
-import { signin } from '@/services/auth'
 import { useUser } from "@/context/userContext"
-import { TfiReload } from "react-icons/tfi";
+import { signin } from '@/services/auth'
+import { TfiReload } from "react-icons/tfi"
 import { toast } from "react-toastify"
+
+import { useSearchParams } from 'next/navigation'
+
+
 
 export default function LoginForm({ toggleAuthMode }) {
     const [email, setEmail] = useState("")
@@ -28,6 +32,8 @@ export default function LoginForm({ toggleAuthMode }) {
     const [rememberMe, setRememberMe] = useState(false)
     const { refreshUser } = useUser();
 
+    const searchParams = useSearchParams(); // App Router
+    const redirectPath = searchParams?.get('redirect') || '/';
     const router = useRouter()
 
     useEffect(() => {
@@ -82,9 +88,12 @@ export default function LoginForm({ toggleAuthMode }) {
                     secure: true,
                     sameSite: "Lax",
                 });
+
                 refreshUser();
                 toast.success("Login successful!");
-                router.push("/");
+
+                const redirectTo = searchParams.get("redirect") || "/";
+                router.push(redirectTo);
             } else {
                 const errMsg = "Invalid response. Please try again.";
                 toast.error(errMsg);

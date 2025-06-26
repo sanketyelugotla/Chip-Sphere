@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import BlogCard from '@/components/blogCard';
 import Loading from '../loading';
+import { toast } from 'react-toastify';
 
 export default function Blogs() {
   const [blogs, setBlogs] = useState(null);
@@ -20,10 +21,11 @@ export default function Blogs() {
         const uniqueCategories = Array.from(new Set(data.map(q => q.type))).filter(Boolean);
         setCategories(uniqueCategories);
       } catch (err) {
-        console.error(err);
         if (err.message === 'Network Error') {
+          toast.error(err.message)
           setError("⚠️ Network Error: Please check your internet connection or try again later.");
         } else {
+          toast.error(err.message)
           setError(`⚠️ ${err.message}`);
         }
       }

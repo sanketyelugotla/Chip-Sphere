@@ -5,7 +5,7 @@ const getBlogs = async () => {
         const blogs = await Blog.find().populate("author", "name");
         return blogs;
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         throw new Error(error);
     }
 };
@@ -25,7 +25,7 @@ const addBlog = async ({ title, image, description, type, durationRead, user }) 
         const saved = await blog.save();
         return saved;
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         throw new Error(error);
     }
 };

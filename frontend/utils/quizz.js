@@ -36,7 +36,6 @@ export const getQuestions = async (id, token) => {
             };
         });
 
-
         questions = shuffleArray(questions);
 
         return questions;
@@ -47,12 +46,20 @@ export const getQuestions = async (id, token) => {
 };
 
 
-export const submitAnswers = async (id, answers) => {
-    console.log(answers)
+export const submitAnswers = async (id, answers, token) => {
+    // console.log(answers);
     try {
-        const response = await axios.post(`${dbUri}/question/${id}`, { answers });
+        const response = await axios.post(
+            `${dbUri}/question/${id}`,
+            { answers },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
         return response.data;
     } catch (error) {
         return error;
     }
-}
+};

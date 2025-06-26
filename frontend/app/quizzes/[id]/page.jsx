@@ -16,6 +16,11 @@ export default function QuizPage({ params }) {
   const router = useRouter()
 
   useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) {
+      router.replace("/auth?mode=login");
+      return;
+    }
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
@@ -80,7 +85,9 @@ export default function QuizPage({ params }) {
   };
 
   const handleSubmit = async () => {
-    const response = await submitAnswers(id, answers);
+    const token = Cookies.get('token')
+    const response = await submitAnswers(id, answers, token);
+    console.log(response);
     setScore(response.result.correct);
     setQuizSubmitted(true);
   };

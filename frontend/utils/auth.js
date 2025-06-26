@@ -13,7 +13,7 @@ export const userDetails = async (token) => {
     } catch (error) {
         return error;
     }
-  };
+};
 
 export const signin = async (email, password) => {
     try {
@@ -23,7 +23,7 @@ export const signin = async (email, password) => {
         });
         return response;
     } catch (error) {
-        return error;
+        throw new Error(error.response.data.message);
     }
 }
 

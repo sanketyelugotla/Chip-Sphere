@@ -8,7 +8,7 @@ const registerUser = async ({ name, email, education, institution, password, rol
     const emailLower = email.toLowerCase();
 
     let user = await User.findOne({ email: emailLower });
-    console.log(user);
+    // console.log(user);
     if (user) throw new Error("User already exists");
 
     user = new User({ name, email: emailLower, education, institution, password, role });

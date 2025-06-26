@@ -15,6 +15,7 @@ import { useEffect, useState } from "react"
 import { signin } from '@/utils/auth'
 import { useUser } from "@/context/userContext"
 import { TfiReload } from "react-icons/tfi";
+import { toast } from "react-toastify"
 
 export default function LoginForm({ toggleAuthMode }) {
     const [email, setEmail] = useState("")
@@ -58,36 +59,42 @@ export default function LoginForm({ toggleAuthMode }) {
     }
 
     async function handleSubmit(e) {
-        e.preventDefault()
-        setError("")
-        setIsLoading(true)
+        e.preventDefault();
+        setError("");
+        setIsLoading(true);
 
         if (captchaInput.trim().toUpperCase() !== captchaText.trim().toUpperCase()) {
-            setError("Captcha doesn't match. Try again.")
-            setIsLoading(false)
-            refreshCaptcha()
-            return
+            const captchaError = "Captcha doesn't match. Try again.";
+            toast.error(captchaError);
+            setError(captchaError);
+            setIsLoading(false);
+            refreshCaptcha();
+            return;
         }
 
         try {
-            const response = await signin(email, password)
+            const response = await signin(email, password);
+            const { token, role, success } = response?.data || {};
 
-            if (response?.data?.token) {
-                // Store token in cookies
-                Cookies.set('token', response.data.token, {
+            if (success && token) {
+                Cookies.set("token", token, {
                     expires: rememberMe ? 7 : undefined,
                     secure: true,
-                    sameSite: 'Lax',
-                })
+                    sameSite: "Lax",
+                });
                 refreshUser();
-                router.push("/")
+                toast.success("Login successful!");
+                router.push("/");
             } else {
-                setError("Invalid response. Please try again.")
+                const errMsg = "Invalid response. Please try again.";
+                toast.error(errMsg);
+                setError(errMsg);
             }
         } catch (err) {
-            setError(err?.response?.data?.message || "Login failed. Please check your credentials.")
+            toast.error(err.message);
+            setError(err.message);
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
 

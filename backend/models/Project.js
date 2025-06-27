@@ -34,6 +34,8 @@ const ProjectSchema = new mongoose.Schema({
         ref: "User",
         required: [true, 'Author is required'],
     },
+}, {
+    timestamps: true,
 });
 
 module.exports = mongoose.model("Project", ProjectSchema);

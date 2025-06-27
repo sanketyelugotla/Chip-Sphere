@@ -37,6 +37,8 @@ const BlogSchema = new mongoose.Schema({
         type: String,
         required: [true, 'content is required'],
     },
+},{
+    timestamps: true,
 });
 
 module.exports = mongoose.model("Blog", BlogSchema);

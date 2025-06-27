@@ -5,4 +5,5 @@ module.exports = {
     resource: require('./resources.route'),
     project: require('./project.route'),
     question: require('./question.route'),
+    user: require('./user.route'),
 }

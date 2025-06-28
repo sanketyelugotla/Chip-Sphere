@@ -4,7 +4,7 @@ module.exports = {
     User: require('./User'),
     Quiz: require('./Quizz'),
     Blog: require('./Blog'),
-    Resource: require('./Resources'),
+    Resource: require('./Resource'),
     Project: require('./Project'),
     Question: require('./Question'),
     QuizAttempt: require('./QuizAttempt'),

@@ -2,21 +2,46 @@ const { Question, Quiz } = require("../models");
 const QuizAttempt = require("../models/QuizAttempt");
 const mongoose = require("mongoose");
 
-// 📌 Get all questions for a quiz
-const getQuestions = async (quizId) => {
+// 📌 Get all questions for a quiz (with explanations if user attempted)
+const getQuestions = async (quizId, userId = null) => {
     try {
-        const questions = await Question.find({ quizId })
-            .select('-answer') // Don't send correct answers to client
-            .sort({ createdAt: 1 });
+        let hasAttempted = false;
+
+        // Check if user has attempted this quiz (only if userId is provided)
+        if (userId) {
+            const attempt = await QuizAttempt.findOne({
+                quiz: quizId,
+                user: userId,
+                status: 'completed'
+            });
+            hasAttempted = !!attempt;
+        }
+
+        let questions;
+
+        if (hasAttempted) {
+            // User has attempted - show everything including answers and explanations
+            questions = await Question.find({ quizId })
+                .sort({ createdAt: 1 });
+        } else {
+            // User hasn't attempted - hide answers and explanations
+            questions = await Question.find({ quizId })
+                .select('-answer -explanation')
+                .sort({ createdAt: 1 });
+        }
 
         if (!questions.length) {
             throw new Error("No questions found for this quiz");
         }
 
-        return questions;
+        return {
+            questions,
+            hasAttempted,
+            showAnswers: hasAttempted
+        };
     } catch (error) {
         console.error(error);
-        throw new Error("Error fetching questions");
+        throw new Error(error.message);
     }
 };
 
@@ -29,7 +54,7 @@ const getQuestionsWithAnswers = async (quizId) => {
         return questions;
     } catch (error) {
         console.error(error);
-        throw new Error("Error fetching questions with answers");
+        throw new Error(error.message);
     }
 };
 
@@ -46,7 +71,7 @@ const getQuestion = async (questionId) => {
         return question;
     } catch (error) {
         console.error(error);
-        throw new Error("Error fetching question");
+        throw new Error(error.message);
     }
 };
 
@@ -88,10 +113,11 @@ const addQuestionsToQuiz = async (quizId, questionsData) => {
 
         const savedQuestions = await Question.insertMany(questions, { session });
 
-        // Update quiz questions count
+        // Update quiz questions count - get current total count
+        const totalQuestions = await Question.countDocuments({ quizId }).session(session);
         await Quiz.findByIdAndUpdate(
             quizId,
-            { questions: savedQuestions.length },
+            { questions: totalQuestions },
             { session }
         );
 
@@ -100,7 +126,7 @@ const addQuestionsToQuiz = async (quizId, questionsData) => {
     } catch (error) {
         await session.abortTransaction();
         console.error(error);
-        throw new Error("Error adding questions to quiz");
+        throw new Error(error.message);
     } finally {
         session.endSession();
     }
@@ -134,7 +160,7 @@ const updateQuestion = async (questionId, updateData) => {
         return question;
     } catch (error) {
         console.error(error);
-        throw new Error("Error updating question");
+        throw new Error(error.message);
     }
 };
 
@@ -163,7 +189,7 @@ const deleteQuestion = async (questionId) => {
     } catch (error) {
         await session.abortTransaction();
         console.error(error);
-        throw new Error("Error deleting question");
+        throw new Error(error.message);
     } finally {
         session.endSession();
     }
@@ -173,8 +199,19 @@ const deleteQuestion = async (questionId) => {
 const submitQuizAnswers = async (quizId, userId, submittedAnswers, timeSpent = 0) => {
     const session = await mongoose.startSession();
     session.startTransaction();
-
+    // console.log(submittedAnswers);
     try {
+        // Check if user has already attempted this quiz
+        const existingAttempt = await QuizAttempt.findOne({
+            quiz: quizId,
+            user: userId,
+            status: 'completed'
+        }).session(session);
+
+        if (existingAttempt) {
+            throw new Error("You have already attempted this quiz");
+        }
+
         // Get quiz and questions
         const quiz = await Quiz.findById(quizId).session(session);
         if (!quiz) {
@@ -275,7 +312,7 @@ const submitQuizAnswers = async (quizId, userId, submittedAnswers, timeSpent = 0
     } catch (error) {
         await session.abortTransaction();
         console.error(error);
-        throw new Error("Error submitting quiz answers");
+        throw new Error(error.message);
     } finally {
         session.endSession();
     }
@@ -286,7 +323,10 @@ const getQuizAttemptResults = async (attemptId, userId) => {
     try {
         const attempt = await QuizAttempt.findOne({ _id: attemptId, user: userId })
             .populate('quiz', 'title description category level')
-            .populate('answers.questionId', 'title options answer explanation');
+            .populate({
+                path: 'answers.questionId',
+                select: 'title options answer explanation type'
+            });
 
         if (!attempt) {
             throw new Error("Quiz attempt not found");
@@ -295,7 +335,7 @@ const getQuizAttemptResults = async (attemptId, userId) => {
         return attempt;
     } catch (error) {
         console.error(error);
-        throw new Error("Error fetching quiz attempt results");
+        throw new Error(error.message);
     }
 };
 
@@ -325,7 +365,7 @@ const getQuizStatistics = async (quizId) => {
         };
     } catch (error) {
         console.error(error);
-        throw new Error("Error fetching quiz statistics");
+        throw new Error(error.message);
     }
 };
 

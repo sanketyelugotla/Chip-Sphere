@@ -3,7 +3,7 @@ const Resource = require("../models/Resource");
 const QuizAttempt = require("../models/QuizAttempt");
 const Blog = require("../models/Blog");
 const Project = require("../models/Project");
-const Quiz = require("../models/Quiz");
+const Quizz = require("../models/Quizz");
 const mongoose = require("mongoose");
 
 // Get all users

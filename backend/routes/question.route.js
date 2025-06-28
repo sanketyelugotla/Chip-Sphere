@@ -10,6 +10,7 @@ router.get("/:quizId", authenticate, async (req, res) => {
     try {
         const userId = req.user._id;
         const result = await questionService.getQuestions(req.params.quizId, userId);
+        // console.log(result.questions)
         res.status(200).json({
             success: true,
             message: "Questions fetched successfully",

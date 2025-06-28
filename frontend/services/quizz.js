@@ -19,7 +19,9 @@ export const getQuestions = async (id, token) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-            let questions = response.data.questions;
+
+        // console.log(response);
+        let questions = response.data.questions;
 
         const shuffleArray = (array) => {
             for (let i = array.length - 1; i > 0; i--) {
@@ -49,7 +51,7 @@ export const submitAnswers = async (id, answers, token) => {
     // console.log(answers);
     try {
         const response = await axios.post(
-            `${dbUri}/question/${id}`,
+            `${dbUri}/question/${id}/submit`,
             { answers },
             {
                 headers: {

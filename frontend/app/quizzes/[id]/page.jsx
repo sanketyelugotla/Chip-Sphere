@@ -15,7 +15,7 @@ export default function QuizPage({ params }) {
   const [answers, setAnswers] = useState([]);
   const router = useRouter()
   const token = Cookies.get("token");
-  
+
   const pathname = usePathname();
   useEffect(() => {
     if (!token) {
@@ -48,7 +48,7 @@ export default function QuizPage({ params }) {
 
   const getData = async () => {
     const data = await getQuestions(id, token);
-
+    // console.log(data)
     setQuestions(Array.isArray(data) ? data : []);
   };
 
@@ -63,7 +63,7 @@ export default function QuizPage({ params }) {
       if (existing) {
         existing.selected = option;
       } else {
-        updated.push({ questionId: currentQuestionId, selected: option });
+        updated.push({ questionId: currentQuestionId, selectedAnswer: option });
       }
       return updated;
     });
@@ -86,8 +86,8 @@ export default function QuizPage({ params }) {
   const handleSubmit = async () => {
     const token = Cookies.get('token')
     const response = await submitAnswers(id, answers, token);
-    console.log(response);
-    setScore(response.result.correct);
+    // console.log(response.result);
+    setScore(response.result.score);
     setQuizSubmitted(true);
   };
 

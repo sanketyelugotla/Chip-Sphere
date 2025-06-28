@@ -89,7 +89,7 @@ const getQuizzes = async ({ category, level, search, page = 1, limit = 10, userI
         }
     } catch (error) {
         console.log(error);
-        throw new Error("Error fetching quizzes");
+        throw new Error(error.message);
     }
 };
 
@@ -106,7 +106,7 @@ const getQuiz = async (quizId) => {
         return quiz;
     } catch (error) {
         console.log(error);
-        throw new Error("Error fetching quiz");
+        throw new Error(error.message);
     }
 };
 
@@ -127,7 +127,7 @@ const addQuiz = async ({ title, description, duration, level, category, user }) 
         return saved;
     } catch (error) {
         console.log(error);
-        throw new Error("Error creating quiz");
+        throw new Error(error.message);
     }
 };
 
@@ -152,7 +152,7 @@ const updateQuiz = async (quizId, updateData) => {
         return quiz;
     } catch (error) {
         console.log(error);
-        throw new Error("Error updating quiz");
+        throw new Error(error.message);
     }
 };
 
@@ -179,7 +179,7 @@ const deleteQuiz = async (quizId) => {
     } catch (error) {
         await session.abortTransaction();
         console.log(error);
-        throw new Error("Error deleting quiz");
+        throw new Error(error.message);
     } finally {
         session.endSession();
     }
@@ -196,7 +196,7 @@ const getPopularQuizzes = async (limit = 10) => {
         return quizzes;
     } catch (error) {
         console.log(error);
-        throw new Error("Error fetching popular quizzes");
+        throw new Error(error.message);
     }
 };
 

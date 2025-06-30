@@ -196,40 +196,20 @@ const deleteQuestion = async (questionId) => {
 };
 
 // 📌 Submit quiz answers and create quiz attempt
-const submitQuizAnswers = async (quizId, userId, submittedAnswers, timeSpent = 0) => {
+const submitQuizAnswers = async (quizId, userId, submittedAnswers, timeSpent) => {
     const session = await mongoose.startSession();
     session.startTransaction();
-    // console.log(submittedAnswers);
+
     try {
-        // Check if user has already attempted this quiz
-        const existingAttempt = await QuizAttempt.findOne({
-            quiz: quizId,
-            user: userId,
-            status: 'completed'
-        }).session(session);
-
-        if (existingAttempt) {
-            throw new Error("You have already attempted this quiz");
-        }
-
-        // Get quiz and questions
         const quiz = await Quiz.findById(quizId).session(session);
-        if (!quiz) {
-            throw new Error("Quiz not found");
-        }
+        if (!quiz) throw new Error("Quiz not found");
 
         const questions = await Question.find({ quizId }).session(session);
-        if (!questions.length) {
-            throw new Error("No questions found for this quiz");
-        }
-
-        // Validate submitted answers
-        if (!Array.isArray(submittedAnswers)) {
-            throw new Error("Submitted answers must be an array");
-        }
+        console.log(quizId)
 
         // Calculate score
         let correctAnswers = 0;
+        let skippedAnswers = 0;
         const answersWithResults = [];
 
         for (let question of questions) {
@@ -237,48 +217,105 @@ const submitQuizAnswers = async (quizId, userId, submittedAnswers, timeSpent = 0
                 answer => answer.questionId === question._id.toString()
             );
 
-            const isCorrect = submittedAnswer && submittedAnswer.selectedAnswer === question.answer;
-
-            if (isCorrect) {
-                correctAnswers++;
+            if (!submittedAnswer || !submittedAnswer.selectedAnswer) {
+                // Skip this question
+                skippedAnswers++;
+                answersWithResults.push({
+                    questionId: question._id,
+                    questionTitle: question.title,
+                    questionOptions: question.options,
+                    selectedAnswer: null,
+                    correctAnswer: question.answer,
+                    explanation: question.explanation || '',
+                    isCorrect: false,
+                    points: 0
+                });
+                continue;
             }
+
+            const isCorrect = submittedAnswer.selectedAnswer === question.answer;
+            if (isCorrect) correctAnswers++;
 
             answersWithResults.push({
                 questionId: question._id,
                 questionTitle: question.title,
                 questionOptions: question.options,
-                selectedAnswer: submittedAnswer ? submittedAnswer.selectedAnswer : null,
+                selectedAnswer: submittedAnswer.selectedAnswer,
                 correctAnswer: question.answer,
                 explanation: question.explanation || '',
                 isCorrect,
                 points: isCorrect ? (question.points || 1) : 0
             });
         }
-
+        console.log(questions)
         const totalQuestions = questions.length;
         const score = correctAnswers;
         const percentage = Math.round((correctAnswers / totalQuestions) * 100);
 
-        // Create quiz attempt
-        const quizAttempt = new QuizAttempt({
+        // Check if user has an existing completed attempt
+        let existingAttempt = await QuizAttempt.findOne({
+            quiz: quizId,
+            user: userId,
+            status: 'completed'
+        }).session(session);
+
+        if (existingAttempt) {
+            if (score > existingAttempt.score) {
+                existingAttempt.score = score;
+                existingAttempt.percentage = percentage;
+                existingAttempt.answers = answersWithResults.map(answer => ({
+                    questionId: answer.questionId,
+                    selectedAnswer: answer.selectedAnswer,
+                    isCorrect: answer.isCorrect
+                }));
+                existingAttempt.totalQuestions = totalQuestions;
+                existingAttempt.timeSpent = timeSpent;
+                existingAttempt.completedAt = new Date();
+
+                await existingAttempt.save({ session });
+            }
+
+            await session.commitTransaction();
+
+            return res.status(200).json({
+                score: existingAttempt.score,
+                totalQuestions: existingAttempt.totalQuestions,
+                percentage: existingAttempt.percentage,
+                timeSpent: existingAttempt.timeSpent,
+                status: 'completed',
+                completedAt: existingAttempt.completedAt,
+                quiz: {
+                    id: quiz._id,
+                    title: quiz.title,
+                    category: quiz.category,
+                    level: quiz.level
+                },
+                detailedResults: answersWithResults,
+                summary: {
+                    correctAnswers,
+                    incorrectAnswers: totalQuestions - correctAnswers - skippedAnswers,
+                    skippedAnswers
+                }
+            });
+        }
+
+        // Create a new attempt if none exists
+        const newAttempt = await QuizAttempt.create([{
             user: userId,
             quiz: quizId,
             score,
             totalQuestions,
             percentage,
-            timeSpent,
             answers: answersWithResults.map(answer => ({
                 questionId: answer.questionId,
                 selectedAnswer: answer.selectedAnswer,
                 isCorrect: answer.isCorrect
             })),
-            status: 'completed',
-            completedAt: new Date()
-        });
+            timeSpent,
+            completedAt: new Date(),
+            status: 'completed'
+        }], { session });
 
-        await quizAttempt.save({ session });
-
-        // Update quiz usersAttempted count
         await Quiz.findByIdAndUpdate(
             quizId,
             { $inc: { usersAttempted: 1 } },
@@ -287,15 +324,14 @@ const submitQuizAnswers = async (quizId, userId, submittedAnswers, timeSpent = 0
 
         await session.commitTransaction();
 
-        // Return results with explanations and detailed answers
         return {
-            attemptId: quizAttempt._id,
-            score,
+            attemptId: newAttempt[0]._id,
+            score: newAttempt[0].score,
             totalQuestions,
             percentage,
             timeSpent,
             status: 'completed',
-            completedAt: quizAttempt.completedAt,
+            completedAt: newAttempt[0].completedAt,
             quiz: {
                 id: quiz._id,
                 title: quiz.title,
@@ -305,14 +341,15 @@ const submitQuizAnswers = async (quizId, userId, submittedAnswers, timeSpent = 0
             detailedResults: answersWithResults,
             summary: {
                 correctAnswers,
-                incorrectAnswers: totalQuestions - correctAnswers,
-                skippedAnswers: answersWithResults.filter(answer => !answer.selectedAnswer).length
+                incorrectAnswers: totalQuestions - correctAnswers - skippedAnswers,
+                skippedAnswers
             }
         };
+
     } catch (error) {
         await session.abortTransaction();
-        console.error(error);
-        throw new Error(error.message);
+        // console.error("Error submitting quiz:", error);
+        throw new error(error.message)
     } finally {
         session.endSession();
     }

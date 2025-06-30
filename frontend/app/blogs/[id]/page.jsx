@@ -21,6 +21,7 @@ export default function BlogDetailPage({ params }) {
             const data = await getBlog(id, token);
             setBlog(data);
         } catch (error) {
+            if (error.message == "Invalid or expired token.") router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
             console.error("Failed to fetch blog:", error);
         } finally {
             setLoading(false);

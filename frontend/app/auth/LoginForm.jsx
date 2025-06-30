@@ -84,7 +84,7 @@ export default function LoginForm({ toggleAuthMode }) {
 
             if (success && token) {
                 Cookies.set("token", token, {
-                    expires: rememberMe ? 7 : undefined,
+                    expires: rememberMe ? 0.01 : undefined,
                     secure: true,
                     sameSite: "Lax",
                 });

@@ -46,12 +46,16 @@ export default function QuizPage({ params }) {
       console.log(currentAnswer)
       setSelectedOption(currentAnswer?.selectedAnswer || null);
     }
-    console.log("called")
   }, [currentQuestionIndex, questions]);
 
   const getData = async () => {
-    const data = await getQuestions(id, token);
-    setQuestions(Array.isArray(data) ? data : []);
+    try {
+      const data = await getQuestions(id, token);
+      setQuestions(Array.isArray(data) ? data : []);
+    } catch (error) {
+      if (error.message == "Invalid or expired token.") router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
+      console.log(error.message);
+    }
   };
 
   const handleOptionSelect = (option) => {

@@ -17,11 +17,12 @@ export default function Resources() {
     const fetchResources = async () => {
       try {
         const data = await getResources();
-        setResources(data);
+        const resources = data.resources
+        setResources(resources);
 
         // Extract unique categories and file types
-        const uniqueCategories = Array.from(new Set(data.map(r => r.typeOfMaterial))).filter(Boolean);
-        const uniqueFileTypes = Array.from(new Set(data.map(r => r.typeOfFile))).filter(Boolean);
+        const uniqueCategories = Array.from(new Set(resources.map(r => r.typeOfMaterial))).filter(Boolean);
+        const uniqueFileTypes = Array.from(new Set(resources.map(r => r.typeOfFile))).filter(Boolean);
 
         setCategories(uniqueCategories);
         setFileTypes(uniqueFileTypes);

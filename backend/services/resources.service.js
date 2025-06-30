@@ -44,7 +44,7 @@ const getResources = async ({ category, type, search, page = 1, limit = 10 } = {
         };
     } catch (error) {
         console.error(error);
-        throw new Error("Error fetching resources");
+        throw new Error(error.message);
     }
 };
 
@@ -66,7 +66,7 @@ const addResource = async ({ name, description, typeOfFile, typeOfMaterial, file
         return savedResource;
     } catch (error) {
         console.error(error);
-        throw new Error("Error adding resource");
+        throw new Error(error.message);
     }
 };
 
@@ -83,7 +83,7 @@ const getResource = async (id) => {
         return resource;
     } catch (error) {
         console.error(error);
-        throw new Error("Error fetching resource details");
+        throw new Error(error.message);
     }
 };
 
@@ -120,7 +120,7 @@ const downloadResource = async (resourceId, userId) => {
         };
     } catch (error) {
         console.error(error);
-        throw new Error("Error processing download");
+        throw new Error(error.message);
     }
 };
 
@@ -134,7 +134,7 @@ const getResourceDownloads = async (resourceId) => {
         return downloads;
     } catch (error) {
         console.error(error);
-        throw new Error("Error fetching resource downloads");
+        throw new Error(error.message);
     }
 };
 
@@ -148,7 +148,7 @@ const getUserDownloads = async (userId) => {
         return downloads;
     } catch (error) {
         console.error(error);
-        throw new Error("Error fetching user downloads");
+        throw new Error(error.message);
     }
 };
 
@@ -163,7 +163,7 @@ const getPopularResources = async (limit = 10) => {
         return resources;
     } catch (error) {
         console.error(error);
-        throw new Error("Error fetching popular resources");
+        throw new Error(error.message);
     }
 };
 
@@ -186,7 +186,7 @@ const updateResource = async (id, updateData) => {
         return resource;
     } catch (error) {
         console.error(error);
-        throw new Error("Error updating resource");
+        throw new Error(error.message);
     }
 };
 
@@ -205,7 +205,7 @@ const deleteResource = async (id) => {
         return resource;
     } catch (error) {
         console.error(error);
-        throw new Error("Error deleting resource");
+        throw new Error(error.message);
     }
 };
 

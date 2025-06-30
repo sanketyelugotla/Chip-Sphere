@@ -1,20 +1,14 @@
-const { Resource } = require("../models");
+const { Resource, User } = require("../models");
 const Download = require("../models/Download");
 const mongoose = require("mongoose");
 
 // 📌 Get all resources
-const getResources = async ({ category, type, search, page = 1, limit = 10 } = {}) => {
+const getResources = async ({ category, type, search, page = 1, limit = 10, userId, includeSavedAndDownloaded = false } = {}) => {
     try {
         const query = {};
 
-        if (category) {
-            query.typeOfMaterial = category;
-        }
-
-        if (type) {
-            query.typeOfFile = type;
-        }
-
+        if (category) query.typeOfMaterial = category;
+        if (type) query.typeOfFile = type;
         if (search) {
             query.$or = [
                 { name: { $regex: search, $options: 'i' } },
@@ -24,13 +18,29 @@ const getResources = async ({ category, type, search, page = 1, limit = 10 } = {
 
         const skip = (page - 1) * limit;
 
-        const resources = await Resource.find(query)
+        let resources = await Resource.find(query)
             .populate("author", "name email")
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(parseInt(limit));
 
         const total = await Resource.countDocuments(query);
+
+        // Optional: append isSaved and isDownloaded
+        if (includeSavedAndDownloaded && userId) {
+            const user = await User.findById(userId).select("savedResources");
+            const downloads = await Download.find({ user: userId }).select("resource");
+
+            const savedSet = new Set(user.savedResources.map(r => r.resource?.toString?.() || r.toString()));
+            const downloadedSet = new Set(downloads.map(d => d.resource.toString()));
+
+            resources = resources.map(resource => {
+                const resObj = resource.toObject();
+                resObj.isSaved = savedSet.has(resource._id.toString());
+                resObj.isDownloaded = downloadedSet.has(resource._id.toString());
+                return resObj;
+            });
+        }
 
         return {
             resources,
@@ -47,6 +57,7 @@ const getResources = async ({ category, type, search, page = 1, limit = 10 } = {
         throw new Error(error.message);
     }
 };
+
 
 // 📌 Add a new resource
 const addResource = async ({ name, description, typeOfFile, typeOfMaterial, file, sizeOfFile, user }) => {

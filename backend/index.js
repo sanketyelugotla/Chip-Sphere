@@ -2,7 +2,7 @@ const express = require('express');
 const connectDB = require('./config/db')
 const cors = require("cors");
 
-const { auth, quiz, blog, resource, project, question } = require('./routes')
+const { auth, quiz, blog, resource, project, question, user } = require('./routes')
 const { authenticate } = require('./middleware/authenticate')
 
 require("dotenv").config();
@@ -29,11 +29,9 @@ app.get('/', (req, res) => {
 })
 
 app.use("/auth", auth);
+app.use('/user', user);
 app.use('/quiz', quiz);
 app.use('/resource', resource);
-// app.use(authenticate);
-app.use('/blog', blog);
-app.use('/quiz', quiz);
 app.use('/blog', blog);
 app.use('/project', project);
 app.use('/question', question);

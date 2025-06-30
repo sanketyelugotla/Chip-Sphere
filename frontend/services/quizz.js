@@ -46,7 +46,6 @@ export const getQuestions = async (id, token) => {
     }
 };
 
-
 export const submitAnswers = async (id, answers, token) => {
     // console.log(answers);
     try {

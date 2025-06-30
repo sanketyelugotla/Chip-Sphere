@@ -14,8 +14,7 @@ export const UserProvider = ({ children }) => {
         if (!token) return;
 
         const res = await userDetails(token);
-        console.log(res)
-
+        // console.log(res)
         if (res.data.success === true) {
             setUser(res.data.user);
         }

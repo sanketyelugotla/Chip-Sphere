@@ -45,6 +45,11 @@ const ResourceSchema = new mongoose.Schema({
         default: 0,
         min: [0, 'Number of downloads cannot be negative']
     },
+    noOfSaves: {
+        type: Number,
+        default: 0,
+        min: [0, 'Number of saves cannot be negative']
+    },
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

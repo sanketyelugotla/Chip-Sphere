@@ -1,7 +1,9 @@
 'use client';
-import { getResources } from '@/services/resources';
-import React, { useState, useEffect } from 'react';
 import ResourceCard from '@/components/ResourceCard';
+import { getResources } from '@/services/resources';
+import Cookies from 'js-cookie';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Loading from '../loading';
 
 export default function Resources() {
@@ -12,11 +14,14 @@ export default function Resources() {
   const [selectedFileType, setSelectedFileType] = useState("All Types");
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState(null);
+  const router = useRouter()
+  const token = Cookies.get("token");
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchResources = async () => {
       try {
-        const data = await getResources();
+        const data = await getResources(token);
         const resources = data.resources
         setResources(resources);
 
@@ -30,6 +35,8 @@ export default function Resources() {
         console.error(err);
         if (err.message === 'Network Error') {
           setError("⚠️ Network Error: Please check your internet connection or try again later.");
+        } else if (error.message == "Invalid or expired token.") {
+          router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
         } else {
           setError(`⚠️ ${err.message}`);
         }

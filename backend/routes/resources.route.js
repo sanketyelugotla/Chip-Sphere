@@ -16,6 +16,24 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/my-resources", authenticate, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const { category, type, search, page, limit } = req.query;
+
+        const resources = await resourcesService.getResources({ category, type, search, page, limit, userId, includeSavedAndDownloaded: true });
+
+        res.status(200).json({
+            success: true,
+            message: "Resources fetched successfully",
+            resources
+        });
+    } catch (error) {
+        console.error("Error Getting resources:", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
 // 📌 Add a new resource
 router.post("/", authenticateAdmin, async (req, res) => {
     try {

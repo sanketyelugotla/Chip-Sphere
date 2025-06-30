@@ -1,13 +1,13 @@
 const authenticate = require("../middleware/authenticate");
 const authenticateAdmin = require("../middleware/authenticateAdmin");
-const { usersService } = require("../services");
+const { userService } = require("../services");
 const express = require("express");
 const router = express.Router();
 
 // 📌 Get all users (Admin only)
 router.get("/", authenticateAdmin, async (req, res) => {
     try {
-        const users = await usersService.getUsers();
+        const users = await userService.getUsers();
         res.status(200).json({ success: true, message: "Users fetched successfully", users });
     } catch (error) {
         console.error("Error getting users:", error);
@@ -19,7 +19,7 @@ router.get("/", authenticateAdmin, async (req, res) => {
 router.get("/profile", authenticate, async (req, res) => {
     try {
         const userId = req.user._id;
-        const profile = await usersService.getUserProfile(userId);
+        const profile = await userService.getUserProfile(userId);
         res.status(200).json({ success: true, message: "Profile fetched successfully", profile });
     } catch (error) {
         console.error("Error getting user profile:", error);
@@ -30,7 +30,7 @@ router.get("/profile", authenticate, async (req, res) => {
 // 📌 Get specific user by ID
 router.get("/:id", authenticate, async (req, res) => {
     try {
-        const user = await usersService.getUser(req.params.id);
+        const user = await userService.getUser(req.params.id);
         res.status(200).json({ success: true, message: "User details fetched successfully", user });
     } catch (error) {
         console.error("Error getting user details:", error);
@@ -42,7 +42,7 @@ router.get("/:id", authenticate, async (req, res) => {
 router.put("/profile", authenticate, async (req, res) => {
     try {
         const userId = req.user._id;
-        const updatedUser = await usersService.updateUser(userId, req.body);
+        const updatedUser = await userService.updateUser(userId, req.body);
         res.status(200).json({ success: true, message: "Profile updated successfully", user: updatedUser });
     } catch (error) {
         console.error("Error updating profile:", error);
@@ -53,7 +53,7 @@ router.put("/profile", authenticate, async (req, res) => {
 // 📌 Update user by ID (Admin only)
 router.put("/:id", authenticateAdmin, async (req, res) => {
     try {
-        const updatedUser = await usersService.updateUser(req.params.id, req.body);
+        const updatedUser = await userService.updateUser(req.params.id, req.body);
         res.status(200).json({ success: true, message: "User updated successfully", user: updatedUser });
     } catch (error) {
         console.error("Error updating user:", error);
@@ -64,7 +64,7 @@ router.put("/:id", authenticateAdmin, async (req, res) => {
 // 📌 Delete user (Admin only)
 router.delete("/:id", authenticateAdmin, async (req, res) => {
     try {
-        await usersService.deleteUser(req.params.id);
+        await userService.deleteUser(req.params.id);
         res.status(200).json({ success: true, message: "User deleted successfully" });
     } catch (error) {
         console.error("Error deleting user:", error);
@@ -78,7 +78,7 @@ router.post("/save-resource", authenticate, async (req, res) => {
         const userId = req.user._id;
         const { resourceId } = req.body;
 
-        const result = await usersService.saveResource(userId, resourceId);
+        const result = await userService.saveResource(userId, resourceId);
 
         if (result.success) {
             res.status(200).json({ success: true, message: "Resource saved successfully" });
@@ -97,7 +97,7 @@ router.delete("/save-resource/:resourceId", authenticate, async (req, res) => {
         const userId = req.user._id;
         const { resourceId } = req.params;
 
-        await usersService.unsaveResource(userId, resourceId);
+        await userService.unsaveResource(userId, resourceId);
         res.status(200).json({ success: true, message: "Resource unsaved successfully" });
     } catch (error) {
         console.error("Error unsaving resource:", error);
@@ -109,7 +109,7 @@ router.delete("/save-resource/:resourceId", authenticate, async (req, res) => {
 router.get("/saved-resources", authenticate, async (req, res) => {
     try {
         const userId = req.user._id;
-        const savedResources = await usersService.getSavedResources(userId);
+        const savedResources = await userService.getSavedResources(userId);
         res.status(200).json({ success: true, message: "Saved resources fetched successfully", savedResources });
     } catch (error) {
         console.error("Error getting saved resources:", error);
@@ -123,7 +123,7 @@ router.get("/check-saved/:resourceId", authenticate, async (req, res) => {
         const userId = req.user._id;
         const { resourceId } = req.params;
 
-        const isSaved = await usersService.isResourceSaved(userId, resourceId);
+        const isSaved = await userService.isResourceSaved(userId, resourceId);
         res.status(200).json({ success: true, isSaved });
     } catch (error) {
         console.error("Error checking saved resource:", error);
@@ -137,7 +137,7 @@ router.get("/quiz-attempts", authenticate, async (req, res) => {
         const userId = req.user._id;
         const { page = 1, limit = 10 } = req.query;
 
-        const quizAttempts = await usersService.getUserQuizAttempts(userId, page, limit);
+        const quizAttempts = await userService.getUserQuizAttempts(userId, page, limit);
         res.status(200).json({ success: true, message: "Quiz attempts fetched successfully", quizAttempts });
     } catch (error) {
         console.error("Error getting quiz attempts:", error);
@@ -149,7 +149,7 @@ router.get("/quiz-attempts", authenticate, async (req, res) => {
 router.get("/quiz-stats", authenticate, async (req, res) => {
     try {
         const userId = req.user._id;
-        const stats = await usersService.getUserQuizStats(userId);
+        const stats = await userService.getUserQuizStats(userId);
         res.status(200).json({ success: true, message: "Quiz statistics fetched successfully", stats });
     } catch (error) {
         console.error("Error getting quiz statistics:", error);
@@ -161,7 +161,7 @@ router.get("/quiz-stats", authenticate, async (req, res) => {
 router.get("/dashboard", authenticate, async (req, res) => {
     try {
         const userId = req.user._id;
-        const dashboardData = await usersService.getUserDashboard(userId);
+        const dashboardData = await userService.getUserDashboard(userId);
         res.status(200).json({ success: true, message: "Dashboard data fetched successfully", dashboard: dashboardData });
     } catch (error) {
         console.error("Error getting dashboard data:", error);
@@ -175,7 +175,7 @@ router.put("/change-password", authenticate, async (req, res) => {
         const userId = req.user._id;
         const { currentPassword, newPassword } = req.body;
 
-        await usersService.changePassword(userId, currentPassword, newPassword);
+        await userService.changePassword(userId, currentPassword, newPassword);
         res.status(200).json({ success: true, message: "Password changed successfully" });
     } catch (error) {
         console.error("Error changing password:", error);
@@ -189,7 +189,7 @@ router.get("/activity", authenticate, async (req, res) => {
         const userId = req.user._id;
         const { limit = 20 } = req.query;
 
-        const activities = await usersService.getUserActivity(userId, limit);
+        const activities = await userService.getUserActivity(userId, limit);
         res.status(200).json({ success: true, message: "User activity fetched successfully", activities });
     } catch (error) {
         console.error("Error getting user activity:", error);
@@ -201,7 +201,7 @@ router.get("/activity", authenticate, async (req, res) => {
 router.get("/my-content", authenticate, async (req, res) => {
     try {
         const userId = req.user._id;
-        const content = await usersService.getUserContent(userId);
+        const content = await userService.getUserContent(userId);
         res.status(200).json({ success: true, message: "User content fetched successfully", content });
     } catch (error) {
         console.error("Error getting user content:", error);

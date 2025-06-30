@@ -140,6 +140,10 @@ const saveResource = async (userId, resourceId) => {
         const saved = await user.saveResource(resourceId);
 
         if (saved) {
+            // Increment noOfSaves
+            resource.noOfSaves = (resource.noOfSaves || 0) + 1;
+            await resource.save();
+
             return { success: true, message: 'Resource saved successfully' };
         } else {
             return { success: false, message: 'Resource already saved' };
@@ -157,12 +161,24 @@ const unsaveResource = async (userId, resourceId) => {
             throw new Error('User not found');
         }
 
-        await user.unsaveResource(resourceId);
+        const resource = await Resource.findById(resourceId);
+        if (!resource) {
+            throw new Error('Resource not found');
+        }
+
+        const removed = await user.unsaveResource(resourceId);
+
+        if (removed) {
+            resource.noOfSaves = Math.max((resource.noOfSaves || 0) - 1, 0);
+            await resource.save();
+        }
+
         return true;
     } catch (error) {
         throw error;
     }
 };
+
 
 // Get saved resources
 const getSavedResources = async (userId) => {
@@ -288,22 +304,34 @@ const getUserDashboard = async (userId) => {
     try {
         const user = await User.findById(userId).select('-password');
 
-        // Get counts
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        // Count values
         const savedResourcesCount = user.savedResources.length;
         const quizAttemptsCount = await QuizAttempt.countDocuments({ user: userId });
         const createdBlogsCount = await Blog.countDocuments({ author: userId });
         const createdProjectsCount = await Project.countDocuments({ author: userId });
         const createdQuizzesCount = await Quiz.countDocuments({ author: userId });
+        const downloadCount = await Download.countDocuments({ user: userId });
 
-        // Get recent activities
+        // Recent quiz attempts
         const recentQuizAttempts = await QuizAttempt.find({ user: userId })
             .populate('quiz', 'title')
             .sort({ attemptedAt: -1 })
             .limit(3);
 
+        // Recent saved resources
         const recentSavedResources = user.savedResources
             .sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt))
             .slice(0, 3);
+
+        // Recent downloaded resources
+        const recentDownloads = await Download.find({ user: userId })
+            .populate('resource', 'title description')
+            .sort({ downloadedAt: -1 })
+            .limit(3);
 
         return {
             counts: {
@@ -311,11 +339,13 @@ const getUserDashboard = async (userId) => {
                 quizAttempts: quizAttemptsCount,
                 createdBlogs: createdBlogsCount,
                 createdProjects: createdProjectsCount,
-                createdQuizzes: createdQuizzesCount
+                createdQuizzes: createdQuizzesCount,
+                downloads: downloadCount
             },
             recentActivities: {
                 quizAttempts: recentQuizAttempts,
-                savedResources: recentSavedResources
+                savedResources: recentSavedResources,
+                downloads: recentDownloads
             }
         };
     } catch (error) {

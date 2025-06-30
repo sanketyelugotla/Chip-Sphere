@@ -58,15 +58,24 @@ const getQuizzes = async ({ category, level, search, page = 1, limit = 10, userI
                 user: userId,
                 quiz: { $in: quizIds },
                 status: 'completed'
-            }).select('quiz');
+            }).select('quiz _id');
 
-            // Create a Set of attempted quiz IDs for faster lookup
-            const attemptedQuizIds = new Set(attempts.map(attempt => attempt.quiz.toString()));
+            const attemptMap = new Map();
+            attempts.forEach(attempt => {
+                attemptMap.set(attempt.quiz.toString(), attempt._id.toString());
+            });
 
-            // Add attempted status to each quiz
+            // Add attempted status and attemptId to each quiz
             quizzes = quizzes.map(quiz => {
                 const quizObj = quiz.toObject();
-                quizObj.attempted = attemptedQuizIds.has(quiz._id.toString());
+                const quizIdStr = quiz._id.toString();
+                if (attemptMap.has(quizIdStr)) {
+                    quizObj.attempted = true;
+                    quizObj.attemptId = attemptMap.get(quizIdStr);
+                } else {
+                    quizObj.attempted = false;
+                    quizObj.attemptId = null;
+                }
                 return quizObj;
             });
         } else {
@@ -77,7 +86,6 @@ const getQuizzes = async ({ category, level, search, page = 1, limit = 10, userI
                 return quizObj;
             });
         }
-
         // Return with or without pagination based on the query
         if (pagination) {
             return {
@@ -200,11 +208,28 @@ const getPopularQuizzes = async (limit = 10) => {
     }
 };
 
+const getAttempt = async (attemptId) => {
+    try {
+        const attempt = await QuizAttempt.findById(attemptId).populate({
+            path: 'answers.questionId',
+            model: 'Question',
+            select: 'title options correctAnswer explanation' // include only necessary fields
+        });
+
+        return attempt;
+
+    } catch (error) {
+        console.log(error);
+        throw new Error(error.message);
+    }
+}
+
 module.exports = {
     getQuizzes,
     getQuiz,
     addQuiz,
     updateQuiz,
     deleteQuiz,
-    getPopularQuizzes
+    getPopularQuizzes,
+    getAttempt
 };

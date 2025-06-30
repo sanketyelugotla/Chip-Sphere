@@ -205,7 +205,7 @@ const submitQuizAnswers = async (quizId, userId, submittedAnswers, timeSpent) =>
         if (!quiz) throw new Error("Quiz not found");
 
         const questions = await Question.find({ quizId }).session(session);
-        console.log(quizId)
+        // console.log(quizId)
 
         // Calculate score
         let correctAnswers = 0;
@@ -247,7 +247,7 @@ const submitQuizAnswers = async (quizId, userId, submittedAnswers, timeSpent) =>
                 points: isCorrect ? (question.points || 1) : 0
             });
         }
-        console.log(questions)
+        // console.log(questions)
         const totalQuestions = questions.length;
         const score = correctAnswers;
         const percentage = Math.round((correctAnswers / totalQuestions) * 100);
@@ -277,7 +277,7 @@ const submitQuizAnswers = async (quizId, userId, submittedAnswers, timeSpent) =>
 
             await session.commitTransaction();
 
-            return res.status(200).json({
+            return {
                 score: existingAttempt.score,
                 totalQuestions: existingAttempt.totalQuestions,
                 percentage: existingAttempt.percentage,
@@ -296,7 +296,7 @@ const submitQuizAnswers = async (quizId, userId, submittedAnswers, timeSpent) =>
                     incorrectAnswers: totalQuestions - correctAnswers - skippedAnswers,
                     skippedAnswers
                 }
-            });
+            };
         }
 
         // Create a new attempt if none exists

@@ -95,4 +95,15 @@ router.get("/stats/popular", async (req, res) => {
     }
 });
 
+router.get("/attempt/:id" , async(req,res)=>{
+    try {
+        const attempt =  await quizService.getAttempt(req.params.id);
+        res.status(200).json({ success: true, message: "Quiz attempt fetched successfully", attempt });
+    } catch (error) {
+        console.error("Error updating quiz:", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+})
+
+
 module.exports = router;

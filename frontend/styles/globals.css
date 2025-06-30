@@ -27,6 +27,11 @@
   --input: #e2e8f0;
   --ring: #3b82f6;
   --radius: 0.5rem;
+
+  --success: #069c6a;
+  --success-foreground: #069c6a;
+  --error: #ef4444;
+  --error-foreground: #ef4444;
 }
 
 [data-theme="dark"] {
@@ -53,6 +58,10 @@
   --border: #1e293b;
   --input: #1e293b;
   --ring: #1d4ed8;
+  --success: #069c6a;
+  --success-foreground: #069c6a;
+  --error: #ef4444;
+  --error-foreground: #ef4444;
 }
 
 @theme {
@@ -77,6 +86,10 @@
   --color-secondary-text: var(--secondaryText);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-intermediate: var(--intermediate);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
 }
 
 body {

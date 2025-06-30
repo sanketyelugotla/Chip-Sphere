@@ -2,11 +2,20 @@ import axios from "axios"
 
 const dbUri = process.env.NEXT_PUBLIC_DATABASE_URI;
 
-export const getQuizzes = async (email, password) => {
+export const getQuizzes = async (token) => {
+
     try {
-        const response = await axios.get(`${dbUri}/quiz`);
-        // console.log(response.data.quizzes)
-        return response.data.quizzes;
+        if (!token) {
+            const response = await axios.get(`${dbUri}/quiz`);
+            return response.data.quizzes;
+        } else {
+            const response = await axios.get(`${dbUri}/quiz/my-quizzes`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            return response.data.quizzes;
+        }
     } catch (error) {
         throw new Error(error.response.data.message);
     }
@@ -47,7 +56,6 @@ export const getQuestions = async (id, token) => {
 };
 
 export const submitAnswers = async (id, answers, token) => {
-    // console.log(answers);
     try {
         const response = await axios.post(
             `${dbUri}/question/${id}/submit`,
@@ -63,3 +71,16 @@ export const submitAnswers = async (id, answers, token) => {
         throw new Error(error.response.data.message);
     }
 };
+
+export const getAttempt = async (token, attemptId) => {
+    try {
+        const response = await axios.get(`${dbUri}/quiz/attempt/${attemptId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data.attempt
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+}

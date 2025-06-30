@@ -13,6 +13,7 @@ export default function QuizPage({ params }) {
   const [score, setScore] = useState(0);
   const [questions, setQuestions] = useState(null);
   const [answers, setAnswers] = useState([]);
+  const [result, setResult] = useState([]);
   const router = useRouter()
   const token = Cookies.get("token");
 
@@ -42,13 +43,14 @@ export default function QuizPage({ params }) {
     // Set selected option if returning to previous question
     if (questions && questions[currentQuestionIndex]) {
       const currentAnswer = answers.find(a => a.questionId === questions[currentQuestionIndex]._id);
-      setSelectedOption(currentAnswer?.selected || null);
+      console.log(currentAnswer)
+      setSelectedOption(currentAnswer?.selectedAnswer || null);
     }
+    console.log("called")
   }, [currentQuestionIndex, questions]);
 
   const getData = async () => {
     const data = await getQuestions(id, token);
-    // console.log(data)
     setQuestions(Array.isArray(data) ? data : []);
   };
 
@@ -70,11 +72,21 @@ export default function QuizPage({ params }) {
   };
 
   const handleNext = () => {
+    if (selectedOption === null) {
+      console.log("called last");
+      handleOptionSelect("skipped");
+    }
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
+      if (selectedOption === null) {
+        console.log("called last");
+        handleOptionSelect("skipped");
+      }
       handleSubmit();
     }
+    setSelectedOption(null);
+
   };
 
   const handlePrev = () => {
@@ -86,8 +98,15 @@ export default function QuizPage({ params }) {
   const handleSubmit = async () => {
     const token = Cookies.get('token')
     const response = await submitAnswers(id, answers, token);
-    // console.log(response.result);
-    setScore(response.result.score);
+
+    // Calculate total correct answers
+    console.log(response)
+    setResult(response.result.detailedResults);
+    const correctCount = response.result.detailedResults.reduce((count, item) => {
+      return count + (item.isCorrect ? 1 : 0);
+    }, 0);
+
+    setScore(correctCount);
     setQuizSubmitted(true);
   };
 
@@ -113,16 +132,77 @@ export default function QuizPage({ params }) {
   if (quizSubmitted) {
     return (
       <div className="max-w-3xl mx-auto px-5 py-8 text-foreground">
+        <button
+          onClick={() => router.back()}
+          className="flex items-center text-primary/80 cursor-pointer mb-6 hover:text-primary"
+        >
+          ← Back to Quizzes
+        </button>
         <header className="mb-6">
           <h1 className="text-2xl font-semibold text-primary mb-2">Quiz Completed!</h1>
-          <p className="text-muted-foreground">Your score: <span className="text-accent-foreground font-bold">{score}</span> out of {questions.length}</p>
+          <p className="text-muted-foreground">
+            Your score: <span className="text-accent-foreground font-bold">{score}</span> out of {result.length}
+          </p>
+          <p className="text-muted-foreground">
+            Correct: {score} | Incorrect: {result.length - score}
+          </p>
         </header>
 
-        <div className="bg-secondary-background rounded-lg p-6 mb-6 border border-border">
-          <h2 className="text-xl font-medium mb-4 text-primary">Quiz Results</h2>
-          <p className="text-foreground">
-            You scored <span className="text-primary font-bold">{Math.round((score / questions.length) * 100)}%</span>
-          </p>
+        <div className="space-y-8">
+          {result.map((questionResult, qIndex) => {
+            const question = questions.find(q => q._id === questionResult.questionId);
+            if (!question) return null;
+
+            return (
+              <div key={qIndex} className="bg-secondary-background rounded-lg p-6 border border-border">
+                <h3 className="text-lg font-medium mb-4">
+                  Question {qIndex + 1}: {questionResult.questionTitle || question.title}
+                  {questionResult.isCorrect ? (
+                    <span className="ml-2 text-sm text-success-foreground">✓ Correct ({questionResult.points} points)</span>
+                  ) : (
+                    <span className="ml-2 text-sm text-error-foreground">X Incorrect (0 points)</span>
+                  )}
+                </h3>
+
+                <ul className="space-y-3 mb-4">
+                  {question.options.map((option, oIndex) => {
+                    let optionClasses = "p-4 rounded-lg border";
+                    const isUserSelected = option === questionResult.selectedAnswer;
+                    const isCorrectOption = option === questionResult.correctAnswer;
+
+                    if (isUserSelected && isCorrectOption) {
+                      optionClasses += " border-l-4 border-success  text-success-foreground";
+                    } else if (isUserSelected) {
+                      optionClasses += " border-l-4 border-error  text-error-foreground";
+                    } else if (isCorrectOption) {
+                      optionClasses += " border-l-4 border-success  text-success-foreground";
+                    } else {
+                      optionClasses += " bg-container-background border-border";
+                    }
+
+                    return (
+                      <li
+                        key={oIndex}
+                        className={optionClasses}
+                      >
+                        {option}
+                        {isCorrectOption && !isUserSelected && (
+                          <span className="ml-2 text-xs text-muted-foreground">(Correct Answer)</span>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+
+                {questionResult.explanation && (
+                  <div className="mt-4 p-4 bg-muted rounded-lg">
+                    <h4 className="font-medium mb-2">Explanation:</h4>
+                    <p className="text-muted-foreground">{questionResult.explanation}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     );
@@ -189,7 +269,7 @@ export default function QuizPage({ params }) {
           </button>
           <button
             className={`px-6 py-2 rounded-lg font-medium transition-all border border-primary cursor-pointer
-              ${!selectedOption ? 'bg-primary/50 hover:bg-primary/90  text-primary-foreground' : 'bg-primary/90 hover:bg-primary/90 text-primary-foreground'}`}
+              ${!selectedOption ? 'bg-primary ' : 'bg-primary'}`}
             onClick={handleNext}
           >
             {currentQuestionIndex === questions.length - 1 ? 'Submit' : !selectedOption ? "Skip" : "Next"}

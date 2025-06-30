@@ -2,6 +2,7 @@
 import { getQuizzes } from '@/services/quizz';
 import React, { useEffect, useState } from 'react';
 import QuizCard from '@/components/QuizCard';
+import Cookies from 'js-cookie';
 import Loading from '../loading';
 
 export default function Quizzes() {
@@ -11,11 +12,11 @@ export default function Quizzes() {
   const [selectedDifficulty, setSelectedDifficulty] = useState("All Difficulties");
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState(null);
-
+  const token = Cookies.get("token");
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const data = await getQuizzes();
+        const data = await getQuizzes(token);
         setQuizzes(data);
         const uniqueCategories = Array.from(new Set(data.map(q => q.category))).filter(Boolean);
         setCategories(uniqueCategories);
@@ -102,7 +103,7 @@ export default function Quizzes() {
             <option value="Advanced">Advanced</option>
           </select>
         </div>
-
+        {console.log(filteredQuizzes)}
         {/* Quizzes Grid */}
         {filteredQuizzes.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -34,18 +34,39 @@ const QuizCard = ({ quiz }) => {
                     {quiz.author?.name || 'Unknown Author'}
                 </p>
             </div>
+            <div className="flex justify-between">
 
-            <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">
-                {quiz.category} · {quiz.questions} questions
-            </p>
 
-            <Link href={`/quizzes/${quiz._id}`}>
-                <button
-                    className="mt-auto w-full bg-blue-600 text-white py-1.5 sm:py-2 rounded-md hover:bg-blue-700 transition text-sm sm:text-base cursor-pointer"
-                >
-                    Start Quiz
-                </button>
-            </Link>
+                <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">
+                    {quiz.category} · {quiz.questions} questions
+                </p>
+                {quiz.attempted &&
+                    <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4 border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
+                        Attempted
+                    </p>}
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2">
+                {/* Start Quiz or Reattempt Quiz */}
+                <Link href={`/quizzes/${quiz._id}`} className="w-full">
+                    <button
+                        className="w-full bg-blue-600 text-white py-1.5 sm:py-2 rounded-md hover:bg-blue-700 transition text-sm sm:text-base"
+                    >
+                        {quiz.attempted ? 'Reattempt Quiz' : 'Start Quiz'}
+                    </button>
+                </Link>
+
+                {/* Show Analysis button only if quiz is attempted */}
+                {quiz.attempted && (
+                    <Link href={`/quizzes/submit/${quiz.attemptId}`} className="w-full">
+                        <button
+                            className="w-full bg-green-600 text-white py-1.5 sm:py-2 rounded-md hover:bg-green-700 transition text-sm sm:text-base"
+                        >
+                            View Analysis
+                        </button>
+                    </Link>
+                )}
+            </div>
+
         </div>
     );
 };

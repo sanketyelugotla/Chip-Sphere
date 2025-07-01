@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import {
     FaFacebookF,
@@ -7,6 +8,7 @@ import {
     FaGithub,
 } from 'react-icons/fa';
 import Image from 'next/image';
+import Link from 'next/link';
 
 
 const Footer = () => {
@@ -51,7 +53,7 @@ const Footer = () => {
                 </div>
 
                 {/* Contact */}
-                <p className="underline cursor-pointer">Contact Us</p>
+                <Link href={"/about#contact"}><p className="underline cursor-pointer">Contact Us</p></Link>
 
                 {/* Divider */}
                 <hr className="my-4 border-muted-foreground w-11/12 mx-auto" />

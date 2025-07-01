@@ -27,17 +27,6 @@ router.get("/profile", authenticate, async (req, res) => {
     }
 });
 
-// 📌 Get specific user by ID
-router.get("/:id", authenticate, async (req, res) => {
-    try {
-        const user = await userService.getUser(req.params.id);
-        res.status(200).json({ success: true, message: "User details fetched successfully", user });
-    } catch (error) {
-        console.error("Error getting user details:", error);
-        res.status(500).json({ success: false, message: error.message });
-    }
-});
-
 // 📌 Update user profile
 router.put("/profile", authenticate, async (req, res) => {
     try {
@@ -205,6 +194,17 @@ router.get("/my-content", authenticate, async (req, res) => {
         res.status(200).json({ success: true, message: "User content fetched successfully", content });
     } catch (error) {
         console.error("Error getting user content:", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 📌 Get specific user by ID
+router.get("/:id", authenticate, async (req, res) => {
+    try {
+        const user = await userService.getUser(req.params.id);
+        res.status(200).json({ success: true, message: "User details fetched successfully", user });
+    } catch (error) {
+        console.error("Error getting user details:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 });

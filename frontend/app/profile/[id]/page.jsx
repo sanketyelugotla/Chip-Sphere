@@ -54,7 +54,7 @@ export default function ProfilePage() {
             />
             <div className="flex flex-col m-2">
               <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
-              <p className="text-sm font-medium text-muted-foreground">{user.email}</p>
+              <p className="text-sm font-medium text-muted-foreground max-w-45 md:w-full truncate">{user.email}</p>
             </div>
           </div>
 

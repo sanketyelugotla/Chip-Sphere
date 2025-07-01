@@ -5,6 +5,7 @@ const Blog = require("../models/Blog");
 const Project = require("../models/Project");
 const Quizz = require("../models/Quizz");
 const mongoose = require("mongoose");
+const { Quiz, Download } = require("../models");
 
 // Get all users
 const getUsers = async () => {
@@ -95,13 +96,14 @@ const updateUser = async (userId, updateData) => {
         delete updateData.password;
         delete updateData.role;
         delete updateData.savedResources;
+        console.log(updateData)
 
         const user = await User.findByIdAndUpdate(
             userId,
             updateData,
             { new: true, runValidators: true }
         ).select('-password');
-
+        console.log(user)
         if (!user) {
             throw new Error('User not found');
         }

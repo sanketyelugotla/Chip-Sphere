@@ -1,33 +1,17 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-import { useUser } from "@/context/userContext";
-import Loading from "./Loading";
-import { Pencil } from "lucide-react";
-import { getSavedResources } from "@/services/user";
+'use client';
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/context/userContext';
+import Loading from './Loading';
+import { Pencil } from 'lucide-react';
 
 export default function ProfilePage() {
   const router = useRouter();
-  const token = Cookies.get("token");
+  const token = Cookies.get('token');
   const { user } = useUser();
   const [quizProgress, setQuizProgress] = useState(0);
-  const [resource, setResource] = useState([]);
-
-  useEffect(() => {
-    const fetchSavedResources = async () => {
-      try {
-        const resources = await getSavedResources(token);
-        setResource(resources);
-      } catch (error) {
-        console.error("Error fetching saved resources:", error);
-      }
-    };
-    if (token) {
-      fetchSavedResources();
-    }
-  }, [token]);
 
   useEffect(() => {
     if (!token) {
@@ -39,25 +23,58 @@ export default function ProfilePage() {
     return () => clearTimeout(timer);
   }, [token]);
 
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || '',
+        email: user.email || '',
+        education: user.education || '',
+        institution: user.institution || ''
+      });
+    }
+  }, [user]);
+
   if (!token || !user) {
     return <Loading />;
   }
 
-  const quickActions = [
-    { label: "Attempt a Quiz", path: "/quizzes" },
-    { label: "Learning Resources", path: "/resources" },
-    { label: "Read Blogs", path: "/blogs" },
-    { label: "View Project", path: "/projects" },
+    const quickActions = [
+    { label: 'Attempt a Quiz', path: '/quizzes' },
+    { label: 'Learning Resources', path: '/resources' },
+    { label: 'Read Blogs', path: '/blogs' },
+    { label: 'View Project', path: '/projects' }
   ];
+
 
   return (
     <div className="min-h-screen bg-background max-w-screen-xl mx-auto p-4 my-4 md:my-8 flex flex-col gap-4">
       <div className="flex w-full gap-4 flex-wrap md:flex-nowrap">
         {/* Profile Info */}
         <div className="relative flex flex-col flex-1/2 border-2 border-border rounded-lg p-4 bg-container-background">
-          <button className="absolute top-4 right-4 bg-muted p-2 rounded-md hover:bg-background transition">
-            <Pencil className="w-5 h-5 text-muted-foreground" />
-          </button>
+          {isEditing ? (
+            <div className="flex gap-2 absolute top-4 right-4">
+              <button
+                onClick={handleSubmit}
+                disabled={isLoading}
+                className="bg-primary p-2 rounded-md hover:bg-primary-dark transition text-white cursor-pointer"
+              >
+                {isLoading ? 'Saving...' : <Save className="w-5 h-5" />}
+              </button>
+              <button
+                onClick={handleCancelClick}
+                className="bg-destructive p-2 rounded-md hover:bg-destructive-dark transition text-white cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={handleEditClick}
+              className="absolute top-4 right-4 bg-muted p-2 rounded-md hover:bg-background transition cursor-pointer"
+            >
+              <Pencil className="w-5 h-5 text-muted-foreground" />
+            </button>
+          )}
 
           <div className="flex items-center gap-4 m-5">
             <Image
@@ -69,27 +86,21 @@ export default function ProfilePage() {
             />
             <div className="flex flex-col m-2">
               <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
-              <p className="text-sm font-medium text-muted-foreground max-w-45 md:w-full truncate">
-                {user.email}
-              </p>
+              <p className="text-sm font-medium text-muted-foreground max-w-45 md:w-full truncate">{user.email}</p>
             </div>
           </div>
 
           <div className="flex flex-col gap-2 px-5 pb-2">
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-medium text-muted-foreground">
-                Education
-              </label>
+              <label className="text-xs font-medium text-muted-foreground">Education</label>
               <div className="bg-muted border border-border px-3 py-2 rounded-md text-sm text-foreground">
-                {user.education || "Education"}
+                {user.education || 'Education'}
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-medium text-muted-foreground">
-                Institution
-              </label>
+              <label className="text-xs font-medium text-muted-foreground">Institution</label>
               <div className="bg-muted border border-border px-3 py-2 rounded-md text-sm text-foreground">
-                {user.institution || "Institution"}
+                {user.institution || 'Institution'}
               </div>
             </div>
           </div>

@@ -1,24 +1,30 @@
+"use client"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ChevronRight, BookOpen, FileText, CheckCircle, Users } from "lucide-react"
+import Image from "next/image"
+import { useUser } from "@/context/userContext"
 
 export default function Home() {
+
+    const{dark} = useUser();
+
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-r from-primary/10 to-primary/5 py-20 px-4 sm:px-6 lg:px-8">
+        <section className="flex items-center justify-center text-center sm:text-left  h-[100vh] sm:h-full bg-gradient-to-r from-primary/10 to-primary/5 pb-40 sm:py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
+                <h1 className="text-5xl font-semibold lg:text-6xl lg:font-bold sm:tracking-tight">
                   Elevate Your <span className="text-primary">Engineering</span> Knowledge
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-lg">
                   Access interactive quizzes, comprehensive resources, and insightful blogs tailored for VLSI and
                   engineering students and professionals.
                 </p>
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap gap-4 justify-center sm:justify-normal">
                   <Button size="lg" asChild>
                     <Link href="/quizzes">
                       Get Started <ChevronRight className="ml-2 h-4 w-4" />
@@ -29,17 +35,14 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
-              <div className="relative h-64 md:h-auto">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-lg animate-pulse"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-primary text-9xl font-bold opacity-98">
-                    <img
-                      src="ChipSphere.png"
-                      alt="logo"
-                      className="h-100 w-100 rounded-full animate-continuous-animation"
-                    />
-                  </div>
-                </div>
+              <div className="hidden itens-center pb-10 justify-center sm:flex opacity-88">
+                <Image
+                src={dark ? "/logo_light.png" : "/logo_dark.png"}
+                alt="Logo"
+                width={380}
+                height={380}
+                priority
+              />
               </div>
             </div>
           </div>

@@ -7,7 +7,7 @@ export default function About() {
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative py-16 px-4 sm:px-6 lg:px-8 circuit-bg">
+        <section className="relative py-16 px-4 sm:px-6 lg:px-8 circuit-bg bg-gradient-to-r from-primary/10 to-primary/5">
           <div className="max-w-7xl mx-auto">
             <div className="text-center">
               <h1 className="text-4xl font-bold mb-4">About ChipSphere</h1>
@@ -20,16 +20,16 @@ export default function About() {
 
         {/* About Tabs */}
         <section className="py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto ">
             <Tabs defaultValue="mission" className="space-y-8">
-              <TabsList className="grid w-full grid-cols-1 md:grid-cols-4">
-                <TabsTrigger value="mission">Our Mission</TabsTrigger>
-                <TabsTrigger value="team">Our Team</TabsTrigger>
-                <TabsTrigger value="story">Our Story</TabsTrigger>
-                <TabsTrigger value="contact">Contact Us</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-4 rounded-full">
+                <TabsTrigger className="rounded-full" value="mission">Our Mission</TabsTrigger>
+                <TabsTrigger className="rounded-full" value="team">Our Team</TabsTrigger>
+                <TabsTrigger className="rounded-full" value="story">Our Story</TabsTrigger>
+                <TabsTrigger className="rounded-full" value="contact">Contact Us</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="mission" className="space-y-6">
+              <TabsContent value="mission" className="mx-2 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div>
                     <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
@@ -37,7 +37,7 @@ export default function About() {
                       We’re a bunch of chip enthusiasts on a mission to turn your “uh-oh” moments into “heck yeah, I’ve got this!”. Whether you're just starting out with Verilog or sweating through interview prep (we feel you), we’ve got your back. Expect bite-sized learning tips, quizzes that make you scratch your head, and real interview stories.
                     </p>
                   </div>
-                  <div className="flex justify-center">
+                  <div className="hidden sm:flex justify-center">
                     <div className="mt-5 w-100">
                       <div className="text-primary text-9xl font-bold opacity-98">
                         <img
@@ -94,7 +94,7 @@ export default function About() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="team">
+              <TabsContent className="mx-2" value="team">
                 <h2 className="text-3xl font-bold mb-8">Our Team</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
                   <Card className="circuit-border">
@@ -123,7 +123,7 @@ export default function About() {
               </TabsContent>
 
 
-              <TabsContent value="story">
+              <TabsContent className="mx-2" value="story">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div>
                     <h2 className="text-3xl font-bold mb-4">Our Story</h2>
@@ -175,7 +175,7 @@ export default function About() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="contact">
+              <TabsContent className="mx-2" value="contact">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <h2 className="text-3xl font-bold mb-4">Ping the Pros!</h2>

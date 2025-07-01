@@ -6,6 +6,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { MdDarkMode, MdOutlineLightMode } from "react-icons/md"
+import Image from "next/image"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { useUser } from "@/context/userContext"
+import { useUser} from "@/context/userContext"
 
 const useAuth = () => {
   const { user, setUser } = useUser();
@@ -35,7 +36,8 @@ export default function Navbar() {
   const { user, signOut } = useAuth();
 
   const [isScrolled, setIsScrolled] = useState(false)
-  const [dark, setDark] = useState(false)
+  const{ dark, setDark } = useUser();
+  
 
   // Detect scrolling to change navbar appearance
   useEffect(() => {
@@ -46,18 +48,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme")
-    if (savedTheme) {
-      setDark(savedTheme === "dark")
-    }
-  }, [])
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light")
-    localStorage.setItem("theme", dark ? "dark" : "light")
-  }, [dark])
-
+ 
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Quizzes", href: "/quizzes" },
@@ -77,13 +68,19 @@ export default function Navbar() {
       className={`sticky top-0 z-50 w-full transition-all duration-200 ${isScrolled ? "bg-background/80 backdrop-blur-md shadow-sm" : "bg-transparent"
         }`}
     >
-      <div className="container mx-auto flex h-16 items-center justify-between px-[4rem] ">
+      <div className="container mx-auto flex h-16 items-center justify-between px-2 md:px-[4rem] ">
         <div className="flex items-center">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="h-12 w-12 rounded-full flex items-center justify-center">
-              <img src="/ChipSphere.png" alt="logo" className="h-12 w-12 rounded-full" />
+            <div className="h-9 w-9 md:h-11 md:w-11  flex items-center justify-center">
+              <Image
+                src={dark ? "/logo_light.png" : "/logo_dark.png"}
+                alt="Logo"
+                width={42}
+                height={42}
+                priority
+              />
             </div>
-            <span className="font-bold text-xl hidden sm:inline-block">Chip Sphere</span>
+            <span className="font-bold text-xl ">Chip Sphere</span>
           </Link>
         </div>
 

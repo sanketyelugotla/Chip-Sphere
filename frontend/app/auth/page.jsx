@@ -43,7 +43,7 @@ export default function AuthPage() {
                 </motion.div> */}
 
                 {/* Forms Container */}
-                <div className="w-full max-w-md relative flex justify-between items-center ml-10">
+                <div className="w-full max-w-md relative flex justify-between items-center md:mr-10">
                     <AnimatePresence mode="wait">
                         {isLogin ? (
                             <motion.div

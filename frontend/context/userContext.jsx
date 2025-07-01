@@ -7,6 +7,7 @@ import { createContext, useContext, useEffect, useState } from "react"
 const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
+    const [dark, setDark] = useState(false)
     const [user, setUser] = useState(null);
 
     const fetchUser = async () => {
@@ -23,6 +24,18 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         fetchUser();
     }, []);
+    
+     useEffect(() => {
+    const savedTheme = localStorage.getItem("theme")
+    if (savedTheme) {
+      setDark(savedTheme === "dark")
+    }
+  }, [])
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light")
+    localStorage.setItem("theme", dark ? "dark" : "light")
+  }, [dark])
 
 
     const refreshUser = () => {
@@ -30,7 +43,7 @@ export const UserProvider = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={{ user, refreshUser, setUser }}>
+        <UserContext.Provider value={{ user, refreshUser, setUser, dark, setDark }}>
             {children}
         </UserContext.Provider>
     )

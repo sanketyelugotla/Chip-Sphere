@@ -14,10 +14,11 @@ export default function QuizPage({ params }) {
   const [questions, setQuestions] = useState(null);
   const [answers, setAnswers] = useState([]);
   const [result, setResult] = useState([]);
-  const router = useRouter()
+  const router = useRouter();
   const token = Cookies.get("token");
 
   const pathname = usePathname();
+
   useEffect(() => {
     if (!token) {
       router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
@@ -40,10 +41,8 @@ export default function QuizPage({ params }) {
   }, []);
 
   useEffect(() => {
-    // Set selected option if returning to previous question
     if (questions && questions[currentQuestionIndex]) {
       const currentAnswer = answers.find(a => a.questionId === questions[currentQuestionIndex]._id);
-      console.log(currentAnswer)
       setSelectedOption(currentAnswer?.selectedAnswer || null);
     }
   }, [currentQuestionIndex, questions]);
@@ -53,14 +52,15 @@ export default function QuizPage({ params }) {
       const data = await getQuestions(id, token);
       setQuestions(Array.isArray(data) ? data : []);
     } catch (error) {
-      if (error.message == "Invalid or expired token.") router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
+      if (error.message === "Invalid or expired token.") {
+        router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
+      }
       console.log(error.message);
     }
   };
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
-
     const currentQuestionId = questions[currentQuestionIndex]._id;
 
     setAnswers(prev => {
@@ -77,20 +77,17 @@ export default function QuizPage({ params }) {
 
   const handleNext = () => {
     if (selectedOption === null) {
-      console.log("called last");
       handleOptionSelect("skipped");
     }
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
       if (selectedOption === null) {
-        console.log("called last");
         handleOptionSelect("skipped");
       }
       handleSubmit();
     }
     setSelectedOption(null);
-
   };
 
   const handlePrev = () => {
@@ -100,11 +97,8 @@ export default function QuizPage({ params }) {
   };
 
   const handleSubmit = async () => {
-    const token = Cookies.get('token')
+    const token = Cookies.get('token');
     const response = await submitAnswers(id, answers, token);
-
-    // Calculate total correct answers
-    console.log(response)
     setResult(response.result.detailedResults);
     const correctCount = response.result.detailedResults.reduce((count, item) => {
       return count + (item.isCorrect ? 1 : 0);
@@ -185,10 +179,7 @@ export default function QuizPage({ params }) {
                     }
 
                     return (
-                      <li
-                        key={oIndex}
-                        className={optionClasses}
-                      >
+                      <li key={oIndex} className={optionClasses}>
                         {option}
                         {isCorrectOption && !isUserSelected && (
                           <span className="ml-2 text-xs text-muted-foreground">(Correct Answer)</span>
@@ -216,7 +207,7 @@ export default function QuizPage({ params }) {
   const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="max-w-3xl my-10 mx-auto px-5 py-8 text-foreground relative bg-container-background rounded-xl shadow-lg border border-border">
+    <div className="max-w-3xl my-10 mx-4 sm:mx-auto px-5 py-8 text-foreground relative bg-container-background rounded-xl shadow-lg border border-border">
       <header className="mb-6">
         <h1 className="text-2xl font-semibold text-primary mb-2">FPGA Architecture and Design</h1>
         <p className="text-muted-foreground text-sm mb-6">Test your knowledge of FPGA architecture, design flow, and implementation techniques.</p>

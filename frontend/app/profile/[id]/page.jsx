@@ -6,12 +6,21 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/userContext';
 import Loading from './Loading';
 import { Pencil } from 'lucide-react';
+import { getDashboard } from '@/services/user';
 
 export default function ProfilePage() {
   const router = useRouter();
   const token = Cookies.get('token');
   const { user } = useUser();
   const [quizProgress, setQuizProgress] = useState(0);
+
+  useEffect(() => {
+    async function getData() {
+      const res = await getDashboard(token);
+      console.log(res);
+    }
+    getData()
+  }, [])
 
   useEffect(() => {
     if (!token) {
@@ -27,7 +36,7 @@ export default function ProfilePage() {
     return <Loading />;
   }
 
-    const quickActions = [
+  const quickActions = [
     { label: 'Attempt a Quiz', path: '/quizzes' },
     { label: 'Learning Resources', path: '/resources' },
     { label: 'Read Blogs', path: '/blogs' },

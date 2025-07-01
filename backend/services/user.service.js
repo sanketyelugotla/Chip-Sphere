@@ -5,6 +5,7 @@ const Blog = require("../models/Blog");
 const Project = require("../models/Project");
 const Quizz = require("../models/Quizz");
 const mongoose = require("mongoose");
+const { Quiz, Download } = require("../models");
 
 // Get all users
 const getUsers = async () => {

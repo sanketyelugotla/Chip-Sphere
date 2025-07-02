@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/userContext';
 import Loading from './Loading';
 import { Pencil, Save, X } from 'lucide-react';
-import { getDashboard, updateProfile } from '@/services/user';
+import { getDashboard, updateProfile, getSavedResources } from '@/services/user';
 import { toast } from 'react-toastify';
 
 export default function ProfilePage() {
@@ -15,21 +15,23 @@ export default function ProfilePage() {
   const { user, setUser } = useUser();
   const [quizProgress, setQuizProgress] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     education: '',
     institution: ''
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [resource, setResource] = useState([]);
 
   useEffect(() => {
     async function getData() {
       const res = await getDashboard(token);
-      console.log(res);
+      const saved = await getSavedResources(token);
+      setResource(saved);
     }
-    getData();
-  }, []);
+    if (token) getData();
+  }, [token]);
 
   useEffect(() => {
     if (!token) {
@@ -52,9 +54,7 @@ export default function ProfilePage() {
     }
   }, [user]);
 
-  if (!token || !user) {
-    return <Loading />;
-  }
+  if (!token || !user) return <Loading />;
 
   const quickActions = [
     { label: 'Attempt a Quiz', path: '/quizzes' },
@@ -63,9 +63,7 @@ export default function ProfilePage() {
     { label: 'View Project', path: '/projects' }
   ];
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
+  const handleEditClick = () => setIsEditing(true);
 
   const handleCancelClick = () => {
     setIsEditing(false);
@@ -79,10 +77,7 @@ export default function ProfilePage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -91,9 +86,10 @@ export default function ProfilePage() {
     try {
       const updatedUser = await updateProfile(token, formData);
       setIsEditing(false);
-      toast.success("Updated successfully");
+      toast.success('Updated successfully');
+      setUser(updatedUser); // optional if needed
     } catch (error) {
-      toast.error("Profile update failed");
+      toast.error('Profile update failed');
       console.error('Error updating profile:', error);
     } finally {
       setIsLoading(false);
@@ -107,92 +103,44 @@ export default function ProfilePage() {
         <div className="relative flex flex-col flex-1/2 border-2 border-border rounded-lg p-4 bg-container-background">
           {isEditing ? (
             <div className="flex gap-2 absolute top-4 right-4">
-              <button
-                onClick={handleSubmit}
-                disabled={isLoading}
-                className="bg-primary p-2 rounded-md hover:bg-primary-dark transition text-white cursor-pointer"
-              >
+              <button onClick={handleSubmit} disabled={isLoading} className="bg-primary p-2 rounded-md hover:bg-primary-dark transition text-white cursor-pointer">
                 {isLoading ? 'Saving...' : <Save className="w-5 h-5" />}
               </button>
-              <button
-                onClick={handleCancelClick}
-                className="bg-destructive p-2 rounded-md hover:bg-destructive-dark transition text-white cursor-pointer"
-              >
+              <button onClick={handleCancelClick} className="bg-destructive p-2 rounded-md hover:bg-destructive-dark transition text-white cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
           ) : (
-            <button
-              onClick={handleEditClick}
-              className="absolute top-4 right-4 bg-muted p-2 rounded-md hover:bg-background transition cursor-pointer"
-            >
+            <button onClick={handleEditClick} className="absolute top-4 right-4 bg-muted p-2 rounded-md hover:bg-background transition cursor-pointer">
               <Pencil className="w-5 h-5 text-muted-foreground" />
             </button>
           )}
 
           <div className="flex items-center gap-4 m-5">
-            <Image
-              src={user.image || "/logo1.jpg"}
-              alt="user"
-              width={80}
-              height={80}
-              className="rounded-full"
-            />
+            <Image src={user.image || "/logo_dark.png"} alt="user" width={80} height={80} className="rounded-full" />
             {isEditing ? (
               <form onSubmit={handleSubmit} className="flex flex-col m-2 gap-2 w-full">
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground">Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="bg-background border border-border px-3 py-2 rounded-md text-sm text-foreground w-full"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="bg-background border border-border px-3 py-2 rounded-md text-sm text-foreground w-full"
-                  />
-                </div>
+                <label className="text-xs font-medium text-muted-foreground">Name</label>
+                <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="bg-background border border-border px-3 py-2 rounded-md text-sm text-foreground" />
+                <label className="text-xs font-medium text-muted-foreground">Email</label>
+                <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="bg-background border border-border px-3 py-2 rounded-md text-sm text-foreground" />
               </form>
             ) : (
               <div className="flex flex-col m-2">
                 <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
-                <p className="text-sm font-medium text-muted-foreground max-w-45 md:w-full truncate">{user.email}</p>
+                <p className="text-sm font-medium text-muted-foreground max-w-45 md:max-w-full truncate">{user.email}</p>
               </div>
             )}
           </div>
 
           <div className="flex flex-col gap-2 px-5 pb-2">
             {isEditing ? (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground">Education</label>
-                  <input
-                    type="text"
-                    name="education"
-                    value={formData.education}
-                    onChange={handleInputChange}
-                    className="bg-background border border-border px-3 py-2 rounded-md text-sm text-foreground"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground">Institution</label>
-                  <input
-                    type="text"
-                    name="institution"
-                    value={formData.institution}
-                    onChange={handleInputChange}
-                    className="bg-background border border-border px-3 py-2 rounded-md text-sm text-foreground"
-                  />
-                </div>
-              </form>
+              <>
+                <label className="text-xs font-medium text-muted-foreground">Education</label>
+                <input type="text" name="education" value={formData.education} onChange={handleInputChange} className="bg-background border border-border px-3 py-2 rounded-md text-sm text-foreground" />
+                <label className="text-xs font-medium text-muted-foreground">Institution</label>
+                <input type="text" name="institution" value={formData.institution} onChange={handleInputChange} className="bg-background border border-border px-3 py-2 rounded-md text-sm text-foreground" />
+              </>
             ) : (
               <>
                 <div className="flex flex-col gap-1">
@@ -213,7 +161,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Saved Items & Quick Actions Section */}
+      {/* Saved Items & Quick Actions */}
       <div className="flex flex-col md:flex-row gap-4 border border-border rounded-lg bg-container-background p-4 mt-4">
         {/* Quick Actions */}
         <div className="md:w-1/3 border border-border rounded-lg p-4 bg-background">
@@ -234,10 +182,19 @@ export default function ProfilePage() {
         {/* Saved Items */}
         <div className="md:w-2/3 border border-border rounded-lg p-4 bg-background">
           <h2 className="text-lg font-semibold mb-4 text-foreground">Saved Items</h2>
-          <div className="bg-background border-2 hover:bg-secondary transition border-border p-4 rounded-md text-sm text-foreground">
-            <h3 className="font-medium text-base mb-2">VLSI Notes</h3>
-            <p className="text-muted-foreground">Saved resource on VLSI architecture and systems for quick reference.</p>
-          </div>
+          {resource.length === 0 ? (
+            <p className="text-muted-foreground">No saved resources.</p>
+          ) : (
+            <div className="flex flex-col gap-4 max-h-[300px] overflow-y-auto pr-2">
+              {resource.map((item, idx) => (
+                <div key={idx} className="bg-background border-2 hover:bg-secondary transition border-border p-4 rounded-md text-sm text-foreground">
+                  <h3 className="font-medium text-base mb-2">{item.resource?.name || 'Untitled'}</h3>
+                  <p className="text-muted-foreground text-xs">Saved on: {new Date(item.savedAt).toLocaleDateString()}</p>
+                  <p className="text-muted-foreground text-sm mt-1 line-clamp-2">{item.resource?.description || 'No description'}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,8 +1,12 @@
+"use client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab"
 import { CircuitBoardIcon as Circuit, Mail, Phone, MapPin, Users, BookOpen, Award, Cpu } from "lucide-react"
+import Image from "next/image"
+import { useUser } from "@/context/userContext"
 
 export default function About() {
+  const { dark } = useUser();
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow">
@@ -26,7 +30,7 @@ export default function About() {
                 <TabsTrigger className="rounded-full" value="mission">Our Mission</TabsTrigger>
                 <TabsTrigger className="rounded-full" value="team">Our Team</TabsTrigger>
                 <TabsTrigger className="rounded-full" value="story">Our Story</TabsTrigger>
-                <TabsTrigger className="rounded-full" value="contact">Contact Us</TabsTrigger>
+                <TabsTrigger id="contact" className="rounded-full" value="contact">Contact Us</TabsTrigger>
               </TabsList>
 
               <TabsContent value="mission" className="mx-2 space-y-6">
@@ -40,10 +44,12 @@ export default function About() {
                   <div className="hidden sm:flex justify-center">
                     <div className="mt-5 w-100">
                       <div className="text-primary text-9xl font-bold opacity-98">
-                        <img
-                          src="ChipSphere.png"
-                          alt="logo"
-                          className="h-100 w-100"
+                        <Image
+                          src={dark ? "/logo_light.png" : "/logo_dark.png"}
+                          alt="Logo"
+                          width={300}
+                          height={300}
+                          priority
                         />
                       </div>
                     </div>

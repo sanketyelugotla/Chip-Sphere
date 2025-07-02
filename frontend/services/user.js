@@ -40,8 +40,8 @@ export const updateProfile = async (token, formData) => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-        console.log(response)
-        return response;
+        // console.log(response)
+        return response.data.user;
     } catch (error) {
         throw new Error(error.response.data.message);
     }

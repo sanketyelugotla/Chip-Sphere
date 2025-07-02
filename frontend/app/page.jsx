@@ -7,7 +7,7 @@ import { useUser } from "@/context/userContext"
 
 export default function Home() {
 
-    const{dark} = useUser();
+  const { dark } = useUser();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -37,12 +37,12 @@ export default function Home() {
               </div>
               <div className="hidden itens-center pb-10 justify-center sm:flex opacity-88">
                 <Image
-                src={dark ? "/logo_light.png" : "/logo_dark.png"}
-                alt="Logo"
-                width={380}
-                height={380}
-                priority
-              />
+                  src={dark ? "/logo_light.png" : "/logo_dark.png"}
+                  alt="Logo"
+                  width={380}
+                  height={380}
+                  priority
+                />
               </div>
             </div>
           </div>

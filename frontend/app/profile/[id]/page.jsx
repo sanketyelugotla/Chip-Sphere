@@ -185,7 +185,7 @@ export default function ProfilePage() {
           {resource.length === 0 ? (
             <p className="text-muted-foreground">No saved resources.</p>
           ) : (
-            <div className="flex flex-col gap-4 max-h-[300px] overflow-y-auto pr-2">
+            <div className="flex flex-col gap-4 max-h-[300px] overflow-y-auto custom-scroll pr-2">
               {resource.map((item, idx) => (
                 <div key={idx} className="bg-background border-2 hover:bg-secondary transition border-border p-4 rounded-md text-sm text-foreground">
                   <h3 className="font-medium text-base mb-2">{item.resource?.name || 'Untitled'}</h3>

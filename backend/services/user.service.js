@@ -96,7 +96,7 @@ const updateUser = async (userId, updateData) => {
         delete updateData.password;
         delete updateData.role;
         delete updateData.savedResources;
-        console.log(updateData)
+        // console.log(updateData)
 
         const user = await User.findByIdAndUpdate(
             userId,

@@ -213,7 +213,7 @@ const getAttempt = async (attemptId) => {
         const attempt = await QuizAttempt.findById(attemptId).populate({
             path: 'answers.questionId',
             model: 'Question',
-            select: 'title options correctAnswer explanation' // include only necessary fields
+            select: 'title options answer explanation' // include only necessary fields
         });
 
         return attempt;

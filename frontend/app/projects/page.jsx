@@ -92,7 +92,9 @@ export default function Projects() {
         </div>
 
         {/* Call to Action - Styled like Blogs but keeping original layout */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 p-6 mb-10 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 border border-border">
+        {/* commented this will release in v2 */}
+
+        {/* <div className="flex flex-col lg:flex-row items-center justify-between gap-6 p-6 mb-10 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 border border-border">
           <div className="flex-1">
             <h2 className="text-xl font-bold mb-2">Have a project to share?</h2>
             <p className="text-muted-foreground">
@@ -102,7 +104,7 @@ export default function Projects() {
           <button className="bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition whitespace-nowrap cursor-pointer">
             Submit your project
           </button>
-        </div>
+        </div> */}
 
         {/* Projects Grid - Keeping original layout but with responsive grid like Blogs */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

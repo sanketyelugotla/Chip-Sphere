@@ -28,6 +28,7 @@ const Submit = ({ params }) => {
     if (!attempt) return <div className="p-4">Loading...</div>;
 
     const { score, totalQuestions, answers } = attempt;
+    console.log(answers)
 
     return (
         <div className="max-w-3xl mx-auto px-5 py-8 text-foreground">
@@ -51,7 +52,7 @@ const Submit = ({ params }) => {
                 {answers.map((answer, index) => {
                     const q = answer.questionId;
                     const selectedAnswer = answer.selectedAnswer;
-                    const correctAnswer = q.options.find(opt => opt === q.options.find(opt => opt === answer.selectedAnswer && answer.isCorrect) || q.options.find(opt => opt === selectedAnswer && !answer.isCorrect)) || q.options.find(opt => opt === selectedAnswer);
+                    const correctAnswer = answer.questionId.answer
 
                     return (
                         <div key={index} className="bg-secondary-background rounded-lg p-6 border border-border">
@@ -69,21 +70,25 @@ const Submit = ({ params }) => {
                                     let optionClasses = "p-4 rounded-lg border";
                                     const isUserSelected = option === answer.selectedAnswer;
                                     const isCorrectOption = option === correctAnswer;
+                                    // console.log(answer.selectedAnswer, "-", correctAnswer);
 
-                                    if (isUserSelected && answer.isCorrect) {
-                                        optionClasses += " border-l-4 border-green-600 text-green-700";
-                                    } else if (isUserSelected && !answer.isCorrect) {
-                                        optionClasses += " border-l-4 border-red-600 text-red-700";
-                                    } else if (!isUserSelected && option === q.options.find(opt => opt === correctAnswer)) {
-                                        optionClasses += " border-l-4 border-green-600 text-green-700";
+                                    if (isUserSelected && isCorrectOption) {
+                                        optionClasses += " border-l-4 border-success  text-success-foreground";
+                                    } else if (isUserSelected) {
+                                        optionClasses += " border-l-4 border-error  text-error-foreground";
+                                    } else if (isCorrectOption) {
+                                        optionClasses += " border-l-4 border-success  text-success-foreground";
                                     } else {
                                         optionClasses += " bg-container-background border-border";
                                     }
 
                                     return (
-                                        <li key={oIndex} className={optionClasses}>
+                                        <li
+                                            key={oIndex}
+                                            className={optionClasses}
+                                        >
                                             {option}
-                                            {option === q.correctAnswer && !isUserSelected && (
+                                            {isCorrectOption && !isUserSelected && (
                                                 <span className="ml-2 text-xs text-muted-foreground">(Correct Answer)</span>
                                             )}
                                         </li>

@@ -16,30 +16,35 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { useUser} from "@/context/userContext"
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet"
+import { useUser } from "@/context/userContext"
 
 const useAuth = () => {
-  const { user, setUser } = useUser();
+  const { user, setUser } = useUser()
 
   const signOut = () => {
-    Cookies.remove("token");
-    setUser(null);
-  };
+    Cookies.remove("token")
+    setUser(null)
+  }
 
-  return { user, signOut };
-};
+  return { user, signOut }
+}
 
 export default function Navbar() {
   const pathname = usePathname()
   const router = useRouter()
-  const { user, signOut } = useAuth();
+  const { user, signOut } = useAuth()
+  const { dark, setDark } = useUser()
 
   const [isScrolled, setIsScrolled] = useState(false)
-  const{ dark, setDark } = useUser();
-  
+  const [open, setOpen] = useState(false) // control mobile Sheet open state
 
-  // Detect scrolling to change navbar appearance
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
@@ -48,7 +53,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
- 
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Quizzes", href: "/quizzes" },
@@ -63,15 +67,22 @@ export default function Navbar() {
     router.push("/")
   }
 
+  const handleNavClick = (href) => {
+    router.push(href)
+    setOpen(false) // Close the sheet
+  }
+
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-200 ${isScrolled ? "bg-background/80 backdrop-blur-md shadow-sm" : "bg-transparent"
+      className={`sticky top-0 z-50 w-full transition-all duration-200 ${isScrolled
+        ? "bg-background/80 backdrop-blur-md shadow-sm"
+        : "bg-transparent"
         }`}
     >
-      <div className="container mx-auto flex h-16 items-center justify-between px-2 md:px-[4rem] ">
+      <div className="container mx-auto flex h-16 items-center justify-between px-2 md:px-[4rem]">
         <div className="flex items-center">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="h-9 w-9 md:h-11 md:w-11  flex items-center justify-center">
+            <div className="h-9 w-9 md:h-11 md:w-11 flex items-center justify-center">
               <Image
                 src={dark ? "/logo_light.png" : "/logo_dark.png"}
                 alt="Logo"
@@ -80,7 +91,7 @@ export default function Navbar() {
                 priority
               />
             </div>
-            <span className="font-bold text-xl ">Chip Sphere</span>
+            <span className="font-bold text-xl">Chip Sphere</span>
           </Link>
         </div>
 
@@ -90,8 +101,10 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              prefetch={true}
-              className={`text-[0.875rem] font-bold transition-colors hover:text-primary ${pathname === link.href ? "text-primary" : "text-muted-foreground"
+              prefetch
+              className={`text-[0.875rem] font-bold transition-colors hover:text-primary ${pathname === link.href
+                ? "text-primary"
+                : "text-muted-foreground"
                 }`}
             >
               {link.name}
@@ -100,31 +113,57 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center space-x-4">
-          {/* <ThemeToggle /> */}
-          <Button className='cursor-pointer' variant="ghost" size="icon" onClick={() => setDark(!dark)} aria-label="Toggle Theme">
-            {dark ? <MdOutlineLightMode className="h-5 w-5" /> : <MdDarkMode className="h-5 w-5" />}
+          {/* Theme Toggle */}
+          <Button
+            className="cursor-pointer"
+            variant="ghost"
+            size="icon"
+            onClick={() => setDark(!dark)}
+            aria-label="Toggle Theme"
+          >
+            {dark ? (
+              <MdOutlineLightMode className="h-5 w-5" />
+            ) : (
+              <MdDarkMode className="h-5 w-5" />
+            )}
           </Button>
 
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full cursor-pointer">
+                <Button
+                  variant="ghost"
+                  className="relative h-8 w-8 rounded-full cursor-pointer"
+                >
                   <User className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-background border-2 border-border" align="end">
+              <DropdownMenuContent
+                className="bg-background border-2 border-border"
+                align="end"
+              >
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
-                    <p className="font-semibold text-foreground">{user.name || "User"}</p>
-                    <p className="text-sm text-muted-foreground">{user.email}</p>
+                    <p className="font-semibold text-foreground">
+                      {user.name || "User"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.email}
+                    </p>
                   </div>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer" onClick={() => router.push(`/profile/${user.name}`)}>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => router.push(`/profile/${user.name}`)}
+                >
                   Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-600 cursor-pointer" onClick={handleLogout}>
+                <DropdownMenuItem
+                  className="text-red-600 cursor-pointer"
+                  onClick={handleLogout}
+                >
                   <LogOut className="mr-2 h-4 w-4" /> Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -141,34 +180,52 @@ export default function Navbar() {
           )}
 
           {/* Mobile Navigation */}
-          <Sheet>
+          <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open Menu">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                aria-label="Open Menu"
+              >
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
+              <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
+              <SheetDescription className="sr-only">
+                This panel contains navigation links for mobile users.
+              </SheetDescription>
+
               <div className="grid gap-6 py-6">
                 <div className="space-y-3">
                   {navLinks.map((link) => (
-                    <Link
+                    <button
                       key={link.name}
-                      href={link.href}
-                      prefetch={true}
-                      className={`block text-lg font-medium transition-colors hover:text-primary ${pathname === link.href ? "text-primary" : "text-muted-foreground"
+                      onClick={() => handleNavClick(link.href)}
+                      className={`w-full text-left text-lg font-medium transition-colors hover:text-primary ${pathname === link.href
+                        ? "text-primary"
+                        : "text-muted-foreground"
                         }`}
                     >
                       {link.name}
-                    </Link>
+                    </button>
                   ))}
                 </div>
                 {!user && (
                   <div className="space-y-2">
-                    <Button className="w-full" asChild>
-                      <Link href="/auth?mode=signup">Sign up</Link>
+                    <Button
+                      className="w-full"
+                      onClick={() => handleNavClick("/auth?mode=signup")}
+                    >
+                      Sign up
                     </Button>
-                    <Button variant="outline" className="w-full" asChild>
-                      <Link href="/auth?mode=login">Log in</Link>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => handleNavClick("/auth?mode=login")}
+                    >
+                      Log in
                     </Button>
                   </div>
                 )}
@@ -180,4 +237,3 @@ export default function Navbar() {
     </header>
   )
 }
-

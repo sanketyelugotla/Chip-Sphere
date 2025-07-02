@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import QuizCard from '@/components/QuizCard';
 import Cookies from 'js-cookie';
 import Loading from '../loading';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function Quizzes() {
   const [quizzes, setQuizzes] = useState(null);
@@ -12,6 +13,8 @@ export default function Quizzes() {
   const [selectedDifficulty, setSelectedDifficulty] = useState("All Difficulties");
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState(null);
+  const router = useRouter()
+  const pathname = usePathname();
   const token = Cookies.get("token");
   useEffect(() => {
     const fetchQuizzes = async () => {
@@ -24,7 +27,9 @@ export default function Quizzes() {
         console.error(err);
         if (err.message === 'Network Error') {
           setError("⚠️ Network Error: Please check your internet connection or try again later.");
-        } else {
+        }
+        else if (err.message == "Invalid or expired token.") router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
+        else {
           setError(`⚠️ ${err.message}`);
         }
       }
@@ -47,6 +52,7 @@ export default function Quizzes() {
   }
 
   // Filter quizzes
+  
   const filteredQuizzes = quizzes.filter((quiz) => {
     const categoryMatch = selectedCategory === "All Categories" || quiz.category === selectedCategory;
     const difficultyMatch = selectedDifficulty === "All Difficulties" || quiz.level === selectedDifficulty;
@@ -70,7 +76,9 @@ export default function Quizzes() {
 
       {/* Search and Filters */}
       <div className="max-w-screen-xl mx-auto px-4 sm:px-10 py-10">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+        {/* Search + Filters */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {/* Left side: Search bar (full width on small screens, 1/2 on md+) */}
           <input
             type="text"
             placeholder="Search quizzes..."
@@ -78,31 +86,33 @@ export default function Quizzes() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+
+          {/* Right side: Filters (2 columns inside right half) */}
+          <div className="grid grid-cols-2 gap-4">
+            <select
+              className="w-full p-3 rounded-md border border-border bg-background text-foreground shadow-sm"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              <option>All Categories</option>
+              {categories.map((cat, idx) => (
+                <option key={idx} value={cat}>{cat}</option>
+              ))}
+            </select>
+
+            <select
+              className="w-full p-3 rounded-md border border-border bg-background text-foreground shadow-sm"
+              value={selectedDifficulty}
+              onChange={(e) => setSelectedDifficulty(e.target.value)}
+            >
+              <option>All Difficulties</option>
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <select
-            className="w-full p-3 rounded-md border border-border bg-background text-foreground shadow-sm"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-          >
-            <option>All Categories</option>
-            {categories.map((cat, idx) => (
-              <option key={idx} value={cat}>{cat}</option>
-            ))}
-          </select>
-
-          <select
-            className="w-full p-3 rounded-md border border-border bg-background text-foreground shadow-sm"
-            value={selectedDifficulty}
-            onChange={(e) => setSelectedDifficulty(e.target.value)}
-          >
-            <option>All Difficulties</option>
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-          </select>
-        </div>
         {/* Quizzes Grid */}
         {filteredQuizzes.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -116,6 +126,7 @@ export default function Quizzes() {
           </div>
         )}
       </div>
+
     </div>
   );
 }

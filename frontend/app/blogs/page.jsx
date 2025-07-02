@@ -6,6 +6,7 @@ import Image from 'next/image';
 import BlogCard from '@/components/blogCard';
 import Loading from '../loading';
 import { toast } from 'react-toastify';
+import FeaturedBlogCard from '@/components/FeaturedBlogCard';
 
 export default function Blogs() {
   const [blogs, setBlogs] = useState(null);
@@ -95,38 +96,25 @@ export default function Blogs() {
         </div>
 
         {/* Featured Blog */}
-        <div className="flex flex-col lg:flex-row border border-border rounded-lg overflow-hidden shadow-sm bg-container-background mb-10">
-          <Image
-            src="https://www.tessolve.com/wp-content/uploads/2023/12/memory-testing-post.jpg"
-            alt="Blog"
-            width={500}
-            height={300}
-            unoptimized
-            className="w-full lg:w-1/2 object-cover"
-          />
-          <div className="p-6 flex flex-col justify-between">
-            <p className="px-3 py-1 w-fit rounded-full bg-blue-500 text-white text-sm font-medium mb-2">
-              Industry Trends
-            </p>
-            <h3 className="text-2xl font-bold mb-2">
-              The Future of VLSI Design in 2025
-            </h3>
-            <p className="text-muted-foreground mb-4">
-              Exploring upcoming trends and technologies in VLSI design that will shape the industry in the coming years.
-            </p>
-            <p className="text-sm text-muted-foreground mb-2">Dr. Sarah Chen · May 15, 2023 · 8 min read</p>
+        {/* <div className="flex flex-col lg:flex-row border border-border rounded-lg overflow-hidden shadow-sm bg-container-background mb-10"> */}
+        {filteredBlogs.map((blog, index) => {
+          console.log(blog); // Moved inside the function body
+          return blog.isFeatured && (
+            <FeaturedBlogCard key={index} blog={blog} />
+          )
+        })}
 
-            <button className="mt-auto bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition w-fit cursor-pointer">
-              Read Full Article
-            </button>
-          </div>
-        </div>
+        {/* </div> */}
 
         {/* Blog Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredBlogs.map((blog, index) => (
-            <BlogCard key={index} blog={blog} />
-          ))}
+          {filteredBlogs.map((blog, index) => {
+            console.log(blog); // Moved inside the function body
+            return !blog.isFeatured && (
+              <BlogCard key={index} blog={blog} />
+            )
+          })}
+
         </div>
       </div>
     </div>

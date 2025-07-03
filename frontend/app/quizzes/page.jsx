@@ -5,6 +5,7 @@ import QuizCard from '@/components/QuizCard';
 import Cookies from 'js-cookie';
 import Loading from '../loading';
 import { usePathname, useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 export default function Quizzes() {
   const [quizzes, setQuizzes] = useState(null);
@@ -28,7 +29,10 @@ export default function Quizzes() {
         if (err.message === 'Network Error') {
           setError("⚠️ Network Error: Please check your internet connection or try again later.");
         }
-        else if (err.message == "Invalid or expired token.") router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
+        else if (err.message == "Invalid or expired token.") {
+          toast.warning("Please login to continue");
+          router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
+        }
         else {
           setError(`⚠️ ${err.message}`);
         }
@@ -52,7 +56,6 @@ export default function Quizzes() {
   }
 
   // Filter quizzes
-  
   const filteredQuizzes = quizzes.filter((quiz) => {
     const categoryMatch = selectedCategory === "All Categories" || quiz.category === selectedCategory;
     const difficultyMatch = selectedDifficulty === "All Difficulties" || quiz.level === selectedDifficulty;

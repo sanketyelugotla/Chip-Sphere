@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { getQuestions, submitAnswers } from '@/services/quizz';
 import Cookies from 'js-cookie';
 import { usePathname, useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 export default function QuizPage({ params }) {
   const { id } = React.use(params);
@@ -21,6 +22,7 @@ export default function QuizPage({ params }) {
 
   useEffect(() => {
     if (!token) {
+      toast.warning("Please login to continue");
       router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
       return;
     }
@@ -53,6 +55,7 @@ export default function QuizPage({ params }) {
       setQuestions(Array.isArray(data) ? data : []);
     } catch (error) {
       if (error.message === "Invalid or expired token.") {
+        toast.warning("Please login to continue");
         router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
       }
       console.log(error.message);

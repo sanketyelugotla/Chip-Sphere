@@ -19,8 +19,6 @@ import { toast } from "react-toastify"
 
 import { useSearchParams } from 'next/navigation'
 
-
-
 export default function LoginForm({ toggleAuthMode }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")

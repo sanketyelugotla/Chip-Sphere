@@ -36,6 +36,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!token) {
       router.push('/auth?mode=login');
+      toast.warning("Please login to continue");
     }
     const timer = setTimeout(() => {
       setQuizProgress(80);

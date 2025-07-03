@@ -11,7 +11,6 @@ const Submit = ({ params }) => {
     const attemptId = id
     const router = useRouter()
 
-
     useEffect(() => {
         const fetchAttempt = async () => {
             try {

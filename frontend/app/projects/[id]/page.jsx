@@ -7,6 +7,7 @@ import DOMPurify from 'dompurify';  // Make sure to `npm install dompurify`
 import React, { useState, useEffect } from 'react';
 import { getProject } from '@/services/projects';
 import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
 
 export default function BlogDetailPage({ params }) {
   const { id } = React.use(params);  // Properly get the blog ID
@@ -18,6 +19,7 @@ export default function BlogDetailPage({ params }) {
   const pathname = usePathname();
   useEffect(() => {
     if (!token) {
+      toast.warning("Please login to continue");
       router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
       return;
     }

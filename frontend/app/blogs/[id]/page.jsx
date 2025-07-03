@@ -6,6 +6,7 @@ import { marked } from 'marked';
 import Head from 'next/head';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { toast } from "react-toastify";
 
 import Cookies from 'js-cookie';
 
@@ -21,16 +22,20 @@ export default function BlogDetailPage({ params }) {
             const data = await getBlog(id, token);
             setBlog(data);
         } catch (error) {
-            if (error.message == "Invalid or expired token.") router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
+            if (error.message == "Invalid or expired token.") {
+                toast.warning("Please login to continue");
+                router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
+            }
             console.error("Failed to fetch blog:", error);
         } finally {
             setLoading(false);
         }
     };
-
+    
     const pathname = usePathname();
     useEffect(() => {
         if (!token) {
+            toast.warning("Please login to continue");
             router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
             return;
         } if (id) {

@@ -28,11 +28,7 @@ const getQuestions = async (quizId, userId = null) => {
             questions = await Question.find({ quizId })
                 .select('-answer -explanation')
                 .sort({ createdAt: 1 });
-        }
-
-        if (!questions.length) {
-            throw new Error("No questions found for this quiz");
-        }
+        }   
 
         return {
             questions,
@@ -114,10 +110,9 @@ const addQuestionsToQuiz = async (quizId, questionsData) => {
         const savedQuestions = await Question.insertMany(questions, { session });
 
         // Update quiz questions count - get current total count
-        const totalQuestions = await Question.countDocuments({ quizId }).session(session);
         await Quiz.findByIdAndUpdate(
             quizId,
-            { questions: totalQuestions },
+            { $inc: { questions: savedQuestions.length } },
             { session }
         );
 
@@ -177,10 +172,9 @@ const deleteQuestion = async (questionId) => {
         }
 
         // Update quiz questions count
-        const remainingQuestions = await Question.countDocuments({ quizId: question.quizId }).session(session);
         await Quiz.findByIdAndUpdate(
             question.quizId,
-            { questions: remainingQuestions },
+            { $inc: { questions: -1 } },
             { session }
         );
 

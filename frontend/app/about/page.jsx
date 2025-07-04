@@ -266,7 +266,7 @@ export default function About() {
                       </div>
                       <button
                         type="submit"
-                        className="w-full bg-primary text-primary-foreground py-2 rounded-md hover:bg-primary/90 transition-colors circuit-border cursor-pointer"
+                        className="w-full bg-primary text-white py-2 rounded-md hover:bg-primary/90 transition-colors circuit-border cursor-pointer"
                       >
                         Send Message
                       </button>

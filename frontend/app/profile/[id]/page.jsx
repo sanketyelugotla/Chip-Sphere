@@ -1,13 +1,13 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/userContext';
-import Loading from './Loading';
+import { getDashboard, getSavedResources, updateProfile } from '@/services/user';
+import Cookies from 'js-cookie';
 import { Pencil, Save, X } from 'lucide-react';
-import { getDashboard, updateProfile, getSavedResources } from '@/services/user';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import Loading from './Loading';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -22,6 +22,7 @@ export default function ProfilePage() {
     education: '',
     institution: ''
   });
+  const { dark } = useUser();
   const [resource, setResource] = useState([]);
 
   useEffect(() => {
@@ -118,7 +119,7 @@ export default function ProfilePage() {
           )}
 
           <div className="flex items-center gap-4 m-5">
-            <Image src={user.image || "/logo_dark.png"} alt="user" width={80} height={80} className="rounded-full" />
+            <Image src={user.image || dark ? "/logo_light.png" : "/logo_dark.png"} alt="user" width={80} height={80} className="rounded-full" />
             {isEditing ? (
               <form onSubmit={handleSubmit} className="flex flex-col m-2 gap-2 w-full">
                 <label className="text-xs font-medium text-muted-foreground">Name</label>

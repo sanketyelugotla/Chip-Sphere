@@ -49,7 +49,7 @@ const QuizCard = ({ quiz }) => {
                 {/* Start Quiz or Reattempt Quiz */}
                 <Link href={`/quizzes/${quiz._id}`} className="w-full">
                     <button
-                        className="w-full bg-blue-600 text-white py-1.5 sm:py-2 rounded-md hover:bg-blue-700 transition text-sm sm:text-base"
+                        className="w-full bg-blue-600 text-white py-1.5 sm:py-2 rounded-md hover:bg-blue-700 transition text-sm sm:text-base cursor-pointer"
                     >
                         {quiz.attempted ? 'Reattempt Quiz' : 'Start Quiz'}
                     </button>
@@ -59,7 +59,7 @@ const QuizCard = ({ quiz }) => {
                 {quiz.attempted && (
                     <Link href={`/quizzes/submit/${quiz.attemptId}`} className="w-full">
                         <button
-                            className="w-full bg-green-600 text-white py-1.5 sm:py-2 rounded-md hover:bg-green-700 transition text-sm sm:text-base"
+                            className="w-full bg-green-600 text-white py-1.5 sm:py-2 rounded-md hover:bg-green-700 transition text-sm sm:text-base cursor-pointer"
                         >
                             View Analysis
                         </button>

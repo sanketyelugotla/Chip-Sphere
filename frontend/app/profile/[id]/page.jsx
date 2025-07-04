@@ -38,7 +38,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!token) {
       router.push('/auth?mode=login');
-      toast.warning("Please login to continue");
+      toast.warning("Please login to continue", { theme: dark ? 'dark' : 'light' });
     }
     const timer = setTimeout(() => {
       setQuizProgress(80);
@@ -89,10 +89,11 @@ export default function ProfilePage() {
     try {
       const updatedUser = await updateProfile(token, formData);
       setIsEditing(false);
-      toast.success('Updated successfully');
+      toast.success('Updated successfully', { theme: dark ? 'dark' : 'light' });
       setUser(updatedUser);
     } catch (error) {
-      toast.error('Profile update failed');
+      toast.error('Profile update failed', { theme: dark ? 'dark' : 'light' });
+
       console.error('Error updating profile:', error);
     } finally {
       setIsLoading(false);

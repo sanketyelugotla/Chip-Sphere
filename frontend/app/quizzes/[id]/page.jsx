@@ -202,7 +202,7 @@ export default function QuizPage({ params }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 // transition={{ delay: qIndex * 0.1 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.1 }}
                 className="bg-secondary-background rounded-lg p-6 border border-border"
               >
                 <h3 className="text-lg font-medium mb-4">
@@ -235,7 +235,8 @@ export default function QuizPage({ params }) {
                         key={oIndex}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: oIndex * 0.05 }}
+                        // transition={{ delay: oIndex * 0.05 }}
+                        transition={{ delay: 0.2 }}
                         className={optionClasses}
                       >
                         {option}

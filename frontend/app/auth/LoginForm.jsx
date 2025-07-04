@@ -28,7 +28,7 @@ export default function LoginForm({ toggleAuthMode }) {
     const [captchaText, setCaptchaText] = useState("")
     const [captchaInput, setCaptchaInput] = useState("")
     const [rememberMe, setRememberMe] = useState(false)
-    const { refreshUser } = useUser();
+    const { refreshUser, dark } = useUser();
 
     const searchParams = useSearchParams(); // App Router
     const redirectPath = searchParams?.get('redirect') || '/';
@@ -69,7 +69,7 @@ export default function LoginForm({ toggleAuthMode }) {
 
         if (captchaInput.trim().toUpperCase() !== captchaText.trim().toUpperCase()) {
             const captchaError = "Captcha doesn't match. Try again.";
-            toast.error(captchaError);
+            toast.error(captchaError, { theme: dark ? "dark" : "light" });
             setError(captchaError);
             setIsLoading(false);
             refreshCaptcha();
@@ -88,17 +88,17 @@ export default function LoginForm({ toggleAuthMode }) {
                 });
 
                 refreshUser();
-                toast.success("Login successful!");
+                toast.success("Login successful!", { theme: dark ? "dark" : "light" });
 
                 const redirectTo = searchParams.get("redirect") || "/";
                 router.push(redirectTo);
             } else {
                 const errMsg = "Invalid response. Please try again.";
-                toast.error(errMsg);
+                toast.error(errMsg, { theme: dark ? "dark" : "light" });
                 setError(errMsg);
             }
         } catch (err) {
-            toast.error(err.message);
+            toast.error(err.message, { theme: dark ? "dark" : "light" });
             setError(err.message);
         } finally {
             setIsLoading(false);
@@ -181,9 +181,7 @@ export default function LoginForm({ toggleAuthMode }) {
                         <Label htmlFor="captcha" className="text-sm text-muted-foreground font-medium">Captcha:</Label>
                         <div className="flex items-center gap-4">
                             <Button type="button" variant="ghost" size="icon" onClick={refreshCaptcha}>
-                                {/* <img src="/reloadicon.png" alt="Refresh Captcha" className="h-6 w-6" /> */}
                                 <TfiReload />
-
                             </Button>
                             <canvas
                                 id="captchaCanvas"

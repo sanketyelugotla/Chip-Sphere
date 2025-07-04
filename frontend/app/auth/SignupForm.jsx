@@ -1,3 +1,5 @@
+'use client'
+
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -32,7 +34,7 @@ export default function SignupForm({ toggleAuthMode }) {
     })
     const [passwordTouched, setPasswordTouched] = useState(false)
     const [agreeToTerms, setAgreeToTerms] = useState(false)
-    const { refreshUser } = useUser();
+    const { refreshUser, dark } = useUser();
 
     const validatePassword = (password) => {
         const minLength = 8
@@ -41,8 +43,8 @@ export default function SignupForm({ toggleAuthMode }) {
 
         setPasswordValidations({
             minLength: password.length >= minLength,
-            hasUppercase: hasUppercase,
-            hasSpecialChar: hasSpecialChar,
+            hasUppercase,
+            hasSpecialChar,
         })
     }
 
@@ -51,45 +53,51 @@ export default function SignupForm({ toggleAuthMode }) {
         setError("")
 
         if (!agreeToTerms) {
-            setError("You must agree to the terms and conditions.")
+            const errMsg = "You must agree to the terms and conditions."
+            setError(errMsg)
+            toast.error(errMsg, { theme: dark ? "dark" : "light" })
             return
         }
 
         if (password !== confirmPassword) {
-            setError("Passwords do not match.")
+            const errMsg = "Passwords do not match."
+            setError(errMsg)
+            toast.error(errMsg, { theme: dark ? "dark" : "light" })
             return
         }
 
         const isPasswordStrong = Object.values(passwordValidations).every(Boolean)
         if (!isPasswordStrong) {
-            setError("Password does not meet strength requirements.")
+            const errMsg = "Password does not meet strength requirements."
+            setError(errMsg)
+            toast.error(errMsg, { theme: dark ? "dark" : "light" })
             return
         }
 
         setIsLoading(true)
         try {
             const response = await signup(name, email, education, institution, password, 'user')
-            const { token, role, success } = response?.data || {};
+            const { token, success } = response?.data || {}
 
             if (success && token) {
-                Cookies.set("token", response.data.token, {
+                Cookies.set("token", token, {
                     expires: 7,
                     secure: true,
                     sameSite: "Lax",
                 })
-                toast.success("Signup successful!");
-                refreshUser();
+                toast.success("Signup successful!", { theme: dark ? "dark" : "light" })
+                refreshUser()
                 router.push("/")
             } else {
-                const errMsg = "ISignup failed. Please try again.";
-                toast.error(errMsg);
-                setError(errMsg);
+                const errMsg = "Signup failed. Please try again."
+                toast.error(errMsg, { theme: dark ? "dark" : "light" })
+                setError(errMsg)
             }
         } catch (err) {
-            toast.error(err.message);
-            setError(err.message);
+            toast.error(err.message, { theme: dark ? "dark" : "light" })
+            setError(err.message)
         } finally {
-            setIsLoading(false);
+            setIsLoading(false)
         }
     }
 
@@ -121,62 +129,30 @@ export default function SignupForm({ toggleAuthMode }) {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Name and Email */}
                     <div className="flex gap-4">
                         <div className="flex-1 space-y-2">
-                            <Label htmlFor="name" className="text-sm text-muted-foreground font-medium">Your Name</Label>
-                            <Input
-                                id="name"
-                                placeholder="Type your name here"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                required
-                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
-                            />
+                            <Label htmlFor="name">Your Name</Label>
+                            <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Type your name here" />
                         </div>
                         <div className="flex-1 space-y-2">
-                            <Label htmlFor="email" className="text-sm text-muted-foreground font-medium">Your Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="Type your mail here"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
-                            />
+                            <Label htmlFor="email">Your Email</Label>
+                            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="Type your mail here" />
                         </div>
                     </div>
 
-                    {/* Education and Institution */}
                     <div className="flex gap-4">
                         <div className="flex-1 space-y-2">
-                            <Label htmlFor="education" className="text-sm text-muted-foreground font-medium">Education Level</Label>
-                            <Input
-                                id="education"
-                                placeholder="Your education level"
-                                value={education}
-                                onChange={(e) => setEducation(e.target.value)}
-                                required
-                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
-                            />
+                            <Label htmlFor="education">Education Level</Label>
+                            <Input id="education" value={education} onChange={(e) => setEducation(e.target.value)} required placeholder="Your education level" />
                         </div>
                         <div className="flex-1 space-y-2">
-                            <Label htmlFor="institution" className="text-sm text-muted-foreground font-medium">Institution</Label>
-                            <Input
-                                id="institution"
-                                placeholder="Your institution name"
-                                value={institution}
-                                onChange={(e) => setInstitution(e.target.value)}
-                                required
-                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4AC9D6] transition-all"
-                            />
+                            <Label htmlFor="institution">Institution</Label>
+                            <Input id="institution" value={institution} onChange={(e) => setInstitution(e.target.value)} required placeholder="Your institution name" />
                         </div>
                     </div>
 
-                    {/* Password */}
                     <div className="space-y-2">
-                        <Label htmlFor="password" className="text-sm text-muted-foreground font-medium">Password</Label>
+                        <Label htmlFor="password">Password</Label>
                         <div className="relative">
                             <Input
                                 id="password"
@@ -189,37 +165,22 @@ export default function SignupForm({ toggleAuthMode }) {
                                 }}
                                 placeholder="Set your key here"
                                 required
-                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
                             />
-                            <div
-                                className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? (
-                                    <EyeOff className="h-4 w-5 text-gray-500" />
-                                ) : (
-                                    <Eye className="h-4 w-5 text-gray-500" />
-                                )}
+                            <div className="absolute inset-y-0 right-3 flex items-center cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
+                                {showPassword ? <EyeOff className="h-4 w-5 text-gray-500" /> : <Eye className="h-4 w-5 text-gray-500" />}
                             </div>
                         </div>
                         {passwordTouched && (
                             <div className="mt-2 text-xs text-gray-600">
-                                <div className={`flex items-center ${passwordValidations.minLength ? "text-green-500" : "text-red-500"}`}>
-                                    <span>• 8+ characters</span>
-                                </div>
-                                <div className={`flex items-center ${passwordValidations.hasUppercase ? "text-green-500" : "text-red-500"}`}>
-                                    <span>• One uppercase letter</span>
-                                </div>
-                                <div className={`flex items-center ${passwordValidations.hasSpecialChar ? "text-green-500" : "text-red-500"}`}>
-                                    <span>• One special character</span>
-                                </div>
+                                <div className={`${passwordValidations.minLength ? "text-green-500" : "text-red-500"}`}>• 8+ characters</div>
+                                <div className={`${passwordValidations.hasUppercase ? "text-green-500" : "text-red-500"}`}>• One uppercase letter</div>
+                                <div className={`${passwordValidations.hasSpecialChar ? "text-green-500" : "text-red-500"}`}>• One special character</div>
                             </div>
                         )}
                     </div>
 
-                    {/* Confirm Password */}
                     <div className="space-y-2">
-                        <Label htmlFor="confirm-password" className="text-sm text-muted-foreground font-medium">Confirm Password</Label>
+                        <Label htmlFor="confirm-password">Confirm Password</Label>
                         <div className="relative">
                             <Input
                                 id="confirm-password"
@@ -228,31 +189,22 @@ export default function SignupForm({ toggleAuthMode }) {
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 placeholder="Confirm your password"
                                 required
-                                className="w-full rounded-md bg-background border-2 border-border placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC9D6] transition-all"
                             />
-                            <div
-                                className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            >
-                                {showConfirmPassword ? (
-                                    <EyeOff className="h-4 w-5 text-gray-500" />
-                                ) : (
-                                    <Eye className="h-4 w-5 text-gray-500" />
-                                )}
+                            <div className="absolute inset-y-0 right-3 flex items-center cursor-pointer" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                                {showConfirmPassword ? <EyeOff className="h-4 w-5 text-gray-500" /> : <Eye className="h-4 w-5 text-gray-500" />}
                             </div>
                         </div>
                     </div>
 
-                    {/* Terms Agreement */}
                     <div className="flex items-center space-x-2">
                         <input
                             type="checkbox"
                             id="agreeToTerms"
                             checked={agreeToTerms}
                             onChange={() => setAgreeToTerms(!agreeToTerms)}
-                            className="h-4 w-4 text-[#4AC9D6] border-gray-300 rounded focus:ring-2 focus:ring-[#4AC9D6]"
+                            className="h-4 w-4"
                         />
-                        <Label htmlFor="agreeToTerms" className="text-sm text-muted-foreground font-medium">
+                        <Label htmlFor="agreeToTerms" className="text-sm">
                             I agree to the{" "}
                             <Link href="/terms" className="text-[#4AC9D6] hover:underline">
                                 terms and conditions
@@ -260,35 +212,16 @@ export default function SignupForm({ toggleAuthMode }) {
                         </Label>
                     </div>
 
-                    {/* Sign Up Button */}
-                    <Button
-                        type="submit"
-                        className="w-full cursor-pointer rounded-md bg-[#307179] text-white hover:bg-[#374d50] transition-all hover:shadow-lg"
-                        disabled={isLoading}
-                    >
+                    <Button type="submit" className="w-full rounded-md bg-[#307179] text-white hover:bg-[#374d50]" disabled={isLoading}>
                         {isLoading ? "Creating your account..." : "Create Account (Welcome to Chipsphere!)"}
                     </Button>
                 </form>
-
-                {/* Divider */}
-                <div className="relative mt-6">
-                    <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-gray-300 opacity-30"></div>
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase text-gray-500">
-                        <span className="bg-white px-2 text-gray-400"></span>
-                    </div>
-                </div>
             </CardContent>
 
-            {/* Footer */}
             <CardFooter className="flex flex-col space-y-4">
                 <div className="text-center text-sm text-muted-foreground font-medium">
                     Been here before?{" "}
-                    <button
-                        onClick={toggleAuthMode}
-                        className="text-[#374d50] hover:underline font-semibold"
-                    >
+                    <button onClick={toggleAuthMode} className="text-[#374d50] hover:underline font-semibold">
                         Login (Welcome back!)
                     </button>
                 </div>

@@ -6,8 +6,9 @@ import Loading from '../loading';
 import { toast } from 'react-toastify';
 import FeaturedBlogCard from '@/components/FeaturedBlogCard';
 import { motion } from 'framer-motion';
+import { useUser } from '@/context/userContext';
 
-// Animation variants for consistent transitions
+// Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -38,6 +39,8 @@ export default function Blogs() {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const { dark } = useUser();
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -46,24 +49,23 @@ export default function Blogs() {
         const uniqueCategories = Array.from(new Set(data.map(q => q.type))).filter(Boolean);
         setCategories(uniqueCategories);
       } catch (err) {
-        if (err.message === 'Network Error') {
-          toast.error(err.message)
+        const msg = err.message || "Unknown Error";
+        toast.error(msg, { theme: dark ? 'dark' : 'light' });
+
+        if (msg === 'Network Error') {
           setError("⚠️ Network Error: Please check your internet connection or try again later.");
         } else {
-          toast.error(err.message)
-          setError(`⚠️ ${err.message}`);
+          setError(`⚠️ ${msg}`);
         }
       }
     };
     getData();
-  }, []);
+  }, [dark]);
 
-  // Loading state
   if (!blogs && !error) {
     return <Loading />;
   }
 
-  // Error state
   if (error) {
     return (
       <motion.div
@@ -76,10 +78,10 @@ export default function Blogs() {
     );
   }
 
-  // Filter blogs by category
   const filteredBlogs = blogs?.filter(blog => {
     const matchesCategory = selectedCategory === "All Categories" || blog.type === selectedCategory;
-    const matchesSearch = blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch =
+      blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       blog.content.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });

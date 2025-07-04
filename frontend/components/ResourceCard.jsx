@@ -49,7 +49,7 @@ function ResourceCard({ resource }) {
         } catch (err) {
             console.error("Error saving resource:", err.message);
             if (err.message == "Invalid or expired token.") router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
-            else if (err.message == "Resource already saved") toast.warning(err.message)
+            else if (err.message == "Resource already saved") toast.warning(err.message,{ theme: dark ? 'dark' : 'light' })
         } finally {
             setLoadingSave(false);
         }

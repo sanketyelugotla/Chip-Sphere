@@ -72,7 +72,7 @@ export default function Resources() {
         if (err.message === 'Network Error') {
           setError("⚠️ Network Error: Please check your internet connection or try again later.");
         } else if (err.message === "Invalid or expired token.") {
-          toast.warning("Please login to continue");
+          toast.warning("Please login to continue", { theme: dark ? 'dark' : 'light' });
           router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
         } else {
           setError(`⚠️ ${err.message}`);

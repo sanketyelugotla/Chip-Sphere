@@ -180,7 +180,7 @@ export default function Navbar() {
                   <DropdownMenuSeparator className="bg-border" />
 
                   <DropdownMenuItem
-                    className="text-red-600 cursor-pointer px-3 py-2 hover:bg-red-500 focus:bg-red-500 transition-colors"
+                    className="text-red-600 cursor-pointer px-3 py-2 hover:bg-red-500 focus:bg-red-500 transition-colors hover:text-white focus:text-white"
                     onClick={handleLogout}
                   >
                     <motion.div

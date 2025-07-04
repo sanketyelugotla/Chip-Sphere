@@ -42,7 +42,7 @@ export default function QuizPage({ params }) {
 
   useEffect(() => {
     if (!token) {
-      toast.warning("Please login to continue");
+      toast.warning("Please login to continue", { theme: dark ? 'dark' : 'light' });
       router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
       return;
     }
@@ -75,7 +75,7 @@ export default function QuizPage({ params }) {
       setQuestions(Array.isArray(data) ? data : []);
     } catch (error) {
       if (error.message === "Invalid or expired token.") {
-        toast.warning("Please login to continue");
+        toast.warning("Please login to continue", { theme: dark ? 'dark' : 'light' });
         router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
       }
       console.log(error.message);

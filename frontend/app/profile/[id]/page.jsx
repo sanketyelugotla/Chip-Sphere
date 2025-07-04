@@ -1,5 +1,5 @@
 'use client';
-import { useUser } from '@/context/userContext';
+import { useUser } from '@/context/userContext'; 
 import { getDashboard, getSavedResources, updateProfile } from '@/services/user';
 import Cookies from 'js-cookie';
 import { Pencil, Save, X } from 'lucide-react';
@@ -8,6 +8,31 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Loading from './Loading';
+import { motion } from 'framer-motion';
+
+// Animation Variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.3,
+      ease: "easeOut"
+    }
+  }
+};
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -89,7 +114,7 @@ export default function ProfilePage() {
       const updatedUser = await updateProfile(token, formData);
       setIsEditing(false);
       toast.success('Updated successfully');
-      setUser(updatedUser); // optional if needed
+      setUser(updatedUser);
     } catch (error) {
       toast.error('Profile update failed');
       console.error('Error updating profile:', error);
@@ -99,10 +124,14 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-background max-w-screen-xl mx-auto p-4 my-4 md:my-8 flex flex-col gap-4">
-      <div className="flex w-full gap-4 flex-wrap md:flex-nowrap">
-        {/* Profile Info */}
-        <div className="relative flex flex-col flex-1/2 border-2 border-border rounded-lg p-4 bg-container-background">
+    <motion.div 
+      initial="hidden" 
+      animate="visible" 
+      variants={containerVariants}
+      className="min-h-screen bg-background max-w-screen-xl mx-auto p-4 my-4 md:my-8 flex flex-col gap-4"
+    >
+      <motion.div variants={itemVariants} className="flex w-full gap-4 flex-wrap md:flex-nowrap">
+        <motion.div variants={itemVariants} className="relative flex flex-col flex-1/2 border-2 border-border rounded-lg p-4 bg-container-background">
           {isEditing ? (
             <div className="flex gap-2 absolute top-4 right-4">
               <button onClick={handleSubmit} disabled={isLoading} className="bg-primary p-2 rounded-md hover:bg-primary-dark transition text-white cursor-pointer">
@@ -160,45 +189,49 @@ export default function ProfilePage() {
               </>
             )}
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      {/* Saved Items & Quick Actions */}
-      <div className="flex flex-col md:flex-row gap-4 border border-border rounded-lg bg-container-background p-4 mt-4">
+      <motion.div variants={itemVariants} className="flex flex-col md:flex-row gap-4 border border-border rounded-lg bg-container-background p-4 mt-4">
         {/* Quick Actions */}
-        <div className="md:w-1/3 border border-border rounded-lg p-4 bg-background">
+        <motion.div variants={itemVariants} className="md:w-1/3 border border-border rounded-lg p-4 bg-background">
           <h2 className="text-lg font-semibold mb-4 text-foreground">Quick Actions</h2>
           <ul className="flex flex-col gap-3">
             {quickActions.map(({ label, path }, index) => (
-              <button
+              <motion.button
                 key={index}
+                variants={itemVariants}
                 onClick={() => router.push(path)}
                 className="w-full cursor-pointer border-border border-2 rounded-md px-4 py-2 text-sm text-foreground bg-background hover:bg-secondary transition text-left"
               >
                 {label}
-              </button>
+              </motion.button>
             ))}
           </ul>
-        </div>
+        </motion.div>
 
         {/* Saved Items */}
-        <div className="md:w-2/3 border border-border rounded-lg p-4 bg-background">
+        <motion.div variants={itemVariants} className="md:w-2/3 border border-border rounded-lg p-4 bg-background">
           <h2 className="text-lg font-semibold mb-4 text-foreground">Saved Items</h2>
           {resource.length === 0 ? (
             <p className="text-muted-foreground">No saved resources.</p>
           ) : (
             <div className="flex flex-col gap-4 max-h-[300px] overflow-y-auto custom-scroll pr-2">
               {resource.map((item, idx) => (
-                <div key={idx} className="bg-background border-2 hover:bg-secondary transition border-border p-4 rounded-md text-sm text-foreground">
+                <motion.div
+                  key={idx}
+                  variants={itemVariants}
+                  className="bg-background border-2 hover:bg-secondary transition border-border p-4 rounded-md text-sm text-foreground"
+                >
                   <h3 className="font-medium text-base mb-2">{item.resource?.name || 'Untitled'}</h3>
                   <p className="text-muted-foreground text-xs">Saved on: {new Date(item.savedAt).toLocaleDateString()}</p>
                   <p className="text-muted-foreground text-sm mt-1 line-clamp-2">{item.resource?.description || 'No description'}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
           )}
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 }

@@ -7,6 +7,31 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Loading from '../loading';
 import { toast } from 'react-toastify';
+import { motion } from 'framer-motion';
+
+// Animation variants for consistent transitions
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut"
+    }
+  }
+};
 
 export default function Resources() {
   const [resources, setResources] = useState(null);
@@ -62,12 +87,16 @@ export default function Resources() {
 
   if (error) {
     return (
-      <div className="p-6 text-red-500 font-semibold bg-red-100 rounded-md max-w-screen-md mx-auto mt-6">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="p-6 text-red-500 font-semibold bg-red-100 rounded-md max-w-screen-md mx-auto mt-6"
+      >
         {error}
-      </div>
+      </motion.div>
     );
   }
-  console.log(selectedCategory)
+
   const filteredResources = resources.filter(resource => {
     const categoryMatch =
       selectedCategory === "all categories" ||
@@ -83,30 +112,39 @@ export default function Resources() {
 
     return categoryMatch && typeMatch && searchMatch;
   });
-  console.log(filteredResources)
-  // filteredResources.map((res) => {
-  //   if (res.typeOfMaterial == selectedCategory) {
-  //     console.log(res)
-  //   }
-  // })
 
   return (
-    <div className="bg-background min-h-screen">
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="bg-background min-h-screen"
+    >
       {/* Header */}
-      <div className="relative bg-gradient-to-r from-primary/10 to-primary/5 px-4 sm:px-10 md:px-16 lg:px-20 py-10">
-        <div className="max-w-screen-xl mx-auto">
+      <motion.div
+        variants={containerVariants}
+        className="relative bg-gradient-to-r from-primary/10 to-primary/5 px-4 sm:px-10 md:px-16 lg:px-20 py-10"
+      >
+        <motion.div variants={itemVariants} className="max-w-screen-xl mx-auto">
           <h1 className="text-4xl font-bold">Resources</h1>
           <p className="text-muted-foreground mt-2">
             Access a wide range of study materials, lecture notes, question papers and more to enhance your learning experience.
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Search + Filters */}
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-10 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <motion.div
+        variants={containerVariants}
+        className="max-w-screen-xl mx-auto px-4 sm:px-10 py-10"
+      >
+        <motion.div
+          variants={itemVariants}
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"
+        >
           {/* Search */}
-          <input
+          <motion.input
+            whileFocus={{ scale: 1.01 }}
             type="text"
             placeholder="Search resources..."
             className="w-full p-3 rounded-md border border-border bg-background text-foreground shadow-sm"
@@ -115,9 +153,14 @@ export default function Resources() {
           />
 
           {/* Filters */}
-          <div className="grid grid-cols-2 gap-4">
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-2 gap-4"
+          >
             {/* Category Dropdown */}
-            <select
+            <motion.select
+              variants={itemVariants}
+              whileHover={{ scale: 1.01 }}
               className="w-full p-3 pr-8 rounded-md border border-border bg-background text-foreground shadow-sm"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -128,10 +171,12 @@ export default function Resources() {
                   {formatLabel(cat)}
                 </option>
               ))}
-            </select>
+            </motion.select>
 
             {/* File Type Dropdown */}
-            <select
+            <motion.select
+              variants={itemVariants}
+              whileHover={{ scale: 1.01 }}
               className="w-full p-3 pr-8 rounded-md border border-border bg-background text-foreground shadow-sm"
               value={selectedFileType}
               onChange={(e) => setSelectedFileType(e.target.value)}
@@ -142,17 +187,27 @@ export default function Resources() {
                   {formatLabel(type)}
                 </option>
               ))}
-            </select>
-          </div>
-        </div>
+            </motion.select>
+          </motion.div>
+        </motion.div>
 
         {/* Resources Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredResources.map((resource) => (
-            <ResourceCard key={resource._id} resource={resource} />
+        <motion.div
+          variants={containerVariants}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {filteredResources.map((resource, index) => (
+            <motion.div
+              key={resource._id}
+              variants={itemVariants}
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ResourceCard resource={resource} />
+            </motion.div>
           ))}
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 }

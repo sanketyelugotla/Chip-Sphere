@@ -6,6 +6,31 @@ import Cookies from 'js-cookie';
 import Loading from '../loading';
 import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { motion } from 'framer-motion';
+
+// Animation variants for consistent transitions
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut"
+    }
+  }
+};
 
 export default function Quizzes() {
   const [quizzes, setQuizzes] = useState(null);
@@ -17,6 +42,7 @@ export default function Quizzes() {
   const router = useRouter()
   const pathname = usePathname();
   const token = Cookies.get("token");
+
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
@@ -49,9 +75,13 @@ export default function Quizzes() {
   // Error state
   if (error) {
     return (
-      <div className="p-6 text-red-500 font-semibold bg-red-100 rounded-md max-w-screen-md mx-auto mt-6">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="p-6 text-red-500 font-semibold bg-red-100 rounded-md max-w-screen-md mx-auto mt-6"
+      >
         {error}
-      </div>
+      </motion.div>
     );
   }
 
@@ -65,24 +95,38 @@ export default function Quizzes() {
   });
 
   return (
-    <div className="bg-background min-h-screen">
-      {/* Header - Matching Blogs page styling */}
-      <div className="relative bg-gradient-to-r from-primary/10 to-primary/5 px-4 sm:px-10 md:px-16 lg:px-20 py-10">
-        <div className="max-w-screen-xl mx-auto">
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="bg-background min-h-screen"
+    >
+      {/* Header */}
+      <motion.div
+        variants={containerVariants}
+        className="relative bg-gradient-to-r from-primary/10 to-primary/5 px-4 sm:px-10 md:px-16 lg:px-20 py-10"
+      >
+        <motion.div variants={itemVariants} className="max-w-screen-xl mx-auto">
           <h1 className="text-4xl font-bold">Quizzes</h1>
           <p className="text-muted-foreground mt-2">
             Test your knowledge with our collection of engineering quizzes. Each quiz is designed to challenge
             your understanding and help you prepare for exams and interviews.
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Search and Filters */}
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-10 py-10">
-        {/* Search + Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          {/* Left side: Search bar (full width on small screens, 1/2 on md+) */}
-          <input
+      <motion.div
+        variants={containerVariants}
+        className="max-w-screen-xl mx-auto px-4 sm:px-10 py-10"
+      >
+        <motion.div
+          variants={itemVariants}
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"
+        >
+          {/* Search */}
+          <motion.input
+            whileFocus={{ scale: 1.01 }}
             type="text"
             placeholder="Search quizzes..."
             className="w-full p-3 rounded-md border border-border bg-background text-foreground shadow-sm"
@@ -90,9 +134,14 @@ export default function Quizzes() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
 
-          {/* Right side: Filters (2 columns inside right half) */}
-          <div className="grid grid-cols-2 gap-4">
-            <select
+          {/* Filters */}
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-2 gap-4"
+          >
+            <motion.select
+              variants={itemVariants}
+              whileHover={{ scale: 1.01 }}
               className="w-full p-3 rounded-md border border-border bg-background text-foreground shadow-sm"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -101,9 +150,11 @@ export default function Quizzes() {
               {categories.map((cat, idx) => (
                 <option key={idx} value={cat}>{cat}</option>
               ))}
-            </select>
+            </motion.select>
 
-            <select
+            <motion.select
+              variants={itemVariants}
+              whileHover={{ scale: 1.01 }}
               className="w-full p-3 rounded-md border border-border bg-background text-foreground shadow-sm"
               value={selectedDifficulty}
               onChange={(e) => setSelectedDifficulty(e.target.value)}
@@ -112,24 +163,36 @@ export default function Quizzes() {
               <option value="Beginner">Beginner</option>
               <option value="Intermediate">Intermediate</option>
               <option value="Advanced">Advanced</option>
-            </select>
-          </div>
-        </div>
+            </motion.select>
+          </motion.div>
+        </motion.div>
 
         {/* Quizzes Grid */}
         {filteredQuizzes.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredQuizzes.map((quiz) => (
-              <QuizCard key={quiz._id} quiz={quiz} />
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {filteredQuizzes.map((quiz, index) => (
+              <motion.div
+                key={quiz._id}
+                variants={itemVariants}
+                whileHover={{ y: -5 }}
+                transition={{ duration: 0.2 }}
+              >
+                <QuizCard quiz={quiz} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         ) : (
-          <div className="text-center py-10 text-muted-foreground">
+          <motion.div
+            variants={itemVariants}
+            className="text-center py-10 text-muted-foreground"
+          >
             No quizzes found matching your criteria.
-          </div>
+          </motion.div>
         )}
-      </div>
-
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

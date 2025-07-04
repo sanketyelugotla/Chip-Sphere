@@ -4,6 +4,7 @@ import { getQuestions, submitAnswers } from '@/services/quizz';
 import Cookies from 'js-cookie';
 import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function QuizPage({ params }) {
   const { id } = React.use(params);
@@ -17,8 +18,27 @@ export default function QuizPage({ params }) {
   const [result, setResult] = useState([]);
   const router = useRouter();
   const token = Cookies.get("token");
-
   const pathname = usePathname();
+
+  // Animation variants
+  const questionVariants = {
+    enter: (direction) => {
+      return {
+        x: direction > 0 ? 100 : -100,
+        opacity: 0
+      };
+    },
+    center: {
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction) => {
+      return {
+        x: direction > 0 ? -100 : 100,
+        opacity: 0
+      };
+    }
+  };
 
   useEffect(() => {
     if (!token) {
@@ -79,6 +99,7 @@ export default function QuizPage({ params }) {
   };
 
   const handleNext = () => {
+    const direction = 1;
     if (selectedOption === null) {
       handleOptionSelect("skipped");
     }
@@ -94,6 +115,7 @@ export default function QuizPage({ params }) {
   };
 
   const handlePrev = () => {
+    const direction = -1;
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(prev => prev - 1);
     }
@@ -118,27 +140,44 @@ export default function QuizPage({ params }) {
   };
 
   if (!questions) {
-    return <p className="text-foreground text-center mt-10">Loading questions...</p>;
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="text-foreground text-center mt-10"
+      >
+        Loading questions...
+      </motion.div>
+    );
   }
 
   if (questions.length === 0) {
     return (
-      <div className="max-w-3xl mx-auto px-5 py-8 text-muted-foreground text-center">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="max-w-3xl mx-auto px-5 py-8 text-muted-foreground text-center"
+      >
         <h1 className="text-2xl font-semibold text-destructive mb-2">No Questions Available</h1>
         <p className="text-muted-foreground mt-2">It looks like there are no questions in this quiz. Please check back later or contact the administrator.</p>
-      </div>
+      </motion.div>
     );
   }
 
   if (quizSubmitted) {
     return (
-      <div className="max-w-3xl mx-auto px-5 py-8 text-foreground">
-        <button
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="max-w-3xl mx-auto px-5 py-8 text-foreground"
+      >
+        <motion.button
+          whileHover={{ x: -3 }}
           onClick={() => router.back()}
           className="flex items-center text-primary/80 cursor-pointer mb-6 hover:text-primary"
         >
           ← Back to Quizzes
-        </button>
+        </motion.button>
         <header className="mb-6">
           <h1 className="text-2xl font-semibold text-primary mb-2">Quiz Completed!</h1>
           <p className="text-muted-foreground">
@@ -155,7 +194,13 @@ export default function QuizPage({ params }) {
             if (!question) return null;
 
             return (
-              <div key={qIndex} className="bg-secondary-background rounded-lg p-6 border border-border">
+              <motion.div
+                key={qIndex}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: qIndex * 0.1 }}
+                className="bg-secondary-background rounded-lg p-6 border border-border"
+              >
                 <h3 className="text-lg font-medium mb-4">
                   Question {qIndex + 1}: {questionResult.questionTitle || question.title}
                   {questionResult.isCorrect ? (
@@ -172,37 +217,48 @@ export default function QuizPage({ params }) {
                     const isCorrectOption = option === questionResult.correctAnswer;
 
                     if (isUserSelected && isCorrectOption) {
-                      optionClasses += " border-l-4 border-success  text-success-foreground";
+                      optionClasses += " border-l-4 border-success text-success-foreground";
                     } else if (isUserSelected) {
-                      optionClasses += " border-l-4 border-error  text-error-foreground";
+                      optionClasses += " border-l-4 border-error text-error-foreground";
                     } else if (isCorrectOption) {
-                      optionClasses += " border-l-4 border-success  text-success-foreground";
+                      optionClasses += " border-l-4 border-success text-success-foreground";
                     } else {
                       optionClasses += " bg-container-background border-border";
                     }
 
                     return (
-                      <li key={oIndex} className={optionClasses}>
+                      <motion.li
+                        key={oIndex}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: oIndex * 0.05 }}
+                        className={optionClasses}
+                      >
                         {option}
                         {isCorrectOption && !isUserSelected && (
                           <span className="ml-2 text-xs text-muted-foreground">(Correct Answer)</span>
                         )}
-                      </li>
+                      </motion.li>
                     );
                   })}
                 </ul>
 
                 {questionResult.explanation && (
-                  <div className="mt-4 p-4 bg-muted rounded-lg">
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="mt-4 p-4 bg-muted rounded-lg"
+                  >
                     <h4 className="font-medium mb-2">Explanation:</h4>
                     <p className="text-muted-foreground">{questionResult.explanation}</p>
-                  </div>
+                  </motion.div>
                 )}
-              </div>
+              </motion.div>
             );
           })}
         </div>
-      </div>
+      </motion.div>
     );
   }
 
@@ -210,7 +266,12 @@ export default function QuizPage({ params }) {
   const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="max-w-3xl my-10 mx-4 sm:mx-auto px-5 py-8 text-foreground relative bg-container-background rounded-xl shadow-lg border border-border">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="max-w-3xl my-10 mx-4 sm:mx-auto px-5 py-8 text-foreground relative bg-container-background rounded-xl shadow-lg border border-border"
+    >
       <header className="mb-6">
         <h1 className="text-2xl font-semibold text-primary mb-2">FPGA Architecture and Design</h1>
         <p className="text-muted-foreground text-sm mb-6">Test your knowledge of FPGA architecture, design flow, and implementation techniques.</p>
@@ -220,60 +281,88 @@ export default function QuizPage({ params }) {
             <span>Progress</span>
             <span>{Math.round(progressPercentage)}%</span>
           </div>
-          <div className="w-full bg-secondary-background rounded-full h-2">
-            <div
-              className="bg-primary h-2 rounded-full transition-all duration-300"
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
-          </div>
+          <motion.div
+            className="w-full bg-secondary-background rounded-full h-2"
+            initial={{ width: 0 }}
+            animate={{ width: '100%' }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.div
+              className="bg-primary h-2 rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${progressPercentage}%` }}
+              transition={{ duration: 0.5 }}
+            ></motion.div>
+          </motion.div>
         </div>
 
         <div className="flex justify-between items-center mb-6 pb-2 border-b border-border">
           <span className="text-foreground font-medium">Question {currentQuestionIndex + 1} of {questions.length}</span>
-          <span className="bg-secondary-text px-3 py-1 rounded-full text-xs text-red-500 font-extrabold border border-border">
+          <motion.span
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="bg-secondary-text px-3 py-1 rounded-full text-xs text-red-500 font-extrabold border border-border"
+          >
             ⏱ {formatTime(timeLeft)} remaining
-          </span>
+          </motion.span>
         </div>
       </header>
 
       <main>
-        <div className="bg-container-background rounded-lg p-6 mb-6 border border-border">
-          <div className="text-lg mb-6 leading-relaxed text-foreground">
-            {currentQuestion?.title}
-          </div>
+        <AnimatePresence mode="wait" custom={1}>
+          <motion.div
+            key={currentQuestionIndex}
+            custom={1}
+            variants={questionVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ type: 'tween', ease: 'easeInOut', duration: 0.3 }}
+          >
+            <div className="bg-container-background rounded-lg p-6 mb-6 border border-border">
+              <div className="text-lg mb-6 leading-relaxed text-foreground">
+                {currentQuestion?.title}
+              </div>
 
-          <ul className="space-y-3 mb-6">
-            {currentQuestion?.options.map((option, index) => (
-              <li
-                key={index}
-                className={`p-4 rounded-lg cursor-pointer transition-all border border-border
-                  ${selectedOption === option ? 'border-primary border-l-4 text-primary' : 'bg-secondary-background hover:bg-secondary'}`}
-                onClick={() => handleOptionSelect(option)}
-              >
-                {option}
-              </li>
-            ))}
-          </ul>
-        </div>
+              <ul className="space-y-3 mb-6">
+                {currentQuestion?.options.map((option, index) => (
+                  <motion.li
+                    key={index}
+                    whileHover={{ y: -2 }}
+                    className={`p-4 rounded-lg cursor-pointer transition-all border border-border
+                      ${selectedOption === option ? 'border-primary border-l-4 text-primary' : 'bg-secondary-background hover:bg-secondary'}`}
+                    onClick={() => handleOptionSelect(option)}
+                  >
+                    {option}
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        </AnimatePresence>
 
         <div className="flex justify-between mt-6">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             className={`px-6 py-2 rounded-lg font-medium transition-all border border-border cursor-pointer
               ${currentQuestionIndex === 0 ? 'bg-secondary text-muted-foreground cursor-not-allowed' : 'bg-secondary hover:bg-secondary-background text-foreground'}`}
             onClick={handlePrev}
             disabled={currentQuestionIndex === 0}
           >
             Previous
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             className={`px-6 py-2 rounded-lg font-medium transition-all border border-primary cursor-pointer
-              ${!selectedOption ? 'bg-primary ' : 'bg-primary'}`}
+              ${!selectedOption ? 'bg-primary' : 'bg-primary'}`}
             onClick={handleNext}
           >
             {currentQuestionIndex === questions.length - 1 ? 'Submit' : !selectedOption ? "Skip" : "Next"}
-          </button>
+          </motion.button>
         </div>
       </main>
-    </div>
+    </motion.div>
   );
 }

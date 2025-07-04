@@ -1,19 +1,43 @@
 'use client';
 import { getBlogs } from '@/services/blog';
-import { CiUser } from 'react-icons/ci';
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import BlogCard from '@/components/blogCard';
 import Loading from '../loading';
 import { toast } from 'react-toastify';
 import FeaturedBlogCard from '@/components/FeaturedBlogCard';
+import { motion } from 'framer-motion';
+
+// Animation variants for consistent transitions
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut"
+    }
+  }
+};
 
 export default function Blogs() {
   const [blogs, setBlogs] = useState(null);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
-  const [error, setError] = useState(null); // 🔥 Error state
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -36,19 +60,19 @@ export default function Blogs() {
 
   // Loading state
   if (!blogs && !error) {
-    return (
-      <div className="p-6">
-        <Loading />
-      </div>
-    );
+    return <Loading />;
   }
 
   // Error state
   if (error) {
     return (
-      <div className="p-6 text-red-500 font-semibold bg-red-100 rounded-md max-w-screen-md mx-auto mt-6">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="p-6 text-red-500 font-semibold bg-red-100 rounded-md max-w-screen-md mx-auto mt-6"
+      >
         {error}
-      </div>
+      </motion.div>
     );
   }
 
@@ -63,19 +87,29 @@ export default function Blogs() {
   return (
     <div className="bg-background min-h-screen">
       {/* Header */}
-      <div className="relative bg-gradient-to-r from-primary/10 to-primary/5 px-4 sm:px-10 md:px-16 lg:px-20 py-10">
-        <div className="max-w-screen-xl mx-auto">
+      <motion.section
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+        className="relative bg-gradient-to-r from-primary/10 to-primary/5 px-4 sm:px-10 md:px-16 lg:px-20 py-10"
+      >
+        <motion.div variants={itemVariants} className="max-w-screen-xl mx-auto">
           <h1 className="text-4xl font-bold">Blogs</h1>
           <p className="text-muted-foreground mt-2">
             Stay updated with the latest news, industry trends, interview experiences, and technical insights in
             the field of VLSI and engineering.
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.section>
 
       {/* Search + Filters */}
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-10 py-10">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+      <motion.section
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+        className="max-w-screen-xl mx-auto px-4 sm:px-10 py-10"
+      >
+        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
           <input
             type="text"
             placeholder="Search blogs..."
@@ -93,30 +127,49 @@ export default function Blogs() {
               <option key={idx} value={cat}>{cat}</option>
             ))}
           </select>
-        </div>
+        </motion.div>
 
         {/* Featured Blog */}
-        {/* <div className="flex flex-col lg:flex-row border border-border rounded-lg overflow-hidden shadow-sm bg-container-background mb-10"> */}
-        {filteredBlogs.map((blog, index) => {
-          console.log(blog); // Moved inside the function body
-          return blog.isFeatured && (
-            <FeaturedBlogCard key={index} blog={blog} />
-          )
-        })}
-
-        {/* </div> */}
+        <motion.div variants={containerVariants} className="mb-10">
+          {filteredBlogs.map((blog, index) => (
+            blog.isFeatured && (
+              <motion.div key={index} variants={itemVariants}>
+                <FeaturedBlogCard blog={blog} />
+              </motion.div>
+            )
+          ))}
+        </motion.div>
 
         {/* Blog Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredBlogs.map((blog, index) => {
-            console.log(blog); // Moved inside the function body
-            return !blog.isFeatured && (
-              <BlogCard key={index} blog={blog} />
+        <motion.div
+          variants={containerVariants}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {filteredBlogs.map((blog, index) => (
+            !blog.isFeatured && (
+              <motion.div
+                key={index}
+                variants={itemVariants}
+                whileHover={{ y: -5 }}
+                className="transition-all duration-200"
+              >
+                <BlogCard blog={blog} />
+              </motion.div>
             )
-          })}
+          ))}
+        </motion.div>
 
-        </div>
-      </div>
+        {filteredBlogs.length === 0 && (
+          <motion.div
+            variants={itemVariants}
+            className="text-center py-10"
+          >
+            <h3 className="text-xl font-medium text-muted-foreground">
+              No blogs found matching your criteria
+            </h3>
+          </motion.div>
+        )}
+      </motion.section>
     </div>
   );
 }

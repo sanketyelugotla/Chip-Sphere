@@ -142,6 +142,7 @@ export default function QuizPage({ params }) {
   if (!questions) {
     return (
       <motion.div
+        transition={{ duration: 0.2 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="text-foreground text-center mt-10"
@@ -154,6 +155,7 @@ export default function QuizPage({ params }) {
   if (questions.length === 0) {
     return (
       <motion.div
+        transition={{ duration: 0.2 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="max-w-3xl mx-auto px-5 py-8 text-muted-foreground text-center"
@@ -169,6 +171,7 @@ export default function QuizPage({ params }) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
         className="max-w-3xl mx-auto px-5 py-8 text-foreground"
       >
         <motion.button
@@ -198,7 +201,8 @@ export default function QuizPage({ params }) {
                 key={qIndex}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: qIndex * 0.1 }}
+                // transition={{ delay: qIndex * 0.1 }}
+                transition={{ duration: 0.2 }}
                 className="bg-secondary-background rounded-lg p-6 border border-border"
               >
                 <h3 className="text-lg font-medium mb-4">
@@ -247,7 +251,7 @@ export default function QuizPage({ params }) {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
+                    transition={{ duration: 0.2 }}
                     className="mt-4 p-4 bg-muted rounded-lg"
                   >
                     <h4 className="font-medium mb-2">Explanation:</h4>

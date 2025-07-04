@@ -16,7 +16,8 @@ const containerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.1,
-      delayChildren: 0.2
+      delayChildren: 0.1,
+      duration: 0.1
     }
   }
 };
@@ -27,7 +28,7 @@ const itemVariants = {
     y: 0,
     opacity: 1,
     transition: {
-      duration: 0.4,
+      duration: 0.2,
       ease: "easeOut"
     }
   }
@@ -90,6 +91,7 @@ export default function Resources() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
+        transition={{ duration: 0.2 }}
         className="p-6 text-red-500 font-semibold bg-red-100 rounded-md max-w-screen-md mx-auto mt-6"
       >
         {error}

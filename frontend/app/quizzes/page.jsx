@@ -8,25 +8,26 @@ import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 
-// Animation variants for consistent transitions
+// Faster animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2
+      staggerChildren: 0.05, // Reduced from 0.1
+      delayChildren: 0.1,    // Reduced from 0.2
+      duration: 0.1
     }
   }
 };
 
 const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
+  hidden: { y: 10, opacity: 0 }, // Reduced y from 20
   visible: {
     y: 0,
     opacity: 1,
     transition: {
-      duration: 0.4,
+      duration: 0.2,  // Reduced from 0.4
       ease: "easeOut"
     }
   }
@@ -39,7 +40,7 @@ export default function Quizzes() {
   const [selectedDifficulty, setSelectedDifficulty] = useState("All Difficulties");
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState(null);
-  const router = useRouter()
+  const router = useRouter();
   const pathname = usePathname();
   const token = Cookies.get("token");
 
@@ -72,12 +73,13 @@ export default function Quizzes() {
     return <Loading />;
   }
 
-  // Error state
+  // Error state - faster fade in
   if (error) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
+        transition={{ duration: 0.1 }}
         className="p-6 text-red-500 font-semibold bg-red-100 rounded-md max-w-screen-md mx-auto mt-6"
       >
         {error}
@@ -101,7 +103,7 @@ export default function Quizzes() {
       variants={containerVariants}
       className="bg-background min-h-screen"
     >
-      {/* Header */}
+      {/* Header - faster animation */}
       <motion.div
         variants={containerVariants}
         className="relative bg-gradient-to-r from-primary/10 to-primary/5 px-4 sm:px-10 md:px-16 lg:px-20 py-10"
@@ -115,7 +117,7 @@ export default function Quizzes() {
         </motion.div>
       </motion.div>
 
-      {/* Search and Filters */}
+      {/* Search and Filters - snappier animations */}
       <motion.div
         variants={containerVariants}
         className="max-w-screen-xl mx-auto px-4 sm:px-10 py-10"
@@ -124,9 +126,10 @@ export default function Quizzes() {
           variants={itemVariants}
           className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"
         >
-          {/* Search */}
+          {/* Search with faster hover */}
           <motion.input
             whileFocus={{ scale: 1.01 }}
+            transition={{ duration: 0.1 }}
             type="text"
             placeholder="Search quizzes..."
             className="w-full p-3 rounded-md border border-border bg-background text-foreground shadow-sm"
@@ -134,7 +137,7 @@ export default function Quizzes() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
 
-          {/* Filters */}
+          {/* Filters with faster hover */}
           <motion.div
             variants={containerVariants}
             className="grid grid-cols-2 gap-4"
@@ -142,6 +145,7 @@ export default function Quizzes() {
             <motion.select
               variants={itemVariants}
               whileHover={{ scale: 1.01 }}
+              transition={{ duration: 0.1 }}
               className="w-full p-3 rounded-md border border-border bg-background text-foreground shadow-sm"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -155,6 +159,7 @@ export default function Quizzes() {
             <motion.select
               variants={itemVariants}
               whileHover={{ scale: 1.01 }}
+              transition={{ duration: 0.1 }}
               className="w-full p-3 rounded-md border border-border bg-background text-foreground shadow-sm"
               value={selectedDifficulty}
               onChange={(e) => setSelectedDifficulty(e.target.value)}
@@ -167,7 +172,7 @@ export default function Quizzes() {
           </motion.div>
         </motion.div>
 
-        {/* Quizzes Grid */}
+        {/* Quizzes Grid - faster staggered animation */}
         {filteredQuizzes.length > 0 ? (
           <motion.div
             variants={containerVariants}
@@ -178,7 +183,7 @@ export default function Quizzes() {
                 key={quiz._id}
                 variants={itemVariants}
                 whileHover={{ y: -5 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.1 }} // Faster hover
               >
                 <QuizCard quiz={quiz} />
               </motion.div>

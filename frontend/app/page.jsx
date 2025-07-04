@@ -24,7 +24,7 @@ const itemVariants = {
     y: 0,
     opacity: 1,
     transition: {
-      duration: 0.4,
+      duration: 0.3,
       ease: "easeOut"
     }
   }
@@ -74,7 +74,7 @@ export default function Home() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.2 }}
                 className="hidden items-center pb-10 justify-center sm:flex opacity-88"
               >
                 <Image
@@ -96,7 +96,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.2 }}
               className="text-3xl font-bold text-center mb-12"
             >
               Platform Features
@@ -151,7 +151,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.2 }}
               className="text-3xl font-bold mb-4"
             >
               Why Choose ChipSphere?
@@ -197,7 +197,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.3 }}
               className="mt-8"
             >
               <Button size="lg" asChild whilehover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
@@ -213,7 +213,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
             className="max-w-7xl mx-auto text-center"
           >
             <h2 className="text-3xl font-bold mb-4">Ready to enhance your skills?</h2>

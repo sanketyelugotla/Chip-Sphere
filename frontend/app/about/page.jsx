@@ -6,6 +6,7 @@ import Image from "next/image"
 import { useUser } from "@/context/userContext"
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
+import Loading from "../loading"
 
 export default function About() {
   const { dark } = useUser();
@@ -416,20 +417,7 @@ export default function About() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <motion.div
-          animate={{
-            rotate: 360,
-            scale: [1, 1.2, 1]
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 1.5,
-            ease: "linear"
-          }}
-          className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full"
-        />
-      </div>
+      <Loading />
     );
   }
 

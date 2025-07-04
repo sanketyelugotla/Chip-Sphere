@@ -58,14 +58,14 @@ export default function Home() {
                   className="flex flex-wrap gap-4 justify-center sm:justify-normal"
                 >
                   <motion.div variants={itemVariants}>
-                    <Button size="lg" asChild whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                    <Button size="lg" asChild>
                       <Link href="/quizzes">
                         Get Started <ChevronRight className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
                   </motion.div>
                   <motion.div variants={itemVariants}>
-                    <Button size="lg" variant="outline" asChild whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                    <Button size="lg" variant="outline" asChild>
                       <Link href="/about">Learn More</Link>
                     </Button>
                   </motion.div>
@@ -200,9 +200,11 @@ export default function Home() {
               transition={{ delay: 0.3 }}
               className="mt-8"
             >
-              <Button size="lg" asChild whilehover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                <Link href="/about">Learn More About Us</Link>
-              </Button>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                <Button size="lg" asChild>
+                  <Link href="/about">Learn More About Us</Link>
+                </Button>
+              </motion.div>
             </motion.div>
           </div>
         </section>
@@ -221,9 +223,11 @@ export default function Home() {
               Join our community of engineering professionals and students to access exclusive content and track your
               progress.
             </p>
-            <Button size="lg" asChild whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <Link href="/auth?mode=signup">Sign Up Now</Link>
-            </Button>
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              <Button size="lg" asChild>
+                <Link href="/auth?mode=signup">Sign Up Now</Link>
+              </Button>
+            </motion.div>
           </motion.div>
         </section>
       </main>

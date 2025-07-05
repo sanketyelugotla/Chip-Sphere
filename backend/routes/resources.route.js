@@ -58,7 +58,7 @@ router.get("/:id", authenticate, async (req, res) => {
 });
 
 // 📌 Download resource
-router.post("/:id/download", authenticate, async (req, res) => {
+router.post("/download/:id", authenticate, async (req, res) => {
     try {
         const resourceId = req.params.id;
         const userId = req.user._id;

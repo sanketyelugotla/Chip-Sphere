@@ -73,15 +73,19 @@ export const unSaveResource = async (token, resourceId) => {
 
 export const downloadResource = async (token, resourceId) => {
     try {
-        let response;
-        response = await axios.post(`${dbUri}/resource/${resourceId}/download`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await axios.post(
+            `${dbUri}/resource/download/${resourceId}`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
         // console.log(response)
-        return response.data.resources;
+        return response.data;
     } catch (error) {
+        // console.log(error)
         throw new Error(error.response.data.message);
     }
 }

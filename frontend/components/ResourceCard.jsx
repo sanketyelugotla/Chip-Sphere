@@ -64,25 +64,28 @@ function ResourceCard({ resource }) {
     async function handleDownload() {
         try {
             setLoadingDownload(true);
-            await downloadResource(token, localResource._id);
+            const res = await downloadResource(token, localResource._id);
 
-            // Optimistically update download state
+            // ✅ 1. Open in new browser tab
+            window.open(res.downloadUrl, '_blank');
+
+            // ✅ 2. Log curl equivalent command
+            const curlCommand = `curl -H "Authorization: Bearer ${token}" -O "${res.downloadUrl}"`;
+            console.log("To download via terminal, run:\n", curlCommand);
+
+            // ✅ 3. Update UI state
             setLocalResource(prev => ({
                 ...prev,
                 isDownloaded: true,
                 noOfDownloads: (prev.noOfDownloads || 0) + 1
             }));
-
-            // getResource(token, localResource._id).then(updated => {
-            //     setLocalResource(updated);
-            // });
-
         } catch (err) {
             console.error("Error downloading resource:", err);
         } finally {
             setLoadingDownload(false);
         }
     }
+
 
     return (
         <div className="border border-border rounded-lg overflow-hidden shadow-sm bg-container-background hover:shadow-md transition-all duration-200">
@@ -132,7 +135,8 @@ function ResourceCard({ resource }) {
                         className={`flex items-center justify-center gap-2 w-full py-2 px-4 rounded-md bg-primary text-white hover:bg-primary/90 transition cursor-pointer ${loadingDownload ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                         <FiDownload className="text-lg" />
-                        {loadingDownload ? 'Downloading...' : localResource.isDownloaded ? 'Download again' : 'Download'}
+                        {/* {loadingDownload ? 'Downloading...' : localResource.isDownloaded ? 'Download again' : 'Download'} */}
+                        {loadingDownload ? 'Downloading...' : 'Download'}
                     </button>
                 </div>
             </div>

@@ -6,7 +6,7 @@ import { marked } from 'marked';
 import Head from 'next/head';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import Cookies from 'js-cookie';
 import { motion } from 'framer-motion';
 
@@ -24,7 +24,7 @@ export default function BlogDetailPage({ params }) {
             setBlog(data);
         } catch (error) {
             if (error.message == "Invalid or expired token.") {
-                toast.warning("Please login to continue");
+                toast.warning("Please login to continue" );
                 router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
             }
             console.error("Failed to fetch blog:", error);
@@ -35,7 +35,7 @@ export default function BlogDetailPage({ params }) {
 
     useEffect(() => {
         if (!token) {
-            toast.warning("Please login to continue");
+            toast.warning("Please login to continue" );
             router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
             return;
         }

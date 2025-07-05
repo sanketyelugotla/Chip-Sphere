@@ -3,7 +3,7 @@ import { getBlogs } from '@/services/blog';
 import React, { useEffect, useState } from 'react';
 import BlogCard from '@/components/blogCard';
 import Loading from '../loading';
-import { toast } from 'react-toastify';
+import { toast } from "sonner"
 import FeaturedBlogCard from '@/components/FeaturedBlogCard';
 import { motion } from 'framer-motion';
 import { useUser } from '@/context/userContext';
@@ -50,7 +50,7 @@ export default function Blogs() {
         setCategories(uniqueCategories);
       } catch (err) {
         const msg = err.message || "Unknown Error";
-        toast.error(msg, { theme: dark ? 'dark' : 'light' });
+        toast.error(msg   );
 
         if (msg === 'Network Error') {
           setError("⚠️ Network Error: Please check your internet connection or try again later.");

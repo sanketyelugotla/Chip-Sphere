@@ -7,7 +7,7 @@ import { marked } from 'marked';
 import Head from 'next/head';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from "sonner"
 import { motion } from 'framer-motion';
 import { useUser } from '@/context/userContext';
 
@@ -22,7 +22,7 @@ export default function BlogDetailPage({ params }) {
 
   useEffect(() => {
     if (!token) {
-      toast.warning("Please login to continue", { theme: dark ? 'dark' : 'light' });
+      toast.warning("Please login to continue" );
       router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
       return;
     }

@@ -5,7 +5,7 @@ import QuizCard from '@/components/QuizCard';
 import Cookies from 'js-cookie';
 import Loading from '../loading';
 import { usePathname, useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from "sonner"
 import { motion } from 'framer-motion';
 import { useUser } from '@/context/userContext';
 
@@ -59,7 +59,7 @@ export default function Quizzes() {
           setError("⚠️ Network Error: Please check your internet connection or try again later.");
         }
         else if (err.message == "Invalid or expired token.") {
-          toast.warning("Please login to continue", { theme: dark ? 'dark' : 'light' });
+          toast.warning("Please login to continue" );
           router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
         }
         else {

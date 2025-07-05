@@ -7,7 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FiDownload, FiSave } from 'react-icons/fi';
 import { TbFileStack, TbFileTypeDocx, TbFileTypePdf, TbFileTypePpt } from "react-icons/tb";
-import { toast } from 'react-toastify';
+import { toast } from "sonner"
 
 function ResourceCard({ resource }) {
     const [localResource, setLocalResource] = useState(resource);

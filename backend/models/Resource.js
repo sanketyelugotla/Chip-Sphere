@@ -28,12 +28,12 @@ const ResourceSchema = new mongoose.Schema({
     file: {
         type: String,
         required: [true, 'File is required'],
-        validate: {
-            validator: function (v) {
-                return /\.(pdf|mp4|docx)$/.test(v);
-            },
-            message: props => `${props.value} is not a valid file format!`
-        }
+        // validate: {
+        //     validator: function (v) {
+        //         return /\.(pdf|mp4|docx)$/.test(v);
+        //     },
+        //     message: props => `${props.value} is not a valid file format!`
+        // }
     },
     sizeOfFile: {
         type: Number,

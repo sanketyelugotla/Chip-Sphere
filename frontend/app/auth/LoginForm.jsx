@@ -15,7 +15,7 @@ import { useEffect, useState } from "react"
 import { useUser } from "@/context/userContext"
 import { signin } from '@/services/auth'
 import { TfiReload } from "react-icons/tfi"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 
 import { useSearchParams } from 'next/navigation'
 
@@ -69,7 +69,7 @@ export default function LoginForm({ toggleAuthMode }) {
 
         if (captchaInput.trim().toUpperCase() !== captchaText.trim().toUpperCase()) {
             const captchaError = "Captcha doesn't match. Try again.";
-            toast.error(captchaError, { theme: dark ? "dark" : "light" });
+            toast.error(captchaError );
             setError(captchaError);
             setIsLoading(false);
             refreshCaptcha();
@@ -88,17 +88,17 @@ export default function LoginForm({ toggleAuthMode }) {
                 });
 
                 refreshUser();
-                toast.success("Login successful!", { theme: dark ? "dark" : "light" });
+                toast.success("Login successful!" );
 
                 const redirectTo = searchParams.get("redirect") || "/";
                 router.push(redirectTo);
             } else {
                 const errMsg = "Invalid response. Please try again.";
-                toast.error(errMsg, { theme: dark ? "dark" : "light" });
+                toast.error(errMsg );
                 setError(errMsg);
             }
         } catch (err) {
-            toast.error(err.message, { theme: dark ? "dark" : "light" });
+            toast.error(err.message );
             setError(err.message);
         } finally {
             setIsLoading(false);

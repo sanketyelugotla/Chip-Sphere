@@ -6,7 +6,7 @@ import { Pencil, Save, X } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from "sonner"
 import Loading from './Loading';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -38,7 +38,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!token) {
       router.push('/auth?mode=login');
-      toast.warning("Please login to continue", { theme: dark ? 'dark' : 'light' });
+      toast.warning("Please login to continue" );
     }
     const timer = setTimeout(() => {
       setQuizProgress(80);
@@ -89,10 +89,10 @@ export default function ProfilePage() {
     try {
       const updatedUser = await updateProfile(token, formData);
       setIsEditing(false);
-      toast.success('Updated successfully', { theme: dark ? 'dark' : 'light' });
+      toast.success('Updated successfully' );
       setUser(updatedUser);
     } catch (error) {
-      toast.error('Profile update failed', { theme: dark ? 'dark' : 'light' });
+      toast.error('Profile update failed' );
 
       console.error('Error updating profile:', error);
     } finally {

@@ -13,7 +13,7 @@ import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
 import { signup } from "@/services/auth"
 import { useUser } from "@/context/userContext"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 
 export default function SignupForm({ toggleAuthMode }) {
     const router = useRouter()
@@ -55,14 +55,14 @@ export default function SignupForm({ toggleAuthMode }) {
         if (!agreeToTerms) {
             const errMsg = "You must agree to the terms and conditions."
             setError(errMsg)
-            toast.error(errMsg, { theme: dark ? "dark" : "light" })
+            toast.error(errMsg )
             return
         }
 
         if (password !== confirmPassword) {
             const errMsg = "Passwords do not match."
             setError(errMsg)
-            toast.error(errMsg, { theme: dark ? "dark" : "light" })
+            toast.error(errMsg )
             return
         }
 
@@ -70,7 +70,7 @@ export default function SignupForm({ toggleAuthMode }) {
         if (!isPasswordStrong) {
             const errMsg = "Password does not meet strength requirements."
             setError(errMsg)
-            toast.error(errMsg, { theme: dark ? "dark" : "light" })
+            toast.error(errMsg )
             return
         }
 
@@ -85,16 +85,16 @@ export default function SignupForm({ toggleAuthMode }) {
                     secure: true,
                     sameSite: "Lax",
                 })
-                toast.success("Signup successful!", { theme: dark ? "dark" : "light" })
+                toast.success("Signup successful!" )
                 refreshUser()
                 router.push("/")
             } else {
                 const errMsg = "Signup failed. Please try again."
-                toast.error(errMsg, { theme: dark ? "dark" : "light" })
+                toast.error(errMsg )
                 setError(errMsg)
             }
         } catch (err) {
-            toast.error(err.message, { theme: dark ? "dark" : "light" })
+            toast.error(err.message )
             setError(err.message)
         } finally {
             setIsLoading(false)

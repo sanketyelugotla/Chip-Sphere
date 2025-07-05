@@ -1,17 +1,22 @@
 'use client'
 
-import React, { useState } from 'react';
-import { FiDownload, FiSave } from 'react-icons/fi';
-import { TbFileStack, TbFileTypePpt, TbFileTypePdf, TbFileTypeDocx } from "react-icons/tb";
-import { saveResource, unSaveResource, getResource, downloadResource } from '@/services/resources';
+import { useUser } from '@/context/userContext';
+import { downloadResource, saveResource, unSaveResource } from '@/services/resources';
 import Cookies from 'js-cookie';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { FiDownload, FiSave } from 'react-icons/fi';
+import { TbFileStack, TbFileTypeDocx, TbFileTypePdf, TbFileTypePpt } from "react-icons/tb";
 import { toast } from 'react-toastify';
 
 function ResourceCard({ resource }) {
-    const token = Cookies.get("token");
     const [localResource, setLocalResource] = useState(resource);
     const [loadingSave, setLoadingSave] = useState(false);
     const [loadingDownload, setLoadingDownload] = useState(false);
+    const router = useRouter();
+    const token = Cookies.get("token");
+    const pathname = usePathname();
+    const { dark } = useUser();
 
     const getFileIcon = (fileType) => {
         switch (fileType?.toLowerCase()) {
@@ -28,6 +33,7 @@ function ResourceCard({ resource }) {
 
     async function handleSave() {
         if (!token) {
+            toast.warning("Please login to continue", { theme: dark ? "dark" : "light" });
             router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
         }
         try {
@@ -49,7 +55,7 @@ function ResourceCard({ resource }) {
         } catch (err) {
             console.error("Error saving resource:", err.message);
             if (err.message == "Invalid or expired token.") router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
-            else if (err.message == "Resource already saved") toast.warning(err.message,{ theme: dark ? 'dark' : 'light' })
+            else if (err.message == "Resource already saved") toast.warning(err.message, { theme: dark ? 'dark' : 'light' })
         } finally {
             setLoadingSave(false);
         }

@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
 import { motion } from 'framer-motion';
+import { useUser } from '@/context/userContext';
 
 // Animation variants for consistent transitions
 const containerVariants = {
@@ -40,6 +41,7 @@ export default function BlogDetailPage({ params }) {
     const [loading, setLoading] = useState(true);
     const router = useRouter()
     const token = Cookies.get("token");
+    const { dark } = useUser();
 
     const fetchBlog = async (id) => {
         try {
@@ -47,7 +49,7 @@ export default function BlogDetailPage({ params }) {
             setBlog(data);
         } catch (error) {
             if (error.message == "Invalid or expired token.") {
-                toast.warning("Please login to continue");
+                toast.warning("Please login to continue", { theme: dark ? "dark" : "light" });
                 router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
             }
             console.error("Failed to fetch blog:", error);
@@ -59,7 +61,7 @@ export default function BlogDetailPage({ params }) {
     const pathname = usePathname();
     useEffect(() => {
         if (!token) {
-            toast.warning("Please login to continue");
+            toast.warning("Please login to continue", { theme: dark ? "dark" : "light" });
             router.push(`/auth?mode=login&redirect=${encodeURIComponent(pathname)}`);
             return;
         } if (id) {

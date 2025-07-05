@@ -7,6 +7,7 @@ import Loading from '../loading';
 import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import { useUser } from '@/context/userContext';
 
 // Faster animation variants
 const containerVariants = {
@@ -43,6 +44,7 @@ export default function Quizzes() {
   const router = useRouter();
   const pathname = usePathname();
   const token = Cookies.get("token");
+  const { dark } = useUser();
 
   useEffect(() => {
     const fetchQuizzes = async () => {

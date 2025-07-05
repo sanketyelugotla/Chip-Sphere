@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import Loading from '../loading';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import { useUser } from '@/context/userContext';
 
 // Animation variants for consistent transitions
 const containerVariants = {
@@ -45,6 +46,7 @@ export default function Resources() {
   const router = useRouter();
   const token = Cookies.get("token");
   const pathname = usePathname();
+  const { dark } = useUser();
 
   // Format labels (e.g., "lecture-notes" -> "Lecture Notes")
   const formatLabel = (str) =>

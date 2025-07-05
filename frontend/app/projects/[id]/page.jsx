@@ -9,6 +9,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import { useUser } from '@/context/userContext';
 
 export default function BlogDetailPage({ params }) {
   const { id } = React.use(params);
@@ -17,6 +18,7 @@ export default function BlogDetailPage({ params }) {
   const [loading, setLoading] = useState(true);
   const token = Cookies.get("token");
   const pathname = usePathname();
+  const { dark } = useUser();
 
   useEffect(() => {
     if (!token) {

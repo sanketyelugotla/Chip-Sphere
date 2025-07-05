@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useUser } from '@/context/userContext';
 
 export default function QuizPage({ params }) {
   const { id } = React.use(params);
@@ -19,6 +20,7 @@ export default function QuizPage({ params }) {
   const router = useRouter();
   const token = Cookies.get("token");
   const pathname = usePathname();
+  const { dark } = useUser();
 
   // Animation variants
   const questionVariants = {

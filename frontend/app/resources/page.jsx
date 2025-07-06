@@ -46,7 +46,6 @@ export default function Resources() {
   const router = useRouter();
   const token = Cookies.get("token");
   const pathname = usePathname();
-  const { dark } = useUser();
 
   // Format labels (e.g., "lecture-notes" -> "Lecture Notes")
   const formatLabel = (str) =>

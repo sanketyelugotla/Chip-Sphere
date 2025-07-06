@@ -461,7 +461,7 @@ export default function About() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
               >
-                <TabsList className="grid grid-cols-2 sm:grid-cols-4 gap-2 rounded-lg sm:rounded-full mb-10">
+                <TabsList className="grid grid-cols-4 gap-2 rounded-lg sm:rounded-full mb-10">
                   {Object.values(tabContents).map((tab) => (
                     <TabsTrigger
                       key={tab.key}

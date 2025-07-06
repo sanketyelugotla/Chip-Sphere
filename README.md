@@ -126,19 +126,16 @@ The frontend communicates with the backend to fetch and visualize chip metrics.
 
 ### Mobile Phones
 
-| ![Mobile Phone 1](./screenshots/mobile1.png) | ![Mobile Phone 2](./screenshots/mobile2.png) |
-| ------------------------------------------- | ------------------------------------------- |
+| ![Mobile Phone 1](./screenshots/mobile_1.png) | ![Mobile Phone 2](../screenshots/mobile_2.png) | ![Mobile Phone 1](./screenshots/mobile_3.png) | ![Mobile Phone 2](../screenshots/mobile_4.png) |
+| ------------------------------------------- | ------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
 
 ### Laptops
 
-| ![Laptop 1](./screenshots/laptop1.png)      | ![Laptop 2](./screenshots/laptop2.png)      |
-| ------------------------------------------ | ------------------------------------------ |
+| ![Laptop 1](./screenshots/laptop_1.png)      | ![Laptop 2](./screenshots/laptop_2.png)      | ![Laptop 1](./screenshots/laptop_3.png)      | ![Laptop 2](./screenshots/laptop_4.png)      |
+| ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ |
 
 ### Tablets
 
-| ![Tablet 1](./screenshots/tablet1.png)      | ![Tablet 2](./screenshots/tablet2.png)      |
-| ------------------------------------------ | ------------------------------------------ |
+| ![Tablet 1](./screenshots/tablet_1.png)      | ![Tablet 2](./screenshots/tablet_2.png)      | ![Tablet 1](./screenshots/tablet_3.png)      | ![Tablet 2](./screenshots/tablet_4.png)      |
+| ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ |
 
-### 4K Devices
-
-![4K Display](./screenshots/4k.png)

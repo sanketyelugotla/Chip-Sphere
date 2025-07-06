@@ -95,6 +95,100 @@ Before you begin, ensure you have the following installed for both the **fronten
 
 ---
 
+## Project Structure    
+
+```bash
+Chip-Sphere/
+├── backend/
+│ ├── .env
+│ ├── .gitignore
+│ ├── index.js
+│ ├── config/
+│ │ └── db.js
+│ ├── middleware/
+│ │ ├── authenticate.js
+│ │ └── authenticateAdmin.js
+│ ├── models/
+│ │ ├── Blog.js
+│ │ ├── Download.js
+│ │ ├── Project.js
+│ │ ├── Question.js
+│ │ ├── QuizAttempt.js
+│ │ ├── Quizz.js
+│ │ ├── Resource.js
+│ │ └── User.js
+│ ├── routes/
+│ │ ├── auth.route.js
+│ │ ├── blog.route.js
+│ │ ├── index.js
+│ │ ├── project.route.js
+│ │ ├── question.route.js
+│ │ ├── quiz.route.js
+│ │ ├── resources.route.js
+│ │ └── user.route.js
+│ ├── seed/
+│ │ ├── project.json
+│ │ ├── seedBlogs.js
+│ │ ├── seedProjects.js
+│ │ └── seedQuestions.js
+│ ├── services/
+│ │ ├── auth.service.js
+│ │ ├── blog.service.js
+│ │ ├── index.js
+│ │ ├── project.service.js
+│ │ ├── question.service.js
+│ │ ├── quiz.service.js
+│ │ ├── resources.service.js
+│ │ └── user.service.js
+│ ├── package.json
+│ └── package-lock.json
+│
+├── frontend/
+│ ├── .env
+│ ├── .gitignore
+│ ├── app/
+│ │ ├── layout.jsx, page.jsx, loading.jsx
+│ │ ├── about/page.jsx
+│ │ ├── auth/SignupForm.jsx, LoginForm.jsx, page.jsx
+│ │ ├── blogs/[id]/page.jsx, loading.jsx, page.jsx
+│ │ ├── profile/[id]/page.jsx, Loading.jsx
+│ │ ├── projects/[id]/page.jsx, page.jsx
+│ │ ├── quizzes/[id]/page.jsx, loading.jsx
+│ │ ├── quizzes/submit/[id]/page.jsx
+│ │ └── resources/page.jsx
+│ ├── components/
+│ │ ├── blogCard.jsx, FeaturedBlogCard.jsx, Footer.jsx, Navbar.jsx
+│ │ ├── ProjectCard.jsx, QuizCard.jsx, ResourceCard.jsx
+│ │ ├── theme-toggle.jsx, ToastWithTheme.jsx
+│ │ └── ui/alert.jsx, button.jsx, card.jsx, dropdown-menu.jsx, input.jsx, label.jsx, sheet.jsx, tab.jsx, use-toast.js
+│ ├── context/userContext.jsx
+│ ├── hooks/HoverDiv/
+│ │ ├── HoverDiv.css, HoverDiv.jsx, HoverMainDiv.jsx
+│ │ ├── LeftDiv.jsx, Mini.jsx, RightDiv.jsx
+│ │ └── index.js, Index.jsx
+│ ├── lib/utils.js
+│ ├── public/
+│ │ ├── .well-known/appspecific/com.chrome.devtools.json
+│ │ ├── all logo, icon, and image files (.svg, .png, .jpg)
+│ ├── styles/globals.css
+│ ├── services/
+│ │ ├── auth.js, blog.js, projects.js, quizz.js, resources.js, user.js
+│ ├── jsconfig.json
+│ ├── next.config.mjs
+│ ├── tailwind.config.js
+│ ├── postcss.config.mjs
+│ ├── eslint.config.mjs
+│ ├── package.json
+│ └── package-lock.json
+│
+├── screenshots/
+│ ├── mobile_1.png, mobile_2.png, mobile_3.png, mobile_4.png
+│ ├── laptop_1.png, laptop_2.png, laptop_3.png, laptop_4.png
+│ ├── tablet_1.png, tablet_2.png, tablet_3.png, tablet_4.png
+│
+├── README.md (this file)
+```
+
 ## Running the Project
 
 Once both the **frontend** and **backend** are up:

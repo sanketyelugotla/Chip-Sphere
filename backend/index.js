@@ -13,8 +13,8 @@ const app = express();
 const corsOptions = {
     origin: [
         'http://localhost:3000',
-        'https://diplomatic-bravery-production.up.railway.app/',
-        'https://chipsphere.in/'
+        'https://diplomatic-bravery-production.up.railway.app',
+        'https://chipsphere.in'
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: ['Content-Type', 'Authorization'],

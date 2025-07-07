@@ -80,7 +80,7 @@ export default function Navbar() {
         : "bg-transparent"
         }`}
     >
-      <div className="container mx-auto flex h-16 items-center justify-between px-2 md:px-[4rem]">
+      <div className="container mx-auto flex h-16 items-center justify-between px-2 lg:px-[4rem]">
         <div className="flex items-center">
           <Link href="/" className="flex items-center space-x-2">
             <div className="h-9 w-9 md:h-11 md:w-11 flex items-center justify-center">

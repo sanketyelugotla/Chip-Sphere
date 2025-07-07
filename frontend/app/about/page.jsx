@@ -59,7 +59,7 @@ export default function About() {
                   width={300}
                   height={300}
                   priority
-                  className="w-full h-auto"
+                  className="hidden sm:block w-full h-auto"
                 />
               </div>
             </motion.div>

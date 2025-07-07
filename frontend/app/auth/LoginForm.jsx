@@ -106,9 +106,9 @@ export default function LoginForm({ toggleAuthMode }) {
     }
 
     return (
-        <Card className="py-16 shadow-lg rounded-2xl bg-container-background border border-border hover:border-[#4AC9D6] transition-all duration-300">
-            <CardHeader className="text-center pt-6">
-                <CardTitle className="text-3xl font-extrabold">Time to Plug In!</CardTitle>
+        <Card className="py-10 shadow-lg rounded-2xl bg-container-background border border-border hover:border-[#4AC9D6] transition-all duration-300">
+            <CardHeader className="text-center pt-6 mb-8">
+                <CardTitle className="text-3xl font-extrabold ">Time to Plug In!</CardTitle>
                 <CardDescription className="text-sm text-muted-foreground font-medium">Chipsphere: Powering Circuit Minds Everywhere.</CardDescription>
             </CardHeader>
 

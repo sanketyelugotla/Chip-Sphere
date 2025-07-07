@@ -102,9 +102,9 @@ export default function SignupForm({ toggleAuthMode }) {
     }
 
     return (
-        <Card className=" py-12 shadow-lg rounded-2xl bg-container-background border border-border hover:border-[#4AC9D6] transition-all duration-300">
+        <Card className=" py-8 shadow-lg rounded-2xl bg-container-background border border-border hover:border-[#4AC9D6] transition-all duration-300">
 
-            <CardHeader className="text-center pt-6">
+            <CardHeader className="text-center pt-6 mb-8">
                 <CardTitle className="text-3xl font-extrabold">Join the ChipSphere!</CardTitle>
                 <CardDescription className="text-sm text-muted-foreground font-medium">Give us your info, and we'll roll out the red carpet!</CardDescription>
             </CardHeader>

@@ -102,18 +102,7 @@ export default function SignupForm({ toggleAuthMode }) {
     }
 
     return (
-        <Card className="shadow-lg rounded-2xl bg-container-background border border-border hover:border-[#4AC9D6] transition-all duration-300">
-            <Link href="/" passHref>
-                <div className="mx-auto w-32 cursor-pointer transition-all duration-500 transform hover:scale-105 hover:animate-pulse">
-                    <Image
-                        src="/ChipSphere.png"
-                        alt="logo"
-                        width={128}
-                        height={128}
-                        className="w-full h-auto"
-                    />
-                </div>
-            </Link>
+        <Card className=" py-12 shadow-lg rounded-2xl bg-container-background border border-border hover:border-[#4AC9D6] transition-all duration-300">
 
             <CardHeader className="text-center pt-6">
                 <CardTitle className="text-3xl font-extrabold">Join the ChipSphere!</CardTitle>

@@ -15,7 +15,8 @@ const corsOptions = {
         'http://localhost:3000',
         'https://diplomatic-bravery-production.up.railway.app',
         'https://chipsphere.in',
-        'https://www.chipsphere.in'
+        'https://www.chipsphere.in',
+        'https://chip-sphere.vercel.app'
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: ['Content-Type', 'Authorization'],
